@@ -1,1 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypixel Skyblock Pets</title>
+    <style>
+        :root {
+            --bg-dark: #0B0E14;
+            --bg-header: #111622;
+            --bg-card: #161C2A;
+            --bg-input: #1C2436;
+            --border-color: #2A364F;
+            --text-main: #E2E8F0;
+            --text-muted: #8E9BAE;
+            --accent-gold: #F59E0B;
+            --accent-gold-hover: #D97706;
+            --accent-cyan: #38BDF8;
+            --pill-inactive: #1E293B;
+            --pill-inactive-hover: #2D3D58;
+            --accent-green: #10B981;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1650px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #10B981 0%, #047857 100%);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+            font-size: 24px;
+        }
+
+        .title-group h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -0.02em;
+        }
+
+        .title-group h1 span {
+            color: #10B981;
+        }
+
+        .title-group p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-badge {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .stat-badge .num-yellow {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .stat-badge .num-cyan {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 420px;
+            min-width: 280px;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #10B981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+        }
+
+        .top-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .rarity-select {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        .view-switch-group {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background-color: #10B981;
+            color: #FFFFFF;
+        }
+
+        .view-btn:not(.active):hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .back-hub-btn {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--accent-cyan);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .back-hub-btn:hover {
+            background-color: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .category-pills {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+
+        .pill-btn {
+            background-color: var(--pill-inactive);
+            border: 1px solid var(--border-color);
+            color: #C0C9D6;
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .pill-btn:hover {
+            background-color: var(--pill-inactive-hover);
+            color: #FFFFFF;
+        }
+
+        .pill-btn.active {
+            background-color: #10B981;
+            border-color: #10B981;
+            color: #FFFFFF;
+        }
+
+        .table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            max-height: 72vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        th {
+            background-color: var(--bg-header);
+            color: #10B981;
+            padding: 16px 18px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        th.col-cat, td.col-cat {
+            white-space: nowrap;
+            width: 1%;
+        }
+
+        th.col-mp, td.col-mp {
+            text-align: center;
+            white-space: nowrap;
+            width: 80px;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.015);
+        }
+
+        tr:hover {
+            background-color: rgba(16, 185, 129, 0.08);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 20px;
+            max-height: 72vh;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #10B981;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #10B981;
+        }
+
+        .card-body {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .badge-rarity {
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+        }
+
+        .rarity-COMMON { color: #F8FAFC; background: rgba(248, 250, 252, 0.12); }
+        .rarity-UNCOMMON { color: #4ADE80; background: rgba(74, 222, 128, 0.12); }
+        .rarity-RARE { color: #60A5FA; background: rgba(96, 165, 250, 0.12); }
+        .rarity-EPIC { color: #A855F7; background: rgba(168, 85, 247, 0.12); }
+        .rarity-LEGENDARY { color: #FACC15; background: rgba(250, 204, 21, 0.15); }
+        .rarity-MYTHIC { color: #FF55FF; background: rgba(255, 85, 255, 0.15); }
+
+        .badge-cat {
+            background: #1E293B;
+            color: #94A3B8;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .badge-mp {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 720px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 22px;
+            right: 22px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-main);
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .modal-group {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            border-radius: 10px;
+        }
+
+        .modal-group.full {
+            grid-column: span 2;
+        }
+
+        .modal-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .modal-value {
+            font-size: 1.02rem;
+            color: var(--text-main);
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+
+        .no-results {
+            padding: 50px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <div class="logo-icon">🐾</div>
+                <div class="title-group">
+                    <h1>Hypixel Skyblock <span>Pets</span></h1>
+                    <p>Interactive database and guide for all Skyblock Pets</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <a href="index.html" class="back-hub-btn">🏠 Hub</a>
+                <div class="stat-badge">Total: <span class="num-yellow" id="statTotal">0</span></div>
+                <div class="stat-badge">Shown: <span class="num-cyan" id="statShown">0</span></div>
+            </div>
+        </header>
+
+        <div class="controls-wrapper">
+            <div class="top-controls">
+                <div class="search-area">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="searchInput" placeholder="Search pet name, stats, perks...">
+                    </div>
+                </div>
+
+                <div class="top-right-controls">
+                    <select class="rarity-select" id="raritySelect">
+                        <option value="ALL">All Rarities</option>
+                        <option value="COMMON">Common</option>
+                        <option value="UNCOMMON">Uncommon</option>
+                        <option value="RARE">Rare</option>
+                        <option value="EPIC">Epic</option>
+                        <option value="LEGENDARY">Legendary</option>
+                        <option value="MYTHIC">Mythic</option>
+                    </select>
+
+                    <div class="view-switch-group">
+                        <button class="view-btn active" id="btnViewTable">
+                            <span>📋</span> Table
+                        </button>
+                        <button class="view-btn" id="btnViewCards">
+                            <span>🔲</span> Cards
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-pills" id="categoryPills">
+                <button class="pill-btn active" data-category="ALL">All</button>
+                <button class="pill-btn" data-category="Farming Pets">Farming</button>
+                <button class="pill-btn" data-category="Mining Pets">Mining</button>
+                <button class="pill-btn" data-category="Combat Pets">Combat</button>
+                <button class="pill-btn" data-category="Foraging Pets">Foraging</button>
+                <button class="pill-btn" data-category="Fishing Pets">Fishing</button>
+                <button class="pill-btn" data-category="Alchemy Pets">Alchemy</button>
+                <button class="pill-btn" data-category="Enchanting Pets">Enchanting</button>
+                <button class="pill-btn" data-category="Taming Pets">Taming</button>
+                <button class="pill-btn" data-category="All Skills Pets">All Skills</button>
+                <button class="pill-btn" data-category="Fractured Soul Pets">Fractured Soul</button>
+                <button class="pill-btn" data-category="Gabagool Pets">Gabagool</button>
+            </div>
+        </div>
+
+        <div class="table-container" id="tableViewContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-cat">Category</th>
+                        <th>Name</th>
+                        <th>Rarity</th>
+                        <th class="col-mp">MP</th>
+                        <th>Stats</th>
+                        <th>Perks & Abilities</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="tableNoResults" class="no-results" style="display: none;">No pets match the selected filters.</div>
+        </div>
+
+        <div class="cards-container" id="cardsViewContainer" style="display: none;"></div>
+        <div id="cardsNoResults" class="no-results" style="display: none;">No pets match the selected filters.</div>
+    </div>
+
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <span class="badge-cat" id="modalCat"></span>
+                <span class="badge-rarity" id="modalRarity"></span>
+                <span class="badge-mp" id="modalMP"></span>
+            </div>
+            <h2 id="modalName" style="color: #10B981; font-size: 1.7rem; margin-bottom: 12px;"></h2>
+
+            <div class="modal-grid">
+                <div class="modal-group">
+                    <div class="modal-label">Stats</div>
+                    <div class="modal-value" id="modalStats"></div>
+                </div>
+                <div class="modal-group">
+                    <div class="modal-label">Perks & Abilities</div>
+                    <div class="modal-value" id="modalPerks" style="color: var(--accent-gold);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getMagicalPower(rarityName) {
+            const r = rarityName.toUpperCase();
+            if (r.includes('MYTHIC')) return 22;
+            if (r.includes('LEGENDARY')) return 16;
+            if (r.includes('EPIC')) return 12;
+            if (r.includes('RARE')) return 8;
+            if (r.includes('UNCOMMON')) return 5;
+            if (r.includes('COMMON')) return 3;
+            return 3;
+        }
+
+        const petsData = [
+            // Farming Pets
+            { category: "Farming Pets", name: "Bee", rarity: "LEGENDARY", stats: "+0.25 ❁ Str\n+0.5 ✎ Int\n+0.1 ✦ Spd", perks: "Hive: Stats bonus based on players within 25 blocks.\nBusy Buzz Buzz: Grants Farming/Foraging/Mining Fortune.\nWeaponized Honey: Gain Absorption as ❤." },
+            { category: "Farming Pets", name: "Chicken", rarity: "RARE", stats: "+0.5 ✦ Spd\n+0.5 ☘ Frm.Frt", perks: "Free Range: +X Farming Fortune on Public Islands.\nEggstra Loot: Extra item drop chance.\nLight Feet: Reduces fall damage." },
+            { category: "Farming Pets", name: "Elephant", rarity: "LEGENDARY", stats: "+1 ❤ HP\n+0.75 ✎ Int", perks: "Stomp: Gain Defense for Speed.\nWalking Fortress: Gain Health for Defense.\nTrunk Efficiency: Increases Farming Fortune." },
+            { category: "Farming Pets", name: "Hedgehog", rarity: "EPIC", stats: "+0.15 ✦ Spd", perks: "Spiky Quills: Damage to Pests.\nFearsome Farmer: Farming Fortune against Pests.\nHunter's Insight: Fortune per Pest Bestiary tier." },
+            { category: "Farming Pets", name: "Mooshroom Cow", rarity: "LEGENDARY", stats: "+1 ❤ HP\n+1 ☘ Frm.Frt", perks: "Efficient Mushrooms: Minions work faster.\nMushroom Eater: Chance to drop mushrooms.\nFarming Strength: Gain Fortune per Strength." },
+            { category: "Farming Pets", name: "Mosquito", rarity: "EPIC", stats: "+0.2 ✦ Spd\n+0.5 ൠ BPC", perks: "Smooth Jazz: Pest Vinyls effectiveness.\nBuzzin' Barterer: Sugar Cane Fortune from Garden visitors.\nBloodsucker's Betrayal: Faster Pest Traps." },
+            { category: "Farming Pets", name: "Pig", rarity: "COMMON", stats: "+0.15 ✦ Spd\n+0.2 ☘ Pot.Frt", perks: "Hamfisted: Increase coins from Shiny Pigs.\nShining Stampede: Potato Fortune per Bestiary tier.\nPig Parade: Stats boost during Year of the Pig." },
+            { category: "Farming Pets", name: "Rabbit", rarity: "EPIC", stats: "+1 ❤ HP\n+0.2 ✦ Spd", perks: "Happy Feet: Jump potions give Speed.\nFarming Wisdom Boost: Grants Farming Wisdom.\nEfficient Farming: Minions work faster.\nChocolate Injections: Chocolate Factory production." },
+            { category: "Farming Pets", name: "Rose Dragon", rarity: "MYTHIC", stats: "+0.5 ✦ Spd\n+0.2 ☘ Frm.Frt", perks: "Garden Power: Farming Fortune per level.\nRosy Scales: Fortune & Speed per Crop Milestone.\nDragon's Gluttony: Rare item drops.\nSymbiosis: Maxed Farming Pet bonus." },
+            { category: "Farming Pets", name: "Slug", rarity: "RARE", stats: "+0.25 ✎ Int\n+0.2 ❈ Def", perks: "Slow and Steady: Less time to catch Slugfish.\nPest Friends: Bonus Pest Chance.\nRepugnant Aroma: Fortune when farming with Sprayonator." },
+
+            // Mining Pets
+            { category: "Mining Pets", name: "Armadillo", rarity: "LEGENDARY", stats: "+2 ❈ Def", perks: "Ridable: Right-click to ride.\nTunneller: Breaks stone/ore in Crystal Hollows.\nEarth Surfer / Rolling Miner / Long Claws." },
+            { category: "Mining Pets", name: "Bal", rarity: "LEGENDARY", stats: "+1.5 ♨ HR\n+1 ☘ Mn.Frt", perks: "Furnace: Grants Pristine in Magma Fields.\nDispersion: Reduces Heat.\nChimney: Cooldown reduction." },
+            { category: "Mining Pets", name: "Bat", rarity: "RARE", stats: "+0.05 α SCC\n+1 ✎ Int\n+0.05 ✦ Spd", perks: "Candy Lover: Candy drop chance.\nNightmare / Wings of Steel / Sonar." },
+            { category: "Mining Pets", name: "Endermite", rarity: "EPIC", stats: "+1.5 ✎ Int\n+0.1 ♣ PL", perks: "More Stonks: Exp orbs & extra block drop.\nDaily Commuter / Mite Bait / Sacrificer." },
+            { category: "Mining Pets", name: "Glacite Golem", rarity: "LEGENDARY", stats: "+1.25 ⸕ M.Spd\n+0.1 ❄ CR", perks: "Powder-powered: More Glacite Powder.\nIceborn: Fortune in Glacite Mineshafts.\nFrozen Perfection: Pristine from corpses." },
+            { category: "Mining Pets", name: "Goblin", rarity: "RARE", stats: "+0.2 ✦ Spd\n+1 ☘ Ore Frt", perks: "Grunt Work: Mining Speed when mining ores.\nFetid Thief / Free-range Eggs." },
+            { category: "Mining Pets", name: "Mithril Golem", rarity: "LEGENDARY", stats: "+0.5 ❂ T.Def\n+0.25 ☘ Mn.Frt", perks: "Mithril Affinity: Mining Speed for Mithril.\nSubterranean Battler / The Smell Of Powder / Refined Senses." },
+            { category: "Mining Pets", name: "Mole", rarity: "EPIC", stats: "+0.75 ⸕ M.Spd\n+1 ✎ Int\n+0.05 ✯ MF", perks: "Archaeologist: Scavenged items in Mines of Divan.\nMagnetic Nose / Nucleic Explorer." },
+            { category: "Mining Pets", name: "Rock", rarity: "EPIC", stats: "+0.1 ❂ T.Def\n+2 ❈ Def", perks: "Rideable / Sailing Stone / Fortify / Steady Ground." },
+            { category: "Mining Pets", name: "Scatha", rarity: "LEGENDARY", stats: "+1 ⸕ M.Spd\n+1.25 ☘ Mn.Frt", perks: "Burrowing: Treasure Chest chance while mining.\nDrill Infusion / Bejeweled Eyes." },
+            { category: "Mining Pets", name: "Silverfish", rarity: "EPIC", stats: "+0.2 ☘ Mn.Frt\n+1 ❈ Def", perks: "Magnetic: Extra mining exp.\nExperienced Burrower / Dexterity." },
+            { category: "Mining Pets", name: "Snail", rarity: "EPIC", stats: "+1 ✎ Int\n+1 ❈ Def", perks: "Red Sand Enjoyer / Slow and Steady / Slimy Reach." },
+            { category: "Mining Pets", name: "Wither Skeleton", rarity: "LEGENDARY", stats: "+0.25 ❁ Str\n+0.25 ☠ CD\n+0.25 ❈ Def\n+0.05 ☣ CC\n+0.25 ✎ Int", perks: "Stronger Bones: Less damage from skeletons.\nWither Blood / Death's Touch." },
+
+            // Combat Pets
+            { category: "Combat Pets", name: "Ankylosaurus", rarity: "LEGENDARY", stats: "+0.15 ❂ T.Def\n+1.5 ❤ HP\n+0.5 ❈ Def", perks: "Armored Tank: Defense as Strength.\nUnyielding / Clubbed Tail." },
+            { category: "Combat Pets", name: "Black Cat", rarity: "LEGENDARY", stats: "+0.15 ✯ MF\n+0.15 ♣ PL\n+1.25 ✦ Spd\n+1 ✎ Int", perks: "Hunter / Omen / Supernatural / Looting." },
+            { category: "Combat Pets", name: "Blaze", rarity: "LEGENDARY", stats: "+1 ✎ Int\n+0.3 ❈ Def", perks: "Nether Embodiment: Stats bonus on Crimson Isle.\nBling Armor / Fusion-Style Potato." },
+            { category: "Combat Pets", name: "Crow", rarity: "EPIC", stats: "+1.5 ✎ Int\n+0.2 ๑ AD", perks: "Quick Hands: Cooldown reduction.\nCamouflage / Insightful." },
+            { category: "Combat Pets", name: "Eerie", rarity: "EPIC", stats: "+0.1 ✦ Spd\n+0.5 ✎ Int", perks: "Fearnesy / Fearama / Fearcreasing." },
+            { category: "Combat Pets", name: "Ender Dragon", rarity: "LEGENDARY", stats: "+0.5 ❁ Str\n+0.5 ☠ CD\n+0.1 ☣ CC", perks: "End Strike / One with the Dragons / Superior." },
+            { category: "Combat Pets", name: "Enderman", rarity: "EPIC", stats: "+0.75 ☠ CD", perks: "Enderian / Teleport Savvy / Zealot Madness / Enderman Slayer." },
+            { category: "Combat Pets", name: "Ghoul", rarity: "LEGENDARY", stats: "+0.05 ⫽ Fer\n+0.25 ♨ Vit\n+0.75 ✎ Int\n+1 ❤ HP\n+0.25 ☄ Mend", perks: "Undead Slayer / Army of the Dead / Reaper Soul." },
+            { category: "Combat Pets", name: "Golden Dragon", rarity: "MYTHIC", stats: "+0.25 ❁ Str\n+0.25 ⚔ AS\n+0.05 ✯ MF", perks: "Gold's Power / Shining Scales / Dragon's Greed / Legendary Treasure / Symbiosis." },
+            { category: "Combat Pets", name: "Golem", rarity: "LEGENDARY", stats: "+0.5 ❁ Str\n+1.5 ❤ HP\n+0.01 Ⓢ Sr", perks: "Last Stand / Ricochet / Toss." },
+            { category: "Combat Pets", name: "Grandma Wolf", rarity: "LEGENDARY", stats: "+0.25 ❁ Str\n+1 ❤ HP", perks: "Kill Combo: Buffs for combo kills." },
+            { category: "Combat Pets", name: "Griffin", rarity: "LEGENDARY", stats: "+0.5 ❁ Str\n+0.25 ⚔ AS\n+0.1 ☣ CC\n+0.5 ☠ CD", perks: "Odyssey / Sacred Strength / King of Kings / Ancient Earth." },
+            { category: "Combat Pets", name: "Horse", rarity: "COMMON", stats: "+0.5 ✎ Int\n+0.25 ✦ Spd", perks: "Rideable / Run / Ride Into Battle." },
+            { category: "Combat Pets", name: "Hound", rarity: "EPIC", stats: "+0.4 ❁ Str\n+0.05 ⫽ Fer\n+0.1 ✦ Spd\n+0.25 ⚔ AS", perks: "Scavenger / Finder / Pack Slayer." },
+            { category: "Combat Pets", name: "Jerry", rarity: "LEGENDARY", stats: "+-1 ✎ Int", perks: "Jerry: Regular damage chance, drops, Jerry Candies." },
+            { category: "Combat Pets", name: "Kuudra", rarity: "LEGENDARY", stats: "+0.4 ❁ Str\n+4 ❤ HP", perks: "Wither Bait / Trophy Bait / Crimson / Kuudra Fortune / Kuudra Specialist." },
+            { category: "Combat Pets", name: "Magma Cube", rarity: "LEGENDARY", stats: "+0.2 ❁ Str\n+0.5 ❤ HP\n+0.33 ❈ Def", perks: "Slimy Minions / Salt Blade / Hot Ember." },
+            { category: "Combat Pets", name: "Mammoth", rarity: "EPIC", stats: "+0.1 ❄ CR\n+0.5 ❈ Def", perks: "Wooly Coat / Tusk Luck / Corpse Crusher." },
+            { category: "Combat Pets", name: "Phoenix", rarity: "LEGENDARY", stats: "+0.5 ❁ Str\n+1 ✎ Int", perks: "Rekindle / Fourth Flare / Magic Bird / Eternal Coins." },
+            { category: "Combat Pets", name: "Pigman", rarity: "LEGENDARY", stats: "+0.5 ❁ Str\n+0.05 ⫽ Fer\n+0.5 ❈ Def", perks: "Bacon Farmer / Pork Master / Giant Slayer." },
+            { category: "Combat Pets", name: "Precursor Drone", rarity: "LEGENDARY", stats: "+0.1 α SCC\n+0.3 ☘ For.Frt\n+0.3 ☘ Mn.Frt", perks: "Contraband / Grungle / Mining Off Camera." },
+            { category: "Combat Pets", name: "Rat", rarity: "LEGENDARY", stats: "+0.5 ❁ Str\n+0.1 ☠ CD\n+1 ❤ HP", perks: "Morph / CHEESE! / Rat's Blessing / Extreme Speed." },
+            { category: "Combat Pets", name: "Rift Ferret", rarity: "EPIC", stats: "+0.5 ✦ Spd\n+-0.02 ✎ Int", perks: "Orbs are Fun: Extra exp from XP Orbs." },
+            { category: "Combat Pets", name: "Skeleton", rarity: "EPIC", stats: "+0.15 ☣ CC\n+0.3 ☠ CD", perks: "Bone Arrows / Combo / Skeletal Defense." },
+            { category: "Combat Pets", name: "Skeleton Horse", rarity: "LEGENDARY", stats: "+1 ✎ Int\n+0.5 ✦ Spd", perks: "Rideable / Run / Ride Into Battle." },
+            { category: "Combat Pets", name: "Snowman", rarity: "LEGENDARY", stats: "+0.25 ❁ Str\n+0.25 ☠ CD\n+0.25 ❁ Dmg", perks: "Blizzard / Frostbite / Snow Cannon / Ouch!" },
+            { category: "Combat Pets", name: "Spider", rarity: "EPIC", stats: "+0.5 ❁ Str\n+0.1 ☣ CC", perks: "One With the Spider / Web-Weaver / Spider Whisperer / Web Battlefield." },
+            { category: "Combat Pets", name: "Spirit", rarity: "LEGENDARY", stats: "+0.3 ✦ Spd\n+1 ✎ Int", perks: "Spirit Assistance / Spirit Cooldowns / Half Life." },
+            { category: "Combat Pets", name: "T-Rex", rarity: "LEGENDARY", stats: "+0.75 ❁ Str\n+0.05 ☣ CC\n+0.25 ⫽ Fer", perks: "Close Combat / Ferocious Roar / Tyrant." },
+            { category: "Combat Pets", name: "Tarantula", rarity: "LEGENDARY", stats: "+0.1 ❁ Str\n+0.1 ☣ CC\n+0.3 ☠ CD", perks: "Webbed Cells / Eight Legs / Arachnid Slayer / Web Battlefield." },
+            { category: "Combat Pets", name: "Tiger", rarity: "LEGENDARY", stats: "+0.1 ❁ Str\n+0.25 ⫽ Fer\n+0.05 ☣ CC\n+0.5 ☠ CD", perks: "Merciless Swipe / Hemorrhage / Apex Predator." },
+            { category: "Combat Pets", name: "Turtle", rarity: "LEGENDARY", stats: "+0.15 ❂ T.Def\n+0.5 ❤ HP\n+1 ❈ Def", perks: "Turtle Tactics / Genius Amniote / Unflippable / Turtle Shell." },
+            { category: "Combat Pets", name: "Wolf", rarity: "LEGENDARY", stats: "+0.1 ❂ T.Def\n+0.1 ☠ CD\n+0.5 ❤ HP\n+0.2 ✦ Spd", perks: "Alpha Dog / Pack Leader / Combat Wisdom Boost." },
+            { category: "Combat Pets", name: "Zombie", rarity: "EPIC", stats: "+1 ❤ HP\n+0.3 ☠ CD", perks: "Bite Shield / Rotten Blade / Living Dead." },
+
+            // Foraging Pets
+            { category: "Foraging Pets", name: "Frog", rarity: "EPIC", stats: "+0.5 ✦ Spd\n+0.1 ⚶ Rsp\n+0.4 ☂ FS", perks: "Hunting Enjoyer / Hop / Happy Tree Friends." },
+            { category: "Foraging Pets", name: "Giraffe", rarity: "LEGENDARY", stats: "+0.05 ☣ CC\n+1 ❤ HP\n+0.01 Ⓢ Sr", perks: "Good Heart / Higher Ground / Long Neck." },
+            { category: "Foraging Pets", name: "Jade Dragon", rarity: "MYTHIC", stats: "+0.25 ❁ Str\n+0.25 ☘ For.Frt\n+0.05 ✯ MF", perks: "Forest Power / Jade Scale / Dragon's Pride / Apex Predator / Symbiosis." },
+            { category: "Foraging Pets", name: "Lion", rarity: "LEGENDARY", stats: "+0.05 ⫽ Fer\n+0.25 ✦ Spd\n+0.5 ❁ Str", perks: "Primal Force / First Pounce / King of the Jungle." },
+            { category: "Foraging Pets", name: "Monkey", rarity: "LEGENDARY", stats: "+0.2 ✦ Spd\n+0.5 ✎ Int", perks: "Treeborn / Vine Swing / Evolved Axes." },
+            { category: "Foraging Pets", name: "Ocelot", rarity: "EPIC", stats: "+0.5 ✦ Spd\n+0.1 ⫽ Fer", perks: "Foraging Wisdom Boost / Tree Hugger / Tree Essence." },
+
+            // Fishing Pets
+            { category: "Fishing Pets", name: "Ammonite", rarity: "LEGENDARY", stats: "+0.05 α SCC", perks: "Heart of the Sea / Expert Cave Fisher / Gift of the Ammonite." },
+            { category: "Fishing Pets", name: "Baby Yeti", rarity: "LEGENDARY", stats: "+0.5 ❁ Str\n+0.1 ❄ CR\n+0.05 α SCC\n+0.5 ☂ FS", perks: "Yeti Fury / Cold Breeze / Frosty Familiarity / Family Gathering." },
+            { category: "Fishing Pets", name: "Blue Whale", rarity: "LEGENDARY", stats: "+2 ❤ HP", perks: "Ingest / Bulk / Archimedes." },
+            { category: "Fishing Pets", name: "Dolphin", rarity: "LEGENDARY", stats: "+1 ✎ Int\n+0.05 α SCC", perks: "Pod Tactics / Echolocation / Splash Surprise." },
+            { category: "Fishing Pets", name: "Flying Fish", rarity: "EPIC", stats: "+0.5 ❁ Str\n+0.5 ❈ Def", perks: "Quick Reel / Water Bender / Deep Sea Diver / Lava Bender / Magmatic Diver / Rapid Decay." },
+            { category: "Fishing Pets", name: "Hermit Crab", rarity: "EPIC", stats: "+0.02 α SCC\n+0.2 ☂ FS\n+0.2 ❈ Def", perks: "Comfort Zone / Seafloor Scalper / Crab Rave / Hotspot Hazard." },
+            { category: "Fishing Pets", name: "Megalodon", rarity: "LEGENDARY", stats: "+0.5 ❁ Str\n+0.1 ✯ MF\n+0.3 ☂ FS\n+0.05 α SCC\n+0.05 ⫽ Fer", perks: "Blood Scent / Enhanced Scales / Feeding Frenzy." },
+            { category: "Fishing Pets", name: "Penguin", rarity: "RARE", stats: "+0.1 α SCC", perks: "Thick Blubber / Chilly Reception / Subzero Hero." },
+            { category: "Fishing Pets", name: "Reindeer", rarity: "LEGENDARY", stats: "+0.05 α SCC\n+1 ❤ HP\n+0.25 ☂ FS", perks: "Winter Spirit / Infused / Snow Power / Icy Wind." },
+            { category: "Fishing Pets", name: "Seal", rarity: "LEGENDARY", stats: "+0.05 α SCC\n+0.01 ⛃ TRC\n+0.35 ☂ FS", perks: "Showboater / Peak Performance / Amphibious." },
+            { category: "Fishing Pets", name: "Spinosaurus", rarity: "LEGENDARY", stats: "+0.08 α SCC\n+0.25 ☂ FS", perks: "Sharp Attitude / Pursuit / Primordial Fisher." },
+            { category: "Fishing Pets", name: "Squid", rarity: "RARE", stats: "+0.5 ❤ HP\n+0.5 ✎ Int", perks: "More Ink / Ink Specialty / Fishing Wisdom Boost." },
+
+            // Alchemy Pets
+            { category: "Alchemy Pets", name: "Jellyfish", rarity: "LEGENDARY", stats: "+2 ❤ HP\n+1 ❣ HP.R", perks: "Radiant Scyphozoa / Stored Energy / Powerful Potions." },
+            { category: "Alchemy Pets", name: "Parrot", rarity: "LEGENDARY", stats: "+1 ✎ Int\n+0.1 ☠ CD", perks: "Flamboyant / Repeat / Bird Discourse / Parrot Feather Infusion." },
+            { category: "Alchemy Pets", name: "Sheep", rarity: "LEGENDARY", stats: "+1 ✎ Int\n+0.2 ๑ AD", perks: "Mana Saver / Overheal / Dungeon Wizard." },
+            { category: "Alchemy Pets", name: "Witch", rarity: "EPIC", stats: "+1 ✎ Int\n+0.05 ☯ Alc.W", perks: "Toil and Trouble / Alchemism / Witching Hour." },
+
+            // Enchanting Pets
+            { category: "Enchanting Pets", name: "Guardian", rarity: "LEGENDARY", stats: "+1 ✎ Int\n+0.5 ❈ Def", perks: "Lazerbeam / Enchanting Wisdom Boost / Mana Pool / Lucky Seven." },
+
+            // Taming Pets
+            { category: "Taming Pets", name: "Owl", rarity: "EPIC", stats: "-", perks: "Training Refunds / Efficient Trainer / Fast Learner." },
+
+            // All Skills Pets
+            { category: "All Skills Pets", name: "Bingo", rarity: "LEGENDARY", stats: "+0.25 ❁ Str\n+1 ❤ HP\n+0.75 ✦ Spd", perks: "Lucky Looting / Mountain Climber / Fast Learner / Chimera / Scavenger / Consumer / Power Of Completion." },
+
+            // Fractured Soul Pets
+            { category: "Fractured Soul Pets", name: "Montezuma", rarity: "LEGENDARY", stats: "+0 ⚡ Mn.R\n+0 ф R.Tme", perks: "Nine Lives: Gain Rift Time per soul piece.\nTrickery: Gain Mana Regen." },
+
+            // Gabagool Pets
+            { category: "Gabagool Pets", name: "Wisp", rarity: "LEGENDARY", stats: "+0.1 ❁ Dmg\n+0.5 ✎ Int\n+1 ❤ HP\n+0.1 ❂ T.Def", perks: "Drophammer / Bulwark / Blaze Slayer / Extinguish / Ephemeral Stability / Icehammer." }
+        ];
+
+        let currentCategory = 'ALL';
+
+        const tableBody = document.getElementById('tableBody');
+        const cardsViewContainer = document.getElementById('cardsViewContainer');
+        const tableViewContainer = document.getElementById('tableViewContainer');
+        const searchInput = document.getElementById('searchInput');
+        const raritySelect = document.getElementById('raritySelect');
+
+        const statTotal = document.getElementById('statTotal');
+        const statShown = document.getElementById('statShown');
+
+        const btnViewTable = document.getElementById('btnViewTable');
+        const btnViewCards = document.getElementById('btnViewCards');
+        const tableNoResults = document.getElementById('tableNoResults');
+        const cardsNoResults = document.getElementById('cardsNoResults');
+
+        const detailModal = document.getElementById('detailModal');
+        const modalClose = document.getElementById('modalClose');
+
+        statTotal.textContent = petsData.length;
+
+        document.querySelectorAll('.pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.getAttribute('data-category');
+                render();
+            });
+        });
+
+        function getFilteredData() {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedRarity = raritySelect.value;
+
+            return petsData.filter(item => {
+                const matchesCat = (currentCategory === 'ALL' || item.category === currentCategory);
+                const matchesRarity = (selectedRarity === 'ALL' || item.rarity.toUpperCase().includes(selectedRarity));
+                const mpValue = getMagicalPower(item.rarity);
+                const searchHaystack = (item.name + " " + item.stats + " " + item.perks + " " + item.category + " " + mpValue + "mp").toLowerCase();
+                const matchesSearch = !query || searchHaystack.includes(query);
+
+                return matchesCat && matchesRarity && matchesSearch;
+            });
+        }
+
+        function openModal(item) {
+            document.getElementById('modalCat').textContent = item.category;
+            const rarityBadge = document.getElementById('modalRarity');
+            const cleanRarity = item.rarity.split('-')[0].split(',')[0].trim().toUpperCase().replace(' ', '_');
+            rarityBadge.className = `badge-rarity rarity-${cleanRarity}`;
+            rarityBadge.textContent = item.rarity;
+
+            const mpValue = getMagicalPower(item.rarity);
+            document.getElementById('modalMP').textContent = `⚡ ${mpValue} MP`;
+
+            document.getElementById('modalName').textContent = item.name;
+            document.getElementById('modalStats').textContent = item.stats;
+            document.getElementById('modalPerks').textContent = item.perks;
+
+            detailModal.classList.add('active');
+        }
+
+        modalClose.addEventListener('click', () => detailModal.classList.remove('active'));
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) detailModal.classList.remove('active');
+        });
+
+        function render() {
+            const filtered = getFilteredData();
+            statShown.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = '';
+                cardsViewContainer.innerHTML = '';
+                tableNoResults.style.display = 'block';
+                cardsNoResults.style.display = 'block';
+                return;
+            }
+
+            tableNoResults.style.display = 'none';
+            cardsNoResults.style.display = 'none';
+
+            tableBody.innerHTML = filtered.map((item) => {
+                const cleanRarity = item.rarity.split('-')[0].split(',')[0].trim().toUpperCase().replace(' ', '_');
+                const mp = getMagicalPower(item.rarity);
+                return `
+                <tr data-index="${petsData.indexOf(item)}">
+                    <td class="col-cat"><span class="badge-cat">${item.category}</span></td>
+                    <td><strong style="color: #10B981;">${item.name}</strong></td>
+                    <td><span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span></td>
+                    <td class="col-mp"><span class="badge-mp">⚡ ${mp}</span></td>
+                    <td style="white-space: pre-line;">${item.stats}</td>
+                    <td>${item.perks}</td>
+                </tr>
+            `}).join('');
+
+            document.querySelectorAll('#tableBody tr').forEach(row => {
+                row.addEventListener('click', () => {
+                    const idx = row.getAttribute('data-index');
+                    openModal(petsData[idx]);
+                });
+            });
+
+            cardsViewContainer.innerHTML = filtered.map((item) => {
+                const cleanRarity = item.rarity.split('-')[0].split(',')[0].trim().toUpperCase().replace(' ', '_');
+                const mp = getMagicalPower(item.rarity);
+                return `
+                <div class="card" data-index="${petsData.indexOf(item)}">
+                    <div class="card-header">
+                        <span class="badge-cat">${item.category}</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <span class="badge-mp">⚡ ${mp} MP</span>
+                            <span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card-title">${item.name}</div>
+                    </div>
+                    <div class="card-body">
+                        <div><strong>Stats:</strong> ${item.stats}</div>
+                        <div><strong>Perks:</strong> ${item.perks}</div>
+                    </div>
+                </div>
+            `}).join('');
+
+            document.querySelectorAll('.cards-container .card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const idx = card.getAttribute('data-index');
+                    openModal(petsData[idx]);
+                });
+            });
+        }
+
+        btnViewTable.addEventListener('click', () => {
+            btnViewTable.classList.add('active');
+            btnViewCards.classList.remove('active');
+            tableViewContainer.style.display = 'block';
+            cardsViewContainer.style.display = 'none';
+        });
+
+        btnViewCards.addEventListener('click', () => {
+            btnViewCards.classList.add('active');
+            btnViewTable.classList.remove('active');
+            tableViewContainer.style.display = 'none';
+            cardsViewContainer.style.display = 'grid';
+        });
+
+        searchInput.addEventListener('input', render);
+        raritySelect.addEventListener('change', render);
+
+        render();
+    </script>
+</body>
+</html>
