@@ -39,7 +39,6 @@
             margin: 0 auto;
         }
 
-        /* Header Layout */
         header {
             display: flex;
             justify-content: space-between;
@@ -113,7 +112,6 @@
             font-weight: 700;
         }
 
-        /* Controls Section */
         .controls-wrapper {
             display: flex;
             flex-direction: column;
@@ -223,7 +221,6 @@
             background-color: rgba(255, 255, 255, 0.05);
         }
 
-        /* Back to Hub navigation button */
         .back-hub-btn {
             background-color: var(--bg-input);
             border: 1px solid var(--border-color);
@@ -243,7 +240,39 @@
             border-color: var(--accent-cyan);
         }
 
-        /* Data Tables and Grid */
+        .category-pills {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+
+        .pill-btn {
+            background-color: var(--pill-inactive);
+            border: 1px solid var(--border-color);
+            color: #C0C9D6;
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .pill-btn:hover {
+            background-color: var(--pill-inactive-hover);
+            color: #FFFFFF;
+        }
+
+        .pill-btn.active {
+            background-color: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: #000000;
+        }
+
         .table-container {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -349,17 +378,18 @@
         .rarity-RARE { color: #60A5FA; background: rgba(96, 165, 250, 0.12); }
         .rarity-EPIC { color: #A855F7; background: rgba(168, 85, 247, 0.12); }
         .rarity-LEGENDARY { color: #FACC15; background: rgba(250, 204, 21, 0.15); }
+        .rarity-MYTHIC { color: #FF55FF; background: rgba(255, 85, 255, 0.15); }
+        .rarity-UNOBTAINABLE { color: #FF5555; background: rgba(255, 85, 85, 0.15); }
 
-        .item-icon {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            padding: 4px;
+        .badge-cat {
+            background: #1E293B;
+            color: #94A3B8;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
         }
 
-        /* Modal Details */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -456,40 +486,39 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <header>
             <div class="header-left">
                 <div class="logo-icon">📿</div>
                 <div class="title-group">
                     <h1>Hypixel Skyblock <span>Accessories</span></h1>
-                    <p>Interactive overview and magical accessories database</p>
+                    <p>Interactive overview and complete database of all Skyblock accessories</p>
                 </div>
             </div>
             <div class="header-stats">
-                <a href="index_4.html" class="back-hub-btn">🏠 Hub</a>
+                <a href="index.html" class="back-hub-btn">🏠 Hub</a>
                 <div class="stat-badge">Total: <span class="num-yellow" id="statTotal">0</span></div>
                 <div class="stat-badge">Shown: <span class="num-cyan" id="statShown">0</span></div>
             </div>
         </header>
 
-        <!-- Controls Section -->
         <div class="controls-wrapper">
             <div class="top-controls">
                 <div class="search-area">
                     <div class="search-box">
                         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                        <input type="text" id="searchInput" placeholder="Search accessory name, effect, source...">
+                        <input type="text" id="searchInput" placeholder="Search accessory name, stats, effect, source...">
                     </div>
                 </div>
 
                 <div class="top-right-controls">
                     <select class="rarity-select" id="raritySelect">
                         <option value="ALL">All Rarities</option>
-                        <option value="LEGENDARY">Legendary</option>
-                        <option value="EPIC">Epic</option>
-                        <option value="RARE">Rare</option>
-                        <option value="UNCOMMON">Uncommon</option>
                         <option value="COMMON">Common</option>
+                        <option value="UNCOMMON">Uncommon</option>
+                        <option value="RARE">Rare</option>
+                        <option value="EPIC">Epic</option>
+                        <option value="LEGENDARY">Legendary</option>
+                        <option value="MYTHIC">Mythic</option>
                     </select>
 
                     <div class="view-switch-group">
@@ -502,18 +531,30 @@
                     </div>
                 </div>
             </div>
+
+            <div class="category-pills" id="categoryPills">
+                <button class="pill-btn active" data-category="ALL">All</button>
+                <button class="pill-btn" data-category="Craftable Collection Accessories">Craftable Collection</button>
+                <button class="pill-btn" data-category="Other craftable accessories">Other Craftable</button>
+                <button class="pill-btn" data-category="Dungeon Accessories">Dungeon</button>
+                <button class="pill-btn" data-category="Mob Drop Accessories">Mob Drop</button>
+                <button class="pill-btn" data-category="NPC Shop Accessories">NPC Shop</button>
+                <button class="pill-btn" data-category="Quest Accessories">Quest</button>
+                <button class="pill-btn" data-category="Slayer Accessories">Slayer</button>
+                <button class="pill-btn" data-category="Miscellaneous Accessories">Miscellaneous</button>
+            </div>
         </div>
 
-        <!-- Table View -->
         <div class="table-container" id="tableViewContainer">
             <table>
                 <thead>
                     <tr>
-                        <th>Icon</th>
+                        <th>Category</th>
                         <th>Name</th>
                         <th>Rarity</th>
+                        <th>Stats</th>
                         <th>Effect</th>
-                        <th>Source / Crafting</th>
+                        <th>Source</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -521,58 +562,290 @@
             <div id="tableNoResults" class="no-results" style="display: none;">No accessories match the selected filters.</div>
         </div>
 
-        <!-- Cards View -->
         <div class="cards-container" id="cardsViewContainer" style="display: none;"></div>
         <div id="cardsNoResults" class="no-results" style="display: none;">No accessories match the selected filters.</div>
     </div>
 
-    <!-- Modal Detail -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <button class="modal-close" id="modalClose">&times;</button>
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <span class="badge-cat" id="modalCat"></span>
                 <span class="badge-rarity" id="modalRarity"></span>
             </div>
             <h2 id="modalName" style="color: var(--accent-gold); font-size: 1.7rem; margin-bottom: 12px;"></h2>
 
             <div class="modal-grid">
+                <div class="modal-group">
+                    <div class="modal-label">Stats</div>
+                    <div class="modal-value" id="modalStats"></div>
+                </div>
+                <div class="modal-group">
+                    <div class="modal-label">Source</div>
+                    <div class="modal-value" id="modalSource"></div>
+                </div>
                 <div class="modal-group full">
                     <div class="modal-label">Effect</div>
                     <div class="modal-value" id="modalEffect" style="color: var(--accent-gold);"></div>
-                </div>
-                <div class="modal-group full">
-                    <div class="modal-label">Source / Crafting</div>
-                    <div class="modal-value" id="modalSource"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Ukázková data accessories (tady můžeš jednoduše rozšiřovat seznam)
         const accessoriesData = [
-            {
-                name: "Farming Talisman",
-                rarity: "Common",
-                icon: "https://wiki.hypixel.net/images/f/fc/Farming_Talisman.png",
-                effect: "Increases your Speed by +10% while in the Farm, The Barn, Mushroom Desert, and Garden.",
-                source: "Wheat IV"
-            },
-            {
-                name: "Vaccine Talisman",
-                rarity: "Common",
-                icon: "https://wiki.hypixel.net/images/9/91/Vaccine_Talisman.png",
-                effect: "Reduces the effect of Poison by 10%.",
-                source: "Potato III"
-            },
-            {
-                name: "Farmer Orb",
-                rarity: "Uncommon",
-                icon: "https://wiki.hypixel.net/images/8/87/Farmer_Orb.png",
-                effect: "Increases the regrowth rate of nearby crops on the public islands, regrowing an extra crop every 3 seconds.",
-                source: "Pumpkin VI"
-            }
+            // Craftable Collection Accessories
+            { category: "Craftable Collection Accessories", name: "Farming Talisman", rarity: "COMMON", stats: "-", effect: "Increases your ✦ Speed by +10% while in the Farm, The Barn, Mushroom Desert, and Garden.", source: "Wheat IV" },
+            { category: "Craftable Collection Accessories", name: "Vaccine Talisman", rarity: "COMMON", stats: "-", effect: "Reduces the effect of Poison by 10%.", source: "Potato III" },
+            { category: "Craftable Collection Accessories", name: "Farmer Orb", rarity: "UNCOMMON", stats: "-", effect: "Increases the regrowth rate of nearby crops on the public islands, regrowing an extra crop every 3 seconds.", source: "Pumpkin VI" },
+            { category: "Craftable Collection Accessories", name: "Night Vision Charm", rarity: "COMMON", stats: "-", effect: "Grants Night Vision I while this item is in your inventory.", source: "Mushroom VII" },
+            { category: "Craftable Collection Accessories", name: "Feather Talisman", rarity: "COMMON", stats: "-", effect: "Increases how high you can fall without taking fall damage by 5 blocks.", source: "Feather IV" },
+            { category: "Craftable Collection Accessories", name: "Feather Ring", rarity: "UNCOMMON", stats: "-", effect: "Increases how high you can fall without taking fall damage by 7 blocks and reduces fall damage by 5%.", source: "Feather VII" },
+            { category: "Craftable Collection Accessories", name: "Feather Artifact", rarity: "RARE", stats: "-", effect: "Increases how high you can fall without taking fall damage by 10 blocks and reduces fall damage by 15%.", source: "Feather IX" },
+            { category: "Craftable Collection Accessories", name: "Piggy Bank", rarity: "UNCOMMON", stats: "-", effect: "Saves your coins from death. Only when in player inventory or Accessory Bag. Fragile! Triggers when losing 20k+ coins.", source: "Raw Porkchop V" },
+            { category: "Craftable Collection Accessories", name: "Potion Affinity Talisman", rarity: "COMMON", stats: "-", effect: "Increases the duration of any consumed Potion by 10%.", source: "Nether Wart III" },
+            { category: "Craftable Collection Accessories", name: "Potion Affinity Ring", rarity: "UNCOMMON", stats: "-", effect: "Increases the duration of any consumed Potion by 25%.", source: "Nether Wart VII" },
+            { category: "Craftable Collection Accessories", name: "Potion Affinity Artifact", rarity: "RARE", stats: "-", effect: "Increasing the duration of any consumed Potion by 50%.", source: "Nether Wart IX" },
+            { category: "Craftable Collection Accessories", name: "Haste Ring", rarity: "RARE", stats: "+10 ⸕ Mining Speed", effect: "Grants permanent Haste II.", source: "Cobblestone VII" },
+            { category: "Craftable Collection Accessories", name: "Haste Artifact", rarity: "EPIC", stats: "+25 ⸕ Mining Speed", effect: "Grants permanent Haste III.", source: "Cobblestone IX" },
+            { category: "Craftable Collection Accessories", name: "Experience Artifact", rarity: "EPIC", stats: "-", effect: "Increase the experience orbs you gain by 25% while this item is in your inventory or accessory bag.", source: "Lapis Lazuli IX" },
+            { category: "Craftable Collection Accessories", name: "Talisman of Coins", rarity: "COMMON", stats: "-", effect: "Coins start appearing around you on public islands. Lucky!", source: "Emerald II" },
+            { category: "Craftable Collection Accessories", name: "Magnetic Talisman", rarity: "UNCOMMON", stats: "-", effect: "Increases item pickup range by 3x.", source: "Emerald III" },
+            { category: "Craftable Collection Accessories", name: "Emerald Ring", rarity: "UNCOMMON", stats: "-", effect: "Get +5 coins every minute!", source: "Emerald V" },
+            { category: "Craftable Collection Accessories", name: "Night Crystal", rarity: "RARE", stats: "-", effect: "Increases your ❁ Strength and ❈ Defense by +5 during the Night.", source: "Quartz VII" },
+            { category: "Craftable Collection Accessories", name: "Day Crystal", rarity: "RARE", stats: "-", effect: "Increases your ❁ Strength and ❈ Defense by +5 during the Day.", source: "Quartz VIII" },
+            { category: "Craftable Collection Accessories", name: "Gravity Talisman", rarity: "UNCOMMON", stats: "-", effect: "Gives between +1 and +10 ❁ Strength and ❈ Defense the closer you are to the spawn of an Island.", source: "Obsidian III" },
+            { category: "Craftable Collection Accessories", name: "Fire Talisman", rarity: "COMMON", stats: "-", effect: "Provides immunity against damage from Fire. While on the Crimson Isle, grants a 20% damage reduction instead.", source: "Blaze Rod IV" },
+            { category: "Craftable Collection Accessories", name: "Lava Talisman", rarity: "UNCOMMON", stats: "-", effect: "Provides immunity against damage from most Lava.", source: "Magma Cream VII" },
+            { category: "Craftable Collection Accessories", name: "Wood Affinity Talisman", rarity: "UNCOMMON", stats: "-", effect: "Increases ✦ Speed by +10% in the Forest, Graveyard, Wilderness, The Park, and Galatea.", source: "Oak Log VII" },
+            { category: "Craftable Collection Accessories", name: "Bait Ring", rarity: "RARE", stats: "-", effect: "5% chance not to consume bait.", source: "Ink Sack VIII" },
+            { category: "Craftable Collection Accessories", name: "Sea Creature Talisman", rarity: "COMMON", stats: "+0.1% α Sea Creature Chance", effect: "Take 5% less damage from Sea Creatures.", source: "Sponge IV" },
+            { category: "Craftable Collection Accessories", name: "Sea Creature Ring", rarity: "UNCOMMON", stats: "+0.2% α Sea Creature Chance", effect: "Take 10% less damage from Sea Creatures.", source: "Sponge VI" },
+            { category: "Craftable Collection Accessories", name: "Sea Creature Artifact", rarity: "RARE", stats: "+0.3% α Sea Creature Chance", effect: "Take 15% less damage from Sea Creatures.", source: "Sponge VIII" },
+            { category: "Craftable Collection Accessories", name: "Personal Compactor 4000", rarity: "UNCOMMON", stats: "-", effect: "Automatically turns certain materials in your inventory into their enchanted form. Does not grant carpentry xp!", source: "Redstone IX" },
+            { category: "Craftable Collection Accessories", name: "Personal Compactor 5000", rarity: "RARE", stats: "-", effect: "Automatically turns certain materials in your inventory into their enchanted form. Does not grant carpentry xp!", source: "Redstone XI" },
+            { category: "Craftable Collection Accessories", name: "Personal Compactor 6000", rarity: "EPIC", stats: "-", effect: "Automatically turns certain materials in your inventory into their enchanted form. Does not grant carpentry xp!", source: "Redstone XIII" },
+            { category: "Craftable Collection Accessories", name: "Personal Compactor 7000", rarity: "LEGENDARY", stats: "-", effect: "Automatically turns certain materials in your inventory into their enchanted form. Does not grant carpentry xp!", source: "Redstone XIV" },
+            { category: "Craftable Collection Accessories", name: "Personal Deletor 4000", rarity: "UNCOMMON", stats: "-", effect: "Automatically delete certain materials in your inventory on pickup.", source: "Iron Ingot IX" },
+            { category: "Craftable Collection Accessories", name: "Personal Deletor 5000", rarity: "RARE", stats: "-", effect: "Automatically delete certain materials in your inventory on pickup.", source: "Iron Ingot X" },
+            { category: "Craftable Collection Accessories", name: "Personal Deletor 6000", rarity: "EPIC", stats: "-", effect: "Automatically delete certain materials in your inventory on pickup.", source: "Iron Ingot XI" },
+            { category: "Craftable Collection Accessories", name: "Personal Deletor 7000", rarity: "LEGENDARY", stats: "-", effect: "Automatically delete certain materials in your inventory on pickup.", source: "Iron Ingot XII" },
+            { category: "Craftable Collection Accessories", name: "Talisman of Power", rarity: "COMMON", stats: "-", effect: "Allows you to harness the power of 2 Gemstones, although only half of the normal power can be harnessed!", source: "Gemstone IV" },
+            { category: "Craftable Collection Accessories", name: "Ring of Power", rarity: "UNCOMMON", stats: "-", effect: "Allows you to harness the power of 4 Gemstones, although only half of the normal power can be harnessed!", source: "Gemstone VI" },
+            { category: "Craftable Collection Accessories", name: "Artifact of Power", rarity: "RARE", stats: "-", effect: "Allows you to harness the power of 7 Gemstones, although only half of the normal power can be harnessed!", source: "Gemstone X" },
+            { category: "Craftable Collection Accessories", name: "Speed Talisman", rarity: "COMMON", stats: "+1 ✦ Speed", effect: "-", source: "Sugar Cane II" },
+            { category: "Craftable Collection Accessories", name: "Speed Ring", rarity: "UNCOMMON", stats: "+3 ✦ Speed", effect: "-", source: "Sugar Cane V" },
+            { category: "Craftable Collection Accessories", name: "Speed Artifact", rarity: "RARE", stats: "+5 ✦ Speed", effect: "-", source: "Sugar Cane VIII" },
+            { category: "Craftable Collection Accessories", name: "Blood Donor Talisman", rarity: "COMMON", stats: "+1 ❣ Health Regen\n+5ф Rift Time", effect: "-", source: "Ender Chest Rift Transfer" },
+            { category: "Craftable Collection Accessories", name: "Blood Donor Ring", rarity: "UNCOMMON", stats: "+2 ❣ Health Regen\n+10sф Rift Time\n+5% ⚡ Mana Regen", effect: "-", source: "Hemovibe IX / Ender Chest Rift Transfer" },
+            { category: "Craftable Collection Accessories", name: "Blood Donor Artifact", rarity: "RARE", stats: "+3 ❣ Health Regen\n+10sф Rift Time\n+5% ⚡ Mana Regen", effect: "-", source: "Hemovibe IX / Ender Chest Rift Transfer" },
+            { category: "Craftable Collection Accessories", name: "Healing Talisman", rarity: "COMMON", stats: "+5 ♨ Vitality", effect: "Grants +5 ♨ Vitality, which increases incoming healing.", source: "Lily Pad III" },
+            { category: "Craftable Collection Accessories", name: "Healing Ring", rarity: "UNCOMMON", stats: "+10 ♨ Vitality", effect: "Grants +10 ♨ Vitality, which increases incoming healing.", source: "Lily Pad VIII" },
+            { category: "Craftable Collection Accessories", name: "Pressure Talisman", rarity: "COMMON", stats: "+10 ❍ Pressure Resistance", effect: "-", source: "Sea Lumies V" },
+            { category: "Craftable Collection Accessories", name: "Pressure Ring", rarity: "UNCOMMON", stats: "+20 ❍ Pressure Resistance", effect: "-", source: "Sea Lumies VII" },
+            { category: "Craftable Collection Accessories", name: "Pressure Artifact", rarity: "RARE", stats: "+30 ❍ Pressure Resistance", effect: "-", source: "Sea Lumies IX" },
+            { category: "Craftable Collection Accessories", name: "Bluetooth Ring", rarity: "RARE", stats: "-2 ✦ Speed\n-1 ✎ Intelligence\n+30sф Rift Time", effect: "Monster melee attacks reduce 1 less ф Rift Time if there is at least another player within 50 blocks. Deal +1 ❁ Damage if there are at least 6 players on the island.", source: "Living Metal Heart III / Ender Chest Rift Transfer" },
+
+            // Other Craftable Accessories
+            { category: "Other craftable accessories", name: "Wolf Ring", rarity: "RARE", stats: "-", effect: "Reduces the damage taken from ☮ Animal by 10%.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Vaccine Ring", rarity: "UNCOMMON", stats: "-", effect: "Provides 25% damage reduction to Poison when held.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Vaccine Artifact", rarity: "RARE", stats: "-", effect: "Provides 50% damage reduction to Poison when held.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Eternal Hoof", rarity: "RARE", stats: "-", effect: "Gain 2% chance to find Trick or Treat Chests.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Spiked Atrocity", rarity: "EPIC", stats: "-", effect: "Gives a 10% chance to not consume Bait.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Fried Frozen Chicken", rarity: "EPIC", stats: "+1 ✦ Speed\n+1 ♨ Heat Resistance\n+1 ❄ Cold Resistance", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Bat Person Ring", rarity: "UNCOMMON", stats: "-", effect: "Grants +5 ❈ Defense, ❁ Strength and ✎ Intelligence for each bat you have summoned.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Bat Person Artifact", rarity: "RARE", stats: "-", effect: "Grants +10 ❈ Defense, ❁ Strength and ✎ Intelligence for each bat you have summoned.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Fiery Kuudra Core", rarity: "EPIC", stats: "+2 ☘ Hunter Fortune", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Infernal Kuudra Core", rarity: "LEGENDARY", stats: "+3 ☘ Hunter Fortune", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Cropie Talisman", rarity: "COMMON", stats: "+10 ☘ Wheat Fortune\n+10 ☘ Carrot Fortune\n+10 ☘ Potato Fortune", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Squash Ring", rarity: "UNCOMMON", stats: "+20 ☘ Wheat/Carrot/Potato/Pumpkin/Melon/Cocoa Fortune", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Fermento Artifact", rarity: "RARE", stats: "+30 ☘ Farming Fortune", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Future Calories Talisman", rarity: "COMMON", stats: "+1 ☯ Fishing Wisdom", effect: "+21s ф Rift Time (Rift Transfer)", source: "Ender Chest Rift Transfer" },
+            { category: "Other craftable accessories", name: "Agarimoo Talisman", rarity: "COMMON", stats: "+1 ☂ Fishing Speed", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Agarimoo Ring", rarity: "UNCOMMON", stats: "+1 ☯ Fishing Wisdom\n+2 ☂ Fishing Speed", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Agarimoo Artifact", rarity: "RARE", stats: "+1 ☯ Farming Wisdom\n+1 ☯ Fishing Wisdom\n+3 ☂ Fishing Speed", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Blue Jerry Talisman", rarity: "RARE", stats: "-2 ✎ Intelligence", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Purple Jerry Talisman", rarity: "EPIC", stats: "-3 ✎ Intelligence", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Golden Jerry Artifact", rarity: "LEGENDARY", stats: "-4 ✎ Intelligence", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Lush Talisman", rarity: "UNCOMMON", stats: "+1 ❤ Health", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Lush Ring", rarity: "RARE", stats: "+3 ❤ Health", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Lush Artifact", rarity: "EPIC", stats: "+5 ❤ Health\n+1 ❣ Health Regen", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Blaze Talisman", rarity: "RARE", stats: "+3 ❂ True Defense", effect: "Reduce the amount of damage taken from ♨ Infernal mobs by 5%.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Pulse Ring", rarity: "UNCOMMON", stats: "+0.25 ✯ Magic Find", effect: "Grants an additional +1% charge when filling up Empty Thunder Bottles.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Mineral Talisman", rarity: "RARE", stats: "+3 ☘ Mining Fortune", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Glossy Mineral Talisman", rarity: "EPIC", stats: "+6 ☘ Mining Fortune", effect: "-", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Draconic Talisman", rarity: "UNCOMMON", stats: "+1 ❤ Health", effect: "Increases damage dealt to Dragons by 2%.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Draconic Ring", rarity: "RARE", stats: "+2 ❤ Health", effect: "Increases damage dealt to Dragons by 3%.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Draconic Artifact", rarity: "EPIC", stats: "+3 ❤ Health", effect: "Increases damage dealt to Dragons by 5%.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Glacial Ring", rarity: "UNCOMMON", stats: "-", effect: "Grants +10 ☯ Mining Wisdom on Jerry's Workshop.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Glacial Artifact", rarity: "RARE", stats: "-", effect: "Grants +15 ☯ Mining Wisdom on Jerry's Workshop.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Beastmaster Crest", rarity: "COMMON", stats: "Pet Exp Boost: +0.1%", effect: "Gains stats based on how many mythological creatures and Minos followers you've slain.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Beastmaster Crest", rarity: "UNCOMMON", stats: "+0.1 ✎ Intelligence\nPet Exp Boost: +0.2%", effect: "Gains stats based on how many mythological creatures and Minos followers you've slain.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Beastmaster Crest", rarity: "RARE", stats: "+0.2 ✎ Intelligence\nPet Exp Boost: +0.3%", effect: "Gains stats based on how many mythological creatures and Minos followers you've slain.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Beastmaster Crest", rarity: "EPIC", stats: "+0.2 ❤ Health\n+0.2 ✎ Intelligence\nPet Exp Boost: +0.4%", effect: "Gains stats based on how many mythological creatures and Minos followers you've slain.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Beastmaster Crest", rarity: "LEGENDARY", stats: "+0.3 ❤ Health\n+0.3 ✎ Intelligence\nPet Exp Boost: +0.5%", effect: "Gains stats based on how many mythological creatures and Minos followers you've slain.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Raggedy Shark Tooth Necklace", rarity: "COMMON", stats: "+2 ❁ Strength", effect: "Grants +5% chance to get Shark Teeth during Fishing Festivals.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Dull Shark Tooth Necklace", rarity: "UNCOMMON", stats: "+4 ❁ Strength", effect: "Grants +10% chance to get Shark Teeth during Fishing Festivals.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Honed Shark Tooth Necklace", rarity: "RARE", stats: "+6 ❁ Strength", effect: "Grants +15% chance to get Shark Teeth during Fishing Festivals.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Sharp Shark Tooth Necklace", rarity: "EPIC", stats: "+8 ❁ Strength", effect: "Grants +20% chance to get Shark Teeth during Fishing Festivals.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Razor-sharp Shark Tooth Necklace", rarity: "LEGENDARY", stats: "+10 ❁ Strength", effect: "Grants +25% chance to get Shark Teeth during Fishing Festivals.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Ring of Coins", rarity: "COMMON", stats: "-", effect: "More coins start appearing around you occasionally on public islands. Lucky!", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Artifact of Coins", rarity: "RARE", stats: "-", effect: "Even more coins start appearing around you occasionally on public islands. Lucky!", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Relic of Coins", rarity: "EPIC", stats: "-", effect: "Alot of coins start appearing around you occasionally. You may even pick up a Stock of Stonks.", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Emerald Artifact", rarity: "RARE", stats: "-", effect: "Get +20 coins every minute!", source: "Crafting" },
+            { category: "Other craftable accessories", name: "Ring of the Century", rarity: "UNCOMMON", stats: "-", effect: "What's better than a party? A party with free goodies and an accessories upgrade!", source: "Crafting" },
+
+            // Dungeon Accessories
+            { category: "Dungeon Accessories", name: "Scarf's Studies", rarity: "RARE", stats: "+10s ф Rift Time", effect: "Gain 2% more Dungeons class experience.", source: "Floor II Chest Drop / Ender Chest Rift Transfer" },
+            { category: "Dungeon Accessories", name: "Scarf's Thesis", rarity: "EPIC", stats: "+11s ф Rift Time", effect: "Gain 4% more Dungeons class experience.", source: "Crafting / Ender Chest Rift Transfer" },
+            { category: "Dungeon Accessories", name: "Scarf's Grimoire", rarity: "LEGENDARY", stats: "+12s ф Rift Time", effect: "Gain 6% more Dungeons class experience.", source: "Crafting / Ender Chest Rift Transfer" },
+            { category: "Dungeon Accessories", name: "Treasure Talisman", rarity: "RARE", stats: "-", effect: "Grants +1% extra loot to end of dungeon chests.", source: "Floor IV Dungeon Secrets" },
+            { category: "Dungeon Accessories", name: "Treasure Ring", rarity: "EPIC", stats: "-", effect: "Grants +2% extra loot to end of dungeon chests.", source: "Crafting" },
+            { category: "Dungeon Accessories", name: "Treasure Artifact", rarity: "LEGENDARY", stats: "-", effect: "Grants +3% extra loot to end of dungeon chests.", source: "Crafting" },
+            { category: "Dungeon Accessories", name: "Auto Recombobulator", rarity: "LEGENDARY", stats: "-", effect: "Grants a 1% chance to automatically recombobulate drops you get from enemies.", source: "Floor VII Obsidian or Bedrock Chest Drop" },
+            { category: "Dungeon Accessories", name: "Catacombs Expert Ring", rarity: "EPIC", stats: "-", effect: "Increases Catacombs dungeon experience by +10%.", source: "Crafting" },
+            { category: "Dungeon Accessories", name: "Wither Relic", rarity: "LEGENDARY", stats: "-", effect: "Reduces the damage taken from ☠ Wither mobs by 25%.", source: "Crafting" },
+            { category: "Dungeon Accessories", name: "Master Skull", rarity: "COMMON-LEGENDARY", stats: "-", effect: "Grants +1% → +10% ❤ Health and ❁ Strength while in Master Mode Dungeons.", source: "Master Mode Drops" },
+
+            // Mob Drop Accessories
+            { category: "Mob Drop Accessories", name: "Bat Talisman", rarity: "RARE", stats: "+1 ❤ Health\n+1 ✦ Speed\n+1 ✎ Intelligence", effect: "-", source: "Bat Sprite Bat (1% drop)" },
+            { category: "Mob Drop Accessories", name: "Potato Talisman", rarity: "COMMON", stats: "+1 ✦ Speed", effect: "Your Potato Minions farm 5% faster while wearing on your island.", source: "Shiny Pig (0.02% drop)" },
+            { category: "Mob Drop Accessories", name: "Atmospheric Filter", rarity: "RARE", stats: "+25 ☘ Farming Fortune (Spring)\n+20 ☯ Farming Wisdom (Summer)", effect: "While on Garden: Pests spawn +15% (Autumn), Visitors give +5% Copper (Winter).", source: "Mite (0.25% drop)" },
+            { category: "Mob Drop Accessories", name: "Spider Talisman", rarity: "UNCOMMON", stats: "-", effect: "Reduces the damage taken from Ж Arthropod mobs by 5%.", source: "Broodmother (100% drop)" },
+            { category: "Mob Drop Accessories", name: "Fish Affinity Talisman", rarity: "RARE", stats: "+10 ☂ Fishing Speed", effect: "-", source: "Water Hydra (6%-15% drop)" },
+            { category: "Mob Drop Accessories", name: "Wolf Talisman", rarity: "UNCOMMON", stats: "-", effect: "Reduces the damage taken from ☮ Animal mobs by 5%.", source: "Old Wolf (0.1% drop)" },
+            { category: "Mob Drop Accessories", name: "Tarantula Talisman", rarity: "EPIC", stats: "-", effect: "Every 10th melee hit on the same enemy deals +10% damage.", source: "Tarantula Broodfather (0.08%-0.17% drop)" },
+            { category: "Mob Drop Accessories", name: "Lucky Hoof", rarity: "UNCOMMON", stats: "-", effect: "Gain 1% chance to find Trick or Treat Chests.", source: "Nightmare (0.2%-1% drop)" },
+            { category: "Mob Drop Accessories", name: "Pocket Espresso Machine", rarity: "COMMON", stats: "Costs 1 ⸎ Soulflow / 5s combat", effect: "Gain +100 ✎ Intelligence.", source: "Voidgloom Seraph (0.39% drop)" },
+            { category: "Mob Drop Accessories", name: "Handy Blood Chalice", rarity: "COMMON", stats: "Costs 1 ⸎ Soulflow / 5s combat", effect: "Gain +20 ⫽ Ferocity.", source: "Voidgloom Seraph (0.18% drop)" },
+            { category: "Mob Drop Accessories", name: "Netherrack-Looking Sunshade", rarity: "COMMON", stats: "-", effect: "Makes you invisible to Dive Ghasts.", source: "Smoldering Blaze (0.01%) / Millennia-Aged Blaze (1%)" },
+            { category: "Mob Drop Accessories", name: "Runebook", rarity: "COMMON", stats: "+1 ☯ Runecrafting Wisdom", effect: "Tracks Runic Mobs killed. Rarity increases by 1 tier per digit on kill counter up to LEGENDARY.", source: "Runic Mobs (0.1% drop)" },
+
+            // NPC Shop Accessories
+            { category: "NPC Shop Accessories", name: "Zombie Talisman", rarity: "COMMON", stats: "-", effect: "Reduce the damage taken from ༕ Undead mobs by 5%.", source: "Adventurer (500 coins)" },
+            { category: "NPC Shop Accessories", name: "Skeleton Talisman", rarity: "COMMON", stats: "-", effect: "Reduce the damage taken from 🦴 Skeletal mobs by 5%.", source: "Adventurer (500 coins)" },
+            { category: "NPC Shop Accessories", name: "Village Affinity Talisman", rarity: "COMMON", stats: "-", effect: "Increases your ✦ Speed by +10% while held in the Village.", source: "Adventurer (2,500 coins)" },
+            { category: "NPC Shop Accessories", name: "Mine Affinity Talisman", rarity: "COMMON", stats: "-", effect: "Grants +25 ✦ Speed while on Mining Islands.", source: "Adventurer (2,500 coins)" },
+            { category: "NPC Shop Accessories", name: "Intimidation Talisman", rarity: "COMMON", stats: "-", effect: "Level 1 monsters will no longer target you.", source: "Adventurer (10,000 coins)" },
+            { category: "NPC Shop Accessories", name: "Scavenger Talisman", rarity: "COMMON", stats: "-", effect: "Grants +0.5 coins per level of the killed enemy.", source: "Adventurer (10,000 coins)" },
+            { category: "NPC Shop Accessories", name: "Bits Talisman", rarity: "RARE", stats: "-", effect: "Whenever you gain Bits, grants a 10% chance to gain double!", source: "Elizabeth (15,000 Bits)" },
+            { category: "NPC Shop Accessories", name: "Dante's Talisman", rarity: "COMMON", stats: "-", effect: "Counts for the same Magical Power as Dante's Ring.", source: "Dante (1,000,000 coins) - UNOBTAINABLE" },
+            { category: "NPC Shop Accessories", name: "Dante's Ring", rarity: "COMMON", stats: "-", effect: "Counts for the same Magical Power as Dante's Talisman.", source: "Pig Shop (2,000,000 coins)" },
+            { category: "NPC Shop Accessories", name: "Blood God Crest", rarity: "COMMON", stats: "-", effect: "Tracks mob kills. Gain +1 ❁ Strength for each digit on counter.", source: "Pig Shop (32x Enc. Pork + 1M coins)" },
+            { category: "NPC Shop Accessories", name: "Candy Talisman", rarity: "UNCOMMON", stats: "-", effect: "Increases chance for mobs to drop Candy by 5% during Spooky Festival.", source: "Fear Mongerer (16x Green Candy)" },
+            { category: "NPC Shop Accessories", name: "Candy Ring", rarity: "RARE", stats: "-", effect: "Increases chance for mobs to drop Candy by 10% during Spooky Festival.", source: "Fear Mongerer (Candy Talisman + 64x Green Candy)" },
+            { category: "NPC Shop Accessories", name: "Candy Artifact", rarity: "EPIC", stats: "-", effect: "Increases chance for mobs to drop Candy by 15% during Spooky Festival.", source: "Fear Mongerer (Candy Ring + 32x Purple Candy)" },
+            { category: "NPC Shop Accessories", name: "Candy Relic", rarity: "LEGENDARY", stats: "-", effect: "Increases chance for mobs to drop Candy by 20% during Spooky Festival.", source: "Fear Mongerer (Candy Artifact + 1024x Purple Candy)" },
+            { category: "NPC Shop Accessories", name: "Intimidation Ring", rarity: "UNCOMMON", stats: "-", effect: "Monsters at or below Level 5 will no longer target you.", source: "Fear Mongerer (Intimidation Talisman + 100x Green Candy)" },
+            { category: "NPC Shop Accessories", name: "Intimidation Artifact", rarity: "RARE", stats: "-", effect: "Monsters at or below Level 25 will no longer target you.", source: "Fear Mongerer (Intimidation Ring + 100x Purple Candy)" },
+            { category: "NPC Shop Accessories", name: "Jungle Amulet", rarity: "UNCOMMON", stats: "+10 ☘ Gemstone Fortune", effect: "-", source: "Odawa (4x Jungle Heart + 500x Sludge Juice)" },
+            { category: "NPC Shop Accessories", name: "White Gift Talisman", rarity: "COMMON", stats: "-", effect: "Grants +5% more Coins and Skill XP from gifts.", source: "Einary (20 North Stars)" },
+            { category: "NPC Shop Accessories", name: "Green Gift Talisman", rarity: "UNCOMMON", stats: "-", effect: "Grants +10% more Coins and Skill XP from gifts.", source: "Einary (White Gift Talisman + 40 North Stars)" },
+            { category: "NPC Shop Accessories", name: "Blue Gift Talisman", rarity: "RARE", stats: "-", effect: "Grants +15% more Coins and Skill XP from gifts.", source: "Einary (Green Gift Talisman + 60 North Stars)" },
+            { category: "NPC Shop Accessories", name: "Purple Gift Talisman", rarity: "EPIC", stats: "-", effect: "Grants +20% more Coins and Skill XP from gifts.", source: "Einary (White Gift Talisman + 100 North Stars)" },
+            { category: "NPC Shop Accessories", name: "Gold Gift Talisman", rarity: "LEGENDARY", stats: "-", effect: "Grants +25% more Coins and Skill XP from gifts.", source: "Einary (Purple Gift Talisman + Golden Gift + 200 North Stars)" },
+            { category: "NPC Shop Accessories", name: "Trapper Crest", rarity: "UNCOMMON", stats: "-", effect: "Increases odds of finding ENDANGERED or ELUSIVE mobs by 10%.", source: "Talbot (340 Pelts)" },
+            { category: "NPC Shop Accessories", name: "New Year Cake Bag", rarity: "UNCOMMON", stats: "-", effect: "Holds New Year Cakes. Each unique New Year Cake grants +1 ❤ Health.", source: "Baker (250,000 coins)" },
+            { category: "NPC Shop Accessories", name: "Kuudra Follower Artifact", rarity: "EPIC", stats: "-", effect: "Reduces damage taken from Kuudra followers by 50%.", source: "Kheharad (100M coins, Red Sand, Mycelium, Kuudra Teeth)" },
+            { category: "NPC Shop Accessories", name: "Sumsung© G3 Abicase", rarity: "RARE", stats: "-", effect: "Adds +1 contact slot. Grants +1 Magical Power per 2 contacts.", source: "Elizabeth (15,000 Bits)" },
+            { category: "NPC Shop Accessories", name: "Sumsung© GG Abicase", rarity: "RARE", stats: "-", effect: "Adds +2 contact slots. Grants +1 Magical Power per 2 contacts.", source: "Elizabeth (25,000 Bits)" },
+            { category: "NPC Shop Accessories", name: "Rezar® Abicase", rarity: "RARE", stats: "-", effect: "Reduces Abiphone calling to single ringing. +1 Magical Power per 2 contacts.", source: "Elizabeth (26,000 Bits)" },
+            { category: "NPC Shop Accessories", name: "Blue™ but Red Abicase", rarity: "RARE", stats: "+1.5 ☯ Combat Wisdom", effect: "Grants +1 Magical Power per 2 contacts in Abiphone.", source: "Elizabeth (17,000 Bits)" },
+            { category: "NPC Shop Accessories", name: "Actually Blue™ Abicase", rarity: "RARE", stats: "+1.5 ☯ Mining Wisdom", effect: "Grants +1 Magical Power per 2 contacts in Abiphone.", source: "Elizabeth (17,000 Bits)" },
+            { category: "NPC Shop Accessories", name: "Blue™ but Green Abicase", rarity: "RARE", stats: "+1.5 ☯ Foraging Wisdom", effect: "Grants +1 Magical Power per 2 contacts in Abiphone.", source: "Elizabeth (17,000 Bits)" },
+            { category: "NPC Shop Accessories", name: "Blue™ but Yellow Abicase", rarity: "RARE", stats: "+1.5 ☯ Farming Wisdom", effect: "Grants +1 Magical Power per 2 contacts in Abiphone.", source: "Elizabeth (17,000 Bits)" },
+            { category: "NPC Shop Accessories", name: "Lighter Blue™ Abicase", rarity: "RARE", stats: "+1.5 ☯ Fishing Wisdom", effect: "Grants +1 Magical Power per 2 contacts in Abiphone.", source: "Elizabeth (17,000 Bits)" },
+            { category: "NPC Shop Accessories", name: "Bingo Talisman", rarity: "COMMON", stats: "-", effect: "-", source: "Bingo NPC (100 Bingo Points)" },
+            { category: "NPC Shop Accessories", name: "Bingo Ring", rarity: "UNCOMMON", stats: "-", effect: "-", source: "Bingo NPC (Bingo Talisman + 150 Bingo Points)" },
+            { category: "NPC Shop Accessories", name: "Bingo Artifact", rarity: "RARE", stats: "-", effect: "-", source: "Bingo NPC (Bingo Ring + 150 Bingo Points)" },
+            { category: "NPC Shop Accessories", name: "Bingo Relic", rarity: "EPIC", stats: "-", effect: "-", source: "Bingo NPC (Bingo Artifact + 200 Bingo Points)" },
+            { category: "NPC Shop Accessories", name: "Jacobus Register", rarity: "LEGENDARY", stats: "+10 ❤ Health\n+1 ♣ Pet Luck", effect: "-", source: "Jacobus (21,500,000 coins)" },
+            { category: "NPC Shop Accessories", name: "Bat Ring", rarity: "EPIC", stats: "+3 ❤ Health\n+2 ✦ Speed\n+2 ✎ Intelligence", effect: "-", source: "Fear Mongerer (Bat Talisman + 64x Green Candy)" },
+            { category: "NPC Shop Accessories", name: "Bat Artifact", rarity: "LEGENDARY", stats: "+5 ❤ Health\n+3 ✦ Speed\n+3 ✎ Intelligence", effect: "-", source: "Fear Mongerer (Bat Ring + 64x Purple Candy)" },
+            { category: "NPC Shop Accessories", name: "Chumming Talisman", rarity: "UNCOMMON", stats: "+1 ☂ Fishing Speed\n+1 ☯ Fishing Wisdom", effect: "-", source: "Moby (32x Full Chum Buckets)" },
+            { category: "NPC Shop Accessories", name: "Great Spook Talisman", rarity: "COMMON", stats: "+2 ☠ Fear", effect: "-", source: "Tyashoi Alchemist (5x Fairy Wings)" },
+            { category: "NPC Shop Accessories", name: "Great Spook Ring", rarity: "UNCOMMON", stats: "+4 ☠ Fear", effect: "-", source: "Tyashoi Alchemist (Great Spook Talisman + 2x Free Spider)" },
+            { category: "NPC Shop Accessories", name: "Great Spook Artifact", rarity: "RARE", stats: "+6 ☠ Fear", effect: "-", source: "Tyashoi Alchemist (Great Spook Ring + ingredients)" },
+            { category: "NPC Shop Accessories", name: "Pesthunter Badge", rarity: "UNCOMMON", stats: "+20 ൠ Bonus Pest Chance", effect: "-", source: "Pesthunter Phillip (25 Pests + 20k coins)" },
+            { category: "NPC Shop Accessories", name: "Pesthunter Ring", rarity: "RARE", stats: "+40 ൠ Bonus Pest Chance", effect: "-", source: "Pesthunter Phillip (100 Pests + Badge + 50k coins)" },
+            { category: "NPC Shop Accessories", name: "Pesthunter Artifact", rarity: "EPIC", stats: "+60 ൠ Bonus Pest Chance", effect: "-", source: "Pesthunter Phillip (250 Pests + Ring + 20k coins)" },
+            { category: "NPC Shop Accessories", name: "Nibble Chocolate Stick", rarity: "COMMON", stats: "-", effect: "Grants +1% chance to find a Chocolate Rabbit and +10 Chocolate/s.", source: "Chocolate Shop (Factory Lvl 2 + 250M Chocolate)" },
+            { category: "NPC Shop Accessories", name: "Smooth Chocolate Bar", rarity: "UNCOMMON", stats: "-", effect: "Grants +2% chance to find a Chocolate Rabbit and +20 Chocolate/s.", source: "Chocolate Shop (Factory Lvl 2 + Nibble Stick + 1B Chocolate)" },
+            { category: "NPC Shop Accessories", name: "Rich Chocolate Chunk", rarity: "RARE", stats: "-", effect: "Grants +3% chance to find a Chocolate Rabbit and +30 Chocolate/s.", source: "Chocolate Shop (Factory Lvl 3 + Smooth Bar + 2B Chocolate)" },
+            { category: "NPC Shop Accessories", name: "Ganache Chocolate Slab", rarity: "EPIC", stats: "-", effect: "Grants +4% chance to find a Chocolate Rabbit and +40 Chocolate/s.", source: "Chocolate Shop (Factory Lvl 3 + Rich Chunk + 3B Chocolate)" },
+            { category: "NPC Shop Accessories", name: "Prestige Chocolate Realm", rarity: "LEGENDARY", stats: "-", effect: "Grants +5% chance to find a Chocolate Rabbit and +50 Chocolate/s.", source: "Chocolate Shop (Factory Lvl 4 + Ganache Slab + 4.5B Chocolate)" },
+            { category: "NPC Shop Accessories", name: "General's Medallion", rarity: "RARE", stats: "-", effect: "Increases base stats of Dungeons items by 1% in Catacombs per secret on secret count.", source: "Zodd (1,000,000 coins)" },
+
+            // Quest Accessories
+            { category: "Quest Accessories", name: "Pig's Foot", rarity: "RARE", stats: "+1 ✦ Speed", effect: "-", source: "Guber (End Race under 48s)" },
+            { category: "Quest Accessories", name: "Wolf Paw", rarity: "UNCOMMON", stats: "+1 ✦ Speed", effect: "-", source: "Gustave (Woods Race under 32s)" },
+            { category: "Quest Accessories", name: "Frozen Chicken", rarity: "RARE", stats: "+1 ✦ Speed", effect: "-", source: "Gulliver (Cluckpoint 3)" },
+            { category: "Quest Accessories", name: "Melody's Hair", rarity: "EPIC", stats: "+6 ✎ Intelligence", effect: "-", source: "Melody (Score 90% on La Vie en Rose)" },
+            { category: "Quest Accessories", name: "Cat Talisman", rarity: "UNCOMMON", stats: "+1 ✦ Speed", effect: "-", source: "Guildford (Dungeon Hub Race)" },
+            { category: "Quest Accessories", name: "Lynx Talisman", rarity: "RARE", stats: "+2 ✦ Speed", effect: "-", source: "Guildford (Dungeon Hub Race)" },
+            { category: "Quest Accessories", name: "Cheetah Talisman", rarity: "EPIC", stats: "+3 ✦ Speed", effect: "-", source: "Guildford (Dungeon Hub Race)" },
+            { category: "Quest Accessories", name: "Odger's Bronze Tooth", rarity: "COMMON", stats: "+0.5% α Sea Creature Chance\n+1% ♔ Trophy Fish Chance", effect: "-", source: "Odger (Trophy Rank)" },
+            { category: "Quest Accessories", name: "Odger's Silver Tooth", rarity: "UNCOMMON", stats: "+1% α Sea Creature Chance\n+2% ♔ Trophy Fish Chance", effect: "-", source: "Odger (Trophy Rank)" },
+            { category: "Quest Accessories", name: "Odger's Gold Tooth", rarity: "RARE", stats: "+1.5% α Sea Creature Chance\n+3% ♔ Trophy Fish Chance", effect: "-", source: "Odger (Trophy Rank)" },
+            { category: "Quest Accessories", name: "Odger's Diamond Tooth", rarity: "EPIC", stats: "+2% α Sea Creature Chance\n+4% ♔ Trophy Fish Chance", effect: "-", source: "Odger (Trophy Rank)" },
+            { category: "Quest Accessories", name: "Jake's Plushie", rarity: "UNCOMMON", stats: "+1 ❤ Health", effect: "Increases pelts obtained when hunting animals by +1.", source: "Jake (Complete Beth's Quest)" },
+            { category: "Quest Accessories", name: "Archaeologist's Compass", rarity: "COMMON", stats: "-", effect: "Right-click to point to nearest Relic!", source: "Archaeologist (Starting Relics Quest)" },
+            { category: "Quest Accessories", name: "King Talisman", rarity: "COMMON", stats: "-", effect: "Commissions grant +10 HOTM Exp.", source: "Talk to all 7 Kings" },
+            { category: "Quest Accessories", name: "Ring of Love", rarity: "COMMON-LEGENDARY", stats: "-", effect: "Grants a 1 in x chance to deal +100% damage.", source: "Romero and Juliette Quest" },
+            { category: "Quest Accessories", name: "Campfire Badge", rarity: "COMMON-LEGENDARY", stats: "+1 → +5 ❣ Health Regen", effect: "Heals x ❤ HP/s while burning.", source: "Trials of Fire" },
+            { category: "Quest Accessories", name: "Soul Campfire Badge", rarity: "COMMON-LEGENDARY", stats: "+2 → +10 ☄ Mending", effect: "Gives x ❈ Def while burning.", source: "Trial of Blue Flames" },
+            { category: "Quest Accessories", name: "Shady Ring", rarity: "UNCOMMON", stats: "-", effect: "Get 1% off in most shops.", source: "Lucius (500k coins + 5 Dark Auction items)" },
+            { category: "Quest Accessories", name: "Crooked Artifact", rarity: "RARE", stats: "-", effect: "Get 2% off in most shops.", source: "Lucius (2M coins + Shady Ring + 10 Dark Auction items)" },
+            { category: "Quest Accessories", name: "Seal of the Family", rarity: "EPIC", stats: "-", effect: "Get 3% off in most shops.", source: "Lucius (10M coins + Crooked Artifact + 15 Dark Auction items)" },
+
+            // Slayer Accessories
+            { category: "Slayer Accessories", name: "Zombie Ring", rarity: "UNCOMMON", stats: "-", effect: "Reduces damage taken from Undead by 10%.", source: "Crafting (Zombie Slayer II)" },
+            { category: "Slayer Accessories", name: "Zombie Artifact", rarity: "RARE", stats: "-", effect: "Reduces damage taken from Undead by 15%.", source: "Crafting (Zombie Slayer VII)" },
+            { category: "Slayer Accessories", name: "Devour Ring", rarity: "RARE", stats: "-", effect: "Heal 5 ❤ HP when killing a monster. Cooldown: 0.5s", source: "Crafting (Zombie Slayer V)" },
+            { category: "Slayer Accessories", name: "Reaper Orb", rarity: "LEGENDARY", stats: "-", effect: "Gain a stack of 2 ❁ Strength for every mob killed in the last 5s.", source: "Crafting (Zombie Slayer VIII)" },
+            { category: "Slayer Accessories", name: "Spider Ring", rarity: "RARE", stats: "-", effect: "Reduces damage taken from Arthropod mobs by 10%.", source: "Crafting (Spider Slayer I)" },
+            { category: "Slayer Accessories", name: "Spider Artifact", rarity: "EPIC", stats: "-", effect: "Reduces damage taken from Arthropod mobs by 15%.", source: "Crafting (Spider Slayer VII)" },
+            { category: "Slayer Accessories", name: "Survivor Cube", rarity: "RARE", stats: "+5 ♨ Vitality", effect: "Grants +5 ♨ Vitality, which increases incoming healing.", source: "Maddox the Slayer (Spider Slayer VII)" },
+            { category: "Slayer Accessories", name: "Red Claw Talisman", rarity: "UNCOMMON", stats: "+1% ☠ Crit Damage", effect: "-", source: "Crafting (Wolf Slayer I)" },
+            { category: "Slayer Accessories", name: "Red Claw Ring", rarity: "RARE", stats: "+3% ☠ Crit Damage", effect: "-", source: "Crafting (Wolf Slayer V)" },
+            { category: "Slayer Accessories", name: "Red Claw Artifact", rarity: "EPIC", stats: "+5% ☠ Crit Damage", effect: "-", source: "Crafting (Wolf Slayer V)" },
+            { category: "Slayer Accessories", name: "Hunter Talisman", rarity: "UNCOMMON", stats: "+2 ☯ Combat Wisdom", effect: "-", source: "Crafting (Wolf Slayer VII)" },
+            { category: "Slayer Accessories", name: "Hunter Ring", rarity: "RARE", stats: "+5 ☯ Combat Wisdom", effect: "-", source: "Crafting (Wolf Slayer VII)" },
+            { category: "Slayer Accessories", name: "Soulflow Pile", rarity: "UNCOMMON", stats: "-", effect: "Converts up to 5 ⸎ Soulflow into 200 ʬ Overflow Mana when leaving combat.", source: "Crafting (Enderman Slayer II)" },
+            { category: "Slayer Accessories", name: "Soulflow Battery", rarity: "RARE", stats: "-", effect: "Converts up to 4 ⸎ Soulflow into 400 ʬ Overflow Mana when leaving combat.", source: "Crafting (Enderman Slayer V)" },
+            { category: "Slayer Accessories", name: "Soulflow Supercell", rarity: "EPIC", stats: "-", effect: "Converts up to 4 ⸎ Soulflow into 600 ʬ Overflow Mana when leaving combat.", source: "Crafting (Enderman Slayer VII)" },
+            { category: "Slayer Accessories", name: "Ender Relic", rarity: "LEGENDARY", stats: "-", effect: "Reduces damage taken from ⊙ Ender mobs by 25%.", source: "Crafting (Enderman Slayer VII)" },
+            { category: "Slayer Accessories", name: "Burststopper Talisman", rarity: "RARE", stats: "+1 ❁ Strength\n+2 ❂ True Defense", effect: "If incoming hit deals >=50% HP, multiply damage by 0.95.", source: "Crafting (Blaze Slayer III)" },
+            { category: "Slayer Accessories", name: "Burststopper Artifact", rarity: "EPIC", stats: "+2 ❁ Strength\n+3 ❂ True Defense", effect: "If incoming hit deals >=50% HP, multiply damage by 0.9.", source: "Crafting (Blaze Slayer VII)" },
+            { category: "Slayer Accessories", name: "Vampire Dentist Relic", rarity: "LEGENDARY", stats: "+30s ф Rift Time\n+1 ❤ Hearts\n+10 ❣ Health Regen\n+1 ♨ Vitality", effect: "Heal +1 ❤ from healing melons. Apply natural regen tick on melee hit.", source: "Crafting (Vampire Slayer V) / Ender Chest Rift Transfer" },
+
+            // Miscellaneous Accessories
+            { category: "Miscellaneous Accessories", name: "Book of Progression", rarity: "COMMON-MYTHIC", stats: "-", effect: "Upgrades as you do. Click to select modifiers!", source: "SkyBlock Level 25" },
+            { category: "Miscellaneous Accessories", name: "Burning Kuudra Core", rarity: "RARE", stats: "-", effect: "Gain a 1% chance for Attributes to spawn 1 level higher.", source: "Kuudra (Paid chest Burning tier)" },
+            { category: "Miscellaneous Accessories", name: "Artifact of Control", rarity: "LEGENDARY", stats: "-", effect: "Holding this artifact grants 2x voting power in Mayor Elections!", source: "Damia (Top 10 bidders)" },
+            { category: "Miscellaneous Accessories", name: "Pandora's Box", rarity: "COMMON", stats: "-", effect: "Complete challenges to earn stats. Gain +1 HP and +1 Strength per 2 challenges.", source: "Damia (Top 20 bidders)" },
+            { category: "Miscellaneous Accessories", name: "Shen's Regalia", rarity: "LEGENDARY", stats: "-", effect: "Grants access to Regalia Room.", source: "Damia (Top 40 bidders)" },
+            { category: "Miscellaneous Accessories", name: "Rift Prism", rarity: "RARE", stats: "-", effect: "Join the Rift at no cost.", source: "Damia Rift (Top 25 bidders)" },
+            { category: "Miscellaneous Accessories", name: "Hegemony Artifact", rarity: "LEGENDARY", stats: "-", effect: "Counts for TWICE the Magical Power in your Accessory Bag.", source: "Sirius (Highest bid in Dark Auction)" },
+            { category: "Miscellaneous Accessories", name: "Magic 8 Ball", rarity: "EPIC", stats: "-", effect: "Grants seasonal Fortune & Wisdom bonuses based on Magic 8 Ball outcome.", source: "Event Drop" },
+            { category: "Miscellaneous Accessories", name: "Nether Artifact", rarity: "EPIC", stats: "-", effect: "Reduces damage taken by Ghasts, Magma Cubes, Blazes, and Pigmen by 5%.", source: "Dark Auction" },
+            { category: "Miscellaneous Accessories", name: "Ender Artifact", rarity: "EPIC", stats: "-", effect: "Reduces damage taken from Endermites, Ender Dragons, and Endermen by 20%.", source: "Dark Auction" },
+            { category: "Miscellaneous Accessories", name: "Wither Artifact", rarity: "EPIC", stats: "-", effect: "Reduces damage taken from Withers by 20%.", source: "Dark Auction" },
+            { category: "Miscellaneous Accessories", name: "Kuudra Follower Relic", rarity: "LEGENDARY", stats: "-", effect: "Reduces damage taken from Kuudra Followers by 65%.", source: "Kuudra Gatekeeper" },
+            { category: "Miscellaneous Accessories", name: "Titanium Talisman", rarity: "UNCOMMON", stats: "+15 ⸕ Mining Speed", effect: "-", source: "Forging (HOTM II)" },
+            { category: "Miscellaneous Accessories", name: "Titanium Ring", rarity: "RARE", stats: "+30 ⸕ Mining Speed", effect: "-", source: "Forging (HOTM III)" },
+            { category: "Miscellaneous Accessories", name: "Titanium Artifact", rarity: "EPIC", stats: "+45 ⸕ Mining Speed", effect: "-", source: "Forging (HOTM IV)" },
+            { category: "Miscellaneous Accessories", name: "Titanium Relic", rarity: "LEGENDARY", stats: "+60 ⸕ Mining Speed", effect: "-", source: "Forging (HOTM V)" },
+            { category: "Miscellaneous Accessories", name: "Test Bucket Please Ignore", rarity: "UNCOMMON", stats: "+0.5 ❂ True Defense", effect: "-", source: "Mirrorverse 4th Puzzle / Rift Transfer" },
+            { category: "Miscellaneous Accessories", name: "Big Brain Talisman", rarity: "COMMON", stats: "+1 ✎ Intelligence", effect: "-", source: "Mirrorverse 5th Puzzle / Rift Transfer" },
+            { category: "Miscellaneous Accessories", name: "Tiny Dancer", rarity: "UNCOMMON", stats: "+1 ☠ Crit Damage", effect: "-", source: "Mirrorverse 6th Puzzle / Rift Transfer" },
+            { category: "Miscellaneous Accessories", name: "Miniaturized Tubulator", rarity: "UNCOMMON", stats: "+1 ❤ Health", effect: "-", source: "Mirrorverse 7th Puzzle / Rift Transfer" },
+            { category: "Miscellaneous Accessories", name: "Potato Talisman (King)", rarity: "COMMON", stats: "+1 ✦ Speed", effect: "Your Potato Minions work 5% faster while wearing in your island.", source: "Potato King" },
+            { category: "Miscellaneous Accessories", name: "Glacial Talisman", rarity: "COMMON", stats: "+5 ☯ Mining Wisdom", effect: "Grants +5 ☯ Mining Wisdom on Jerry's Workshop.", source: "Frozen Treasure (0.38% drop)" },
+            { category: "Miscellaneous Accessories", name: "Talisman of the Century", rarity: "COMMON", stats: "-", effect: "What's better than a party? A party with free goodies!", source: "SkyBlock Anniversary Milestone IV" }
         ];
+
+        let currentCategory = 'ALL';
 
         const tableBody = document.getElementById('tableBody');
         const cardsViewContainer = document.getElementById('cardsViewContainer');
@@ -593,27 +866,40 @@
 
         statTotal.textContent = accessoriesData.length;
 
+        document.querySelectorAll('.pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.getAttribute('data-category');
+                render();
+            });
+        });
+
         function getFilteredData() {
             const query = searchInput.value.toLowerCase().trim();
             const selectedRarity = raritySelect.value;
 
             return accessoriesData.filter(item => {
-                const matchesRarity = (selectedRarity === 'ALL' || item.rarity.toUpperCase() === selectedRarity);
-                const searchHaystack = (item.name + " " + item.effect + " " + item.source).toLowerCase();
+                const matchesCat = (currentCategory === 'ALL' || item.category === currentCategory);
+                const matchesRarity = (selectedRarity === 'ALL' || item.rarity.toUpperCase().includes(selectedRarity));
+                const searchHaystack = (item.name + " " + item.stats + " " + item.effect + " " + item.source + " " + item.category).toLowerCase();
                 const matchesSearch = !query || searchHaystack.includes(query);
 
-                return matchesRarity && matchesSearch;
+                return matchesCat && matchesRarity && matchesSearch;
             });
         }
 
         function openModal(item) {
+            document.getElementById('modalCat').textContent = item.category;
             const rarityBadge = document.getElementById('modalRarity');
-            rarityBadge.className = `badge-rarity rarity-${item.rarity.toUpperCase()}`;
+            const cleanRarity = item.rarity.split('-')[0].toUpperCase();
+            rarityBadge.className = `badge-rarity rarity-${cleanRarity}`;
             rarityBadge.textContent = item.rarity;
 
             document.getElementById('modalName').textContent = item.name;
-            document.getElementById('modalEffect').textContent = item.effect;
+            document.getElementById('modalStats').textContent = item.stats;
             document.getElementById('modalSource').textContent = item.source;
+            document.getElementById('modalEffect').textContent = item.effect;
 
             detailModal.classList.add('active');
         }
@@ -638,16 +924,18 @@
             tableNoResults.style.display = 'none';
             cardsNoResults.style.display = 'none';
 
-            // Render Table
-            tableBody.innerHTML = filtered.map((item) => `
+            tableBody.innerHTML = filtered.map((item) => {
+                const cleanRarity = item.rarity.split('-')[0].toUpperCase();
+                return `
                 <tr data-index="${accessoriesData.indexOf(item)}">
-                    <td><img src="${item.icon}" alt="${item.name}" class="item-icon"></td>
+                    <td><span class="badge-cat">${item.category}</span></td>
                     <td><strong style="color: var(--accent-gold);">${item.name}</strong></td>
-                    <td><span class="badge-rarity rarity-${item.rarity.toUpperCase()}">${item.rarity}</span></td>
+                    <td><span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span></td>
+                    <td style="white-space: pre-line;">${item.stats}</td>
                     <td>${item.effect}</td>
                     <td>${item.source}</td>
                 </tr>
-            `).join('');
+            `}).join('');
 
             document.querySelectorAll('#tableBody tr').forEach(row => {
                 row.addEventListener('click', () => {
@@ -656,22 +944,24 @@
                 });
             });
 
-            // Render Cards
-            cardsViewContainer.innerHTML = filtered.map((item) => `
+            cardsViewContainer.innerHTML = filtered.map((item) => {
+                const cleanRarity = item.rarity.split('-')[0].toUpperCase();
+                return `
                 <div class="card" data-index="${accessoriesData.indexOf(item)}">
                     <div class="card-header">
-                        <img src="${item.icon}" alt="${item.name}" class="item-icon">
-                        <span class="badge-rarity rarity-${item.rarity.toUpperCase()}">${item.rarity}</span>
+                        <span class="badge-cat">${item.category}</span>
+                        <span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span>
                     </div>
                     <div>
                         <div class="card-title">${item.name}</div>
                     </div>
                     <div class="card-body">
+                        <div><strong>Stats:</strong> ${item.stats}</div>
                         <div><strong>Effect:</strong> ${item.effect}</div>
                         <div><strong>Source:</strong> ${item.source}</div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
 
             document.querySelectorAll('.cards-container .card').forEach(card => {
                 card.addEventListener('click', () => {
