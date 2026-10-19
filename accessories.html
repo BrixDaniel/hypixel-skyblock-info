@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypixel Skyblock Accessories</title>
+    <style>
+        :root {
+            --bg-dark: #0B0E14;
+            --bg-header: #111622;
+            --bg-card: #161C2A;
+            --bg-input: #1C2436;
+            --border-color: #2A364F;
+            --text-main: #E2E8F0;
+            --text-muted: #8E9BAE;
+            --accent-gold: #F59E0B;
+            --accent-gold-hover: #D97706;
+            --accent-cyan: #38BDF8;
+            --pill-inactive: #1E293B;
+            --pill-inactive-hover: #2D3D58;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1650px;
+            margin: 0 auto;
+        }
+
+        /* Header Layout */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+            font-size: 24px;
+        }
+
+        .title-group h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -0.02em;
+        }
+
+        .title-group h1 span {
+            color: var(--accent-gold);
+        }
+
+        .title-group p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-badge {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .stat-badge .num-yellow {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .stat-badge .num-cyan {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        /* Controls Section */
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 420px;
+            min-width: 280px;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15);
+        }
+
+        .top-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .rarity-select {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        .view-switch-group {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background-color: var(--accent-gold);
+            color: #000000;
+        }
+
+        .view-btn:not(.active):hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Back to Hub navigation button */
+        .back-hub-btn {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--accent-cyan);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .back-hub-btn:hover {
+            background-color: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Data Tables and Grid */
+        .table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            max-height: 72vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        th {
+            background-color: var(--bg-header);
+            color: var(--accent-gold);
+            padding: 16px 18px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.015);
+        }
+
+        tr:hover {
+            background-color: rgba(245, 158, 11, 0.08);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 20px;
+            max-height: 72vh;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .card-body {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .badge-rarity {
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+        }
+
+        .rarity-COMMON { color: #F8FAFC; background: rgba(248, 250, 252, 0.12); }
+        .rarity-UNCOMMON { color: #4ADE80; background: rgba(74, 222, 128, 0.12); }
+        .rarity-RARE { color: #60A5FA; background: rgba(96, 165, 250, 0.12); }
+        .rarity-EPIC { color: #A855F7; background: rgba(168, 85, 247, 0.12); }
+        .rarity-LEGENDARY { color: #FACC15; background: rgba(250, 204, 21, 0.15); }
+
+        .item-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        /* Modal Details */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 720px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 22px;
+            right: 22px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-main);
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .modal-group {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            border-radius: 10px;
+        }
+
+        .modal-group.full {
+            grid-column: span 2;
+        }
+
+        .modal-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .modal-value {
+            font-size: 1.02rem;
+            color: var(--text-main);
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+
+        .no-results {
+            padding: 50px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-left">
+                <div class="logo-icon">📿</div>
+                <div class="title-group">
+                    <h1>Hypixel Skyblock <span>Accessories</span></h1>
+                    <p>Interactive overview and magical accessories database</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <a href="index_4.html" class="back-hub-btn">🏠 Hub</a>
+                <div class="stat-badge">Total: <span class="num-yellow" id="statTotal">0</span></div>
+                <div class="stat-badge">Shown: <span class="num-cyan" id="statShown">0</span></div>
+            </div>
+        </header>
+
+        <!-- Controls Section -->
+        <div class="controls-wrapper">
+            <div class="top-controls">
+                <div class="search-area">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="searchInput" placeholder="Search accessory name, effect, source...">
+                    </div>
+                </div>
+
+                <div class="top-right-controls">
+                    <select class="rarity-select" id="raritySelect">
+                        <option value="ALL">All Rarities</option>
+                        <option value="LEGENDARY">Legendary</option>
+                        <option value="EPIC">Epic</option>
+                        <option value="RARE">Rare</option>
+                        <option value="UNCOMMON">Uncommon</option>
+                        <option value="COMMON">Common</option>
+                    </select>
+
+                    <div class="view-switch-group">
+                        <button class="view-btn active" id="btnViewTable">
+                            <span>📋</span> Table
+                        </button>
+                        <button class="view-btn" id="btnViewCards">
+                            <span>🔲</span> Cards
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="table-container" id="tableViewContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Icon</th>
+                        <th>Name</th>
+                        <th>Rarity</th>
+                        <th>Effect</th>
+                        <th>Source / Crafting</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="tableNoResults" class="no-results" style="display: none;">No accessories match the selected filters.</div>
+        </div>
+
+        <!-- Cards View -->
+        <div class="cards-container" id="cardsViewContainer" style="display: none;"></div>
+        <div id="cardsNoResults" class="no-results" style="display: none;">No accessories match the selected filters.</div>
+    </div>
+
+    <!-- Modal Detail -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <span class="badge-rarity" id="modalRarity"></span>
+            </div>
+            <h2 id="modalName" style="color: var(--accent-gold); font-size: 1.7rem; margin-bottom: 12px;"></h2>
+
+            <div class="modal-grid">
+                <div class="modal-group full">
+                    <div class="modal-label">Effect</div>
+                    <div class="modal-value" id="modalEffect" style="color: var(--accent-gold);"></div>
+                </div>
+                <div class="modal-group full">
+                    <div class="modal-label">Source / Crafting</div>
+                    <div class="modal-value" id="modalSource"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ukázková data accessories (tady můžeš jednoduše rozšiřovat seznam)
+        const accessoriesData = [
+            {
+                name: "Farming Talisman",
+                rarity: "Common",
+                icon: "https://wiki.hypixel.net/images/f/fc/Farming_Talisman.png",
+                effect: "Increases your Speed by +10% while in the Farm, The Barn, Mushroom Desert, and Garden.",
+                source: "Wheat IV"
+            },
+            {
+                name: "Vaccine Talisman",
+                rarity: "Common",
+                icon: "https://wiki.hypixel.net/images/9/91/Vaccine_Talisman.png",
+                effect: "Reduces the effect of Poison by 10%.",
+                source: "Potato III"
+            },
+            {
+                name: "Farmer Orb",
+                rarity: "Uncommon",
+                icon: "https://wiki.hypixel.net/images/8/87/Farmer_Orb.png",
+                effect: "Increases the regrowth rate of nearby crops on the public islands, regrowing an extra crop every 3 seconds.",
+                source: "Pumpkin VI"
+            }
+        ];
+
+        const tableBody = document.getElementById('tableBody');
+        const cardsViewContainer = document.getElementById('cardsViewContainer');
+        const tableViewContainer = document.getElementById('tableViewContainer');
+        const searchInput = document.getElementById('searchInput');
+        const raritySelect = document.getElementById('raritySelect');
+
+        const statTotal = document.getElementById('statTotal');
+        const statShown = document.getElementById('statShown');
+
+        const btnViewTable = document.getElementById('btnViewTable');
+        const btnViewCards = document.getElementById('btnViewCards');
+        const tableNoResults = document.getElementById('tableNoResults');
+        const cardsNoResults = document.getElementById('cardsNoResults');
+
+        const detailModal = document.getElementById('detailModal');
+        const modalClose = document.getElementById('modalClose');
+
+        statTotal.textContent = accessoriesData.length;
+
+        function getFilteredData() {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedRarity = raritySelect.value;
+
+            return accessoriesData.filter(item => {
+                const matchesRarity = (selectedRarity === 'ALL' || item.rarity.toUpperCase() === selectedRarity);
+                const searchHaystack = (item.name + " " + item.effect + " " + item.source).toLowerCase();
+                const matchesSearch = !query || searchHaystack.includes(query);
+
+                return matchesRarity && matchesSearch;
+            });
+        }
+
+        function openModal(item) {
+            const rarityBadge = document.getElementById('modalRarity');
+            rarityBadge.className = `badge-rarity rarity-${item.rarity.toUpperCase()}`;
+            rarityBadge.textContent = item.rarity;
+
+            document.getElementById('modalName').textContent = item.name;
+            document.getElementById('modalEffect').textContent = item.effect;
+            document.getElementById('modalSource').textContent = item.source;
+
+            detailModal.classList.add('active');
+        }
+
+        modalClose.addEventListener('click', () => detailModal.classList.remove('active'));
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) detailModal.classList.remove('active');
+        });
+
+        function render() {
+            const filtered = getFilteredData();
+            statShown.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = '';
+                cardsViewContainer.innerHTML = '';
+                tableNoResults.style.display = 'block';
+                cardsNoResults.style.display = 'block';
+                return;
+            }
+
+            tableNoResults.style.display = 'none';
+            cardsNoResults.style.display = 'none';
+
+            // Render Table
+            tableBody.innerHTML = filtered.map((item) => `
+                <tr data-index="${accessoriesData.indexOf(item)}">
+                    <td><img src="${item.icon}" alt="${item.name}" class="item-icon"></td>
+                    <td><strong style="color: var(--accent-gold);">${item.name}</strong></td>
+                    <td><span class="badge-rarity rarity-${item.rarity.toUpperCase()}">${item.rarity}</span></td>
+                    <td>${item.effect}</td>
+                    <td>${item.source}</td>
+                </tr>
+            `).join('');
+
+            document.querySelectorAll('#tableBody tr').forEach(row => {
+                row.addEventListener('click', () => {
+                    const idx = row.getAttribute('data-index');
+                    openModal(accessoriesData[idx]);
+                });
+            });
+
+            // Render Cards
+            cardsViewContainer.innerHTML = filtered.map((item) => `
+                <div class="card" data-index="${accessoriesData.indexOf(item)}">
+                    <div class="card-header">
+                        <img src="${item.icon}" alt="${item.name}" class="item-icon">
+                        <span class="badge-rarity rarity-${item.rarity.toUpperCase()}">${item.rarity}</span>
+                    </div>
+                    <div>
+                        <div class="card-title">${item.name}</div>
+                    </div>
+                    <div class="card-body">
+                        <div><strong>Effect:</strong> ${item.effect}</div>
+                        <div><strong>Source:</strong> ${item.source}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.cards-container .card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const idx = card.getAttribute('data-index');
+                    openModal(accessoriesData[idx]);
+                });
+            });
+        }
+
+        btnViewTable.addEventListener('click', () => {
+            btnViewTable.classList.add('active');
+            btnViewCards.classList.remove('active');
+            tableViewContainer.style.display = 'block';
+            cardsViewContainer.style.display = 'none';
+        });
+
+        btnViewCards.addEventListener('click', () => {
+            btnViewCards.classList.add('active');
+            btnViewTable.classList.remove('active');
+            tableViewContainer.style.display = 'none';
+            cardsViewContainer.style.display = 'grid';
+        });
+
+        searchInput.addEventListener('input', render);
+        raritySelect.addEventListener('change', render);
+
+        render();
+    </script>
+</body>
+</html>
