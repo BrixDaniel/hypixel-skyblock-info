@@ -18,6 +18,7 @@
             --accent-cyan: #38BDF8;
             --pill-inactive: #1E293B;
             --pill-inactive-hover: #2D3D58;
+            --accent-purple: #A855F7;
         }
 
         * {
@@ -379,7 +380,8 @@
         .rarity-EPIC { color: #A855F7; background: rgba(168, 85, 247, 0.12); }
         .rarity-LEGENDARY { color: #FACC15; background: rgba(250, 204, 21, 0.15); }
         .rarity-MYTHIC { color: #FF55FF; background: rgba(255, 85, 255, 0.15); }
-        .rarity-UNOBTAINABLE { color: #FF5555; background: rgba(255, 85, 85, 0.15); }
+        .rarity-SPECIAL { color: #FF5555; background: rgba(255, 85, 85, 0.15); }
+        .rarity-VERY_SPECIAL { color: #FF5555; background: rgba(255, 85, 85, 0.2); }
 
         .badge-cat {
             background: #1E293B;
@@ -388,6 +390,15 @@
             border-radius: 12px;
             font-size: 0.78rem;
             font-weight: 600;
+        }
+
+        .badge-mp {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85rem;
         }
 
         .modal-overlay {
@@ -519,6 +530,8 @@
                         <option value="EPIC">Epic</option>
                         <option value="LEGENDARY">Legendary</option>
                         <option value="MYTHIC">Mythic</option>
+                        <option value="SPECIAL">Special</option>
+                        <option value="VERY_SPECIAL">Very Special</option>
                     </select>
 
                     <div class="view-switch-group">
@@ -552,6 +565,7 @@
                         <th>Category</th>
                         <th>Name</th>
                         <th>Rarity</th>
+                        <th>MP</th>
                         <th>Stats</th>
                         <th>Effect</th>
                         <th>Source</th>
@@ -572,6 +586,7 @@
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
                 <span class="badge-cat" id="modalCat"></span>
                 <span class="badge-rarity" id="modalRarity"></span>
+                <span class="badge-mp" id="modalMP"></span>
             </div>
             <h2 id="modalName" style="color: var(--accent-gold); font-size: 1.7rem; margin-bottom: 12px;"></h2>
 
@@ -593,6 +608,22 @@
     </div>
 
     <script>
+        // Funkce pro výpočet Magical Power na základě rarity podle přiložené tabulky
+        function getMagicalPower(rarityName, itemName) {
+            if (itemName === "Hegemony Artifact") return 32; // Speciální případ: Hegemony dá do bagu 2x MP (16 x 2)
+
+            const r = rarityName.toUpperCase().replace(' ', '_');
+            if (r.includes('VERY_SPECIAL')) return 5;
+            if (r.includes('SPECIAL')) return 3;
+            if (r.includes('MYTHIC')) return 22;
+            if (r.includes('LEGENDARY')) return 16;
+            if (r.includes('EPIC')) return 12;
+            if (r.includes('RARE')) return 8;
+            if (r.includes('UNCOMMON')) return 5;
+            if (r.includes('COMMON')) return 3;
+            return 3;
+        }
+
         const accessoriesData = [
             // Craftable Collection Accessories
             { category: "Craftable Collection Accessories", name: "Farming Talisman", rarity: "COMMON", stats: "-", effect: "Increases your ✦ Speed by +10% while in the Farm, The Barn, Mushroom Desert, and Garden.", source: "Wheat IV" },
@@ -882,7 +913,8 @@
             return accessoriesData.filter(item => {
                 const matchesCat = (currentCategory === 'ALL' || item.category === currentCategory);
                 const matchesRarity = (selectedRarity === 'ALL' || item.rarity.toUpperCase().includes(selectedRarity));
-                const searchHaystack = (item.name + " " + item.stats + " " + item.effect + " " + item.source + " " + item.category).toLowerCase();
+                const mpValue = getMagicalPower(item.rarity, item.name);
+                const searchHaystack = (item.name + " " + item.stats + " " + item.effect + " " + item.source + " " + item.category + " " + mpValue + "mp").toLowerCase();
                 const matchesSearch = !query || searchHaystack.includes(query);
 
                 return matchesCat && matchesRarity && matchesSearch;
@@ -892,9 +924,12 @@
         function openModal(item) {
             document.getElementById('modalCat').textContent = item.category;
             const rarityBadge = document.getElementById('modalRarity');
-            const cleanRarity = item.rarity.split('-')[0].toUpperCase();
+            const cleanRarity = item.rarity.split('-')[0].toUpperCase().replace(' ', '_');
             rarityBadge.className = `badge-rarity rarity-${cleanRarity}`;
             rarityBadge.textContent = item.rarity;
+
+            const mpValue = getMagicalPower(item.rarity, item.name);
+            document.getElementById('modalMP').textContent = `⚡ ${mpValue} MP`;
 
             document.getElementById('modalName').textContent = item.name;
             document.getElementById('modalStats').textContent = item.stats;
@@ -925,12 +960,14 @@
             cardsNoResults.style.display = 'none';
 
             tableBody.innerHTML = filtered.map((item) => {
-                const cleanRarity = item.rarity.split('-')[0].toUpperCase();
+                const cleanRarity = item.rarity.split('-')[0].toUpperCase().replace(' ', '_');
+                const mp = getMagicalPower(item.rarity, item.name);
                 return `
                 <tr data-index="${accessoriesData.indexOf(item)}">
                     <td><span class="badge-cat">${item.category}</span></td>
                     <td><strong style="color: var(--accent-gold);">${item.name}</strong></td>
                     <td><span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span></td>
+                    <td><span class="badge-mp">⚡ ${mp}</span></td>
                     <td style="white-space: pre-line;">${item.stats}</td>
                     <td>${item.effect}</td>
                     <td>${item.source}</td>
@@ -945,12 +982,16 @@
             });
 
             cardsViewContainer.innerHTML = filtered.map((item) => {
-                const cleanRarity = item.rarity.split('-')[0].toUpperCase();
+                const cleanRarity = item.rarity.split('-')[0].toUpperCase().replace(' ', '_');
+                const mp = getMagicalPower(item.rarity, item.name);
                 return `
                 <div class="card" data-index="${accessoriesData.indexOf(item)}">
                     <div class="card-header">
                         <span class="badge-cat">${item.category}</span>
-                        <span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <span class="badge-mp">⚡ ${mp} MP</span>
+                            <span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span>
+                        </div>
                     </div>
                     <div>
                         <div class="card-title">${item.name}</div>
