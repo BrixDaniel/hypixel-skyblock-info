@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypixel Skyblock Attributes</title>
+    <style>
+        :root {
+            --bg-dark: #0B0E14;
+            --bg-header: #111622;
+            --bg-card: #161C2A;
+            --bg-input: #1C2436;
+            --border-color: #2A364F;
+            --text-main: #E2E8F0;
+            --text-muted: #8E9BAE;
+            --accent-gold: #F59E0B;
+            --accent-gold-hover: #D97706;
+            --accent-cyan: #38BDF8;
+            --pill-inactive: #1E293B;
+            --pill-inactive-hover: #2D3D58;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1650px;
+            margin: 0 auto;
+        }
+
+        /* Header Layout */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+            font-size: 24px;
+        }
+
+        .title-group h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -0.02em;
+        }
+
+        .title-group h1 span {
+            color: var(--accent-gold);
+        }
+
+        .title-group p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-badge {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .stat-badge .num-yellow {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .stat-badge .num-cyan {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        /* Info Tooltip Button inside top area */
+        .info-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .info-btn {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--accent-gold);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .info-btn:hover {
+            background-color: var(--border-color);
+            border-color: var(--accent-gold);
+        }
+
+        .info-tooltip {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            width: 380px;
+            background-color: #182234;
+            border: 1px solid var(--accent-gold);
+            border-radius: 12px;
+            padding: 16px 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            color: var(--text-main);
+        }
+
+        .info-container:hover .info-tooltip,
+        .info-container:focus-within .info-tooltip {
+            display: flex;
+        }
+
+        .info-tooltip ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-tooltip li {
+            position: relative;
+            padding-left: 18px;
+        }
+
+        .info-tooltip li::before {
+            content: "●";
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+        }
+
+        /* Controls Section */
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 420px;
+            min-width: 280px;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15);
+        }
+
+        .top-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .rarity-select {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        .view-switch-group {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background-color: var(--accent-gold);
+            color: #000000;
+        }
+
+        .view-btn:not(.active):hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Category Pills Row */
+        .category-pills {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+
+        .pill-btn {
+            background-color: var(--pill-inactive);
+            border: 1px solid var(--border-color);
+            color: #C0C9D6;
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .pill-btn:hover {
+            background-color: var(--pill-inactive-hover);
+            color: #FFFFFF;
+        }
+
+        .pill-btn.active {
+            background-color: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: #000000;
+        }
+
+        /* Data Tables and Grid */
+        .table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            max-height: 72vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        th {
+            background-color: var(--bg-header);
+            color: var(--accent-gold);
+            padding: 16px 18px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            white-space: pre-line;
+            cursor: pointer;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.015);
+        }
+
+        tr:hover {
+            background-color: rgba(245, 158, 11, 0.08);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 20px;
+            max-height: 72vh;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .card-attribute {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .card-body {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .badge-rarity {
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+        }
+
+        .rarity-COMMON { color: #F8FAFC; background: rgba(248, 250, 252, 0.12); }
+        .rarity-UNCOMMON { color: #4ADE80; background: rgba(74, 222, 128, 0.12); }
+        .rarity-RARE { color: #60A5FA; background: rgba(96, 165, 250, 0.12); }
+        .rarity-EPIC { color: #A855F7; background: rgba(168, 85, 247, 0.12); }
+        .rarity-LEGENDARY { color: #FACC15; background: rgba(250, 204, 21, 0.15); }
+
+        .badge-cat {
+            background: #1E293B;
+            color: #94A3B8;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        /* Modal Details */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 720px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 22px;
+            right: 22px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-main);
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .modal-group {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            border-radius: 10px;
+        }
+
+        .modal-group.full {
+            grid-column: span 2;
+        }
+
+        .modal-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .modal-value {
+            font-size: 1.02rem;
+            color: var(--text-main);
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+
+        .no-results {
+            padding: 50px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header in English -->
+        <header>
+            <div class="header-left">
+                <div class="logo-icon">💎</div>
+                <div class="title-group">
+                    <h1>Hypixel Skyblock <span>Attributes</span></h1>
+                    <p>Interactive overview and attribute database</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge">Total: <span class="num-yellow" id="statTotal">325</span></div>
+                <div class="stat-badge">Shown: <span class="num-cyan" id="statShown">325</span></div>
+                <div class="stat-badge">Legendary: <span class="num-yellow" id="statLegendary">0</span></div>
+            </div>
+        </header>
+
+        <!-- Controls Section -->
+        <div class="controls-wrapper">
+            <!-- Top Controls (Search + Info Help, Rarity, View toggle) -->
+            <div class="top-controls">
+                <div class="search-area">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="searchInput" placeholder="Search attribute, shard, effects, how to obtain...">
+                    </div>
+
+                    <!-- Info / Help Box Button inside the requested header area -->
+                    <div class="info-container">
+                        <button class="info-btn" tabindex="0">
+                            💡 <span>Quick Info</span>
+                        </button>
+                        <div class="info-tooltip">
+                            <ul>
+                                <li>Use <strong>/am</strong> or <strong>/hb</strong> for easy access to the Attribute Menu.</li>
+                                <li>Type of shards: <strong>⚔️ ➔ Combat</strong>, <strong>💧 ➔ Water</strong>, and <strong>☘️ ➔ Forest</strong>.</li>
+                                <li>Amount of shards required to max an attribute: <strong>24</strong> for Legendary, <strong>32</strong> for Epic, <strong>48</strong> for Rare, <strong>64</strong> for Uncommon, and <strong>96</strong> for Common.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="top-right-controls">
+                    <select class="rarity-select" id="raritySelect">
+                        <option value="ALL">All Rarities</option>
+                        <option value="LEGENDARY">Legendary</option>
+                        <option value="EPIC">Epic</option>
+                        <option value="RARE">Rare</option>
+                        <option value="UNCOMMON">Uncommon</option>
+                        <option value="COMMON">Common</option>
+                    </select>
+
+                    <div class="view-switch-group">
+                        <button class="view-btn active" id="btnViewTable">
+                            <span>📋</span> Table
+                        </button>
+                        <button class="view-btn" id="btnViewCards">
+                            <span>🔲</span> Cards
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Controls (Category Pills in English) -->
+            <div class="category-pills" id="categoryPills">
+                <button class="pill-btn active" data-category="ALL">All</button>
+                <button class="pill-btn" data-category="Combat">Combat</button>
+                <button class="pill-btn" data-category="Fishing">Fishing</button>
+                <button class="pill-btn" data-category="Farming">Farming</button>
+                <button class="pill-btn" data-category="Mining">Mining</button>
+                <button class="pill-btn" data-category="Foraging">Foraging</button>
+                <button class="pill-btn" data-category="Taming">Taming</button>
+                <button class="pill-btn" data-category="Enchanting">Enchanting</button>
+                <button class="pill-btn" data-category="Alchemy">Alchemy</button>
+                <button class="pill-btn" data-category="Global">Global</button>
+            </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="table-container" id="tableViewContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Shard</th>
+                        <th>Attribute</th>
+                        <th>Type</th>
+                        <th>Rarity</th>
+                        <th>How to Obtain</th>
+                        <th>Effect (Max Lvl)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="tableNoResults" class="no-results" style="display: none;">No attributes match the selected filters.</div>
+        </div>
+
+        <!-- Cards View -->
+        <div class="cards-container" id="cardsViewContainer" style="display: none;"></div>
+        <div id="cardsNoResults" class="no-results" style="display: none;">No attributes match the selected filters.</div>
+    </div>
+
+    <!-- Modal in English -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <span class="badge-cat" id="modalCat"></span>
+                <span class="badge-rarity" id="modalRarity"></span>
+            </div>
+            <h2 id="modalShard" style="color: var(--accent-gold); font-size: 1.7rem; margin-bottom: 4px;"></h2>
+            <div id="modalAttribute" style="font-size: 1.15rem; color: var(--text-main); font-weight: 600; margin-bottom: 22px;"></div>
+
+            <div class="modal-grid">
+                <div class="modal-group">
+                    <div class="modal-label">Type / Family</div>
+                    <div class="modal-value" id="modalTypeFamily"></div>
+                </div>
+                <div class="modal-group">
+                    <div class="modal-label">Effect at Max Level</div>
+                    <div class="modal-value" id="modalEffects" style="color: var(--accent-gold);"></div>
+                </div>
+                <div class="modal-group full">
+                    <div class="modal-label">How to Obtain</div>
+                    <div class="modal-value" id="modalHowToObtain"></div>
+                </div>
+                <div class="modal-group full">
+                    <div class="modal-label">Fusion / Alternative Obtain</div>
+                    <div class="modal-value" id="modalAlternative"></div>
+                </div>
+                <div class="modal-group full">
+                    <div class="modal-label">Extra Info</div>
+                    <div class="modal-value" id="modalExtra"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const attributesData = [{"category": "Combat", "shard": "Paragon", "attribute": "Slayer Discount", "family": "-", "type": "⚔️", "how_to_obtain": "Dropped by T4 and T5 Slayer Bosses(except Riftstalker Bloodfiend)\nat Slayer Lvl 5", "extra_info": "-", "effects": "+5% Discount on starting Slayer Quests", "rarity": "Legendary", "alternative_obtain": "Legendary Combat shard + any Combat\nshard upto Epic"}, {"category": "Combat", "shard": "Primordial", "attribute": "Cocoon Chance", "family": "Spider", "type": "⚔️", "how_to_obtain": "Dropped by Primordial Broodfather", "extra_info": "-", "effects": "+5% chance for The Primordial to cocoon Slayer Bosses\nand Slayer Minibosses", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Taurus", "attribute": "Unlimited Torment", "family": "-", "type": "⚔️", "how_to_obtain": "Obtained from Kuudra, Catch Taurus using Pocket Blackhole, Kill while\nusing Salts", "extra_info": "-", "effects": "Increases Intelligence by +1%", "rarity": "Legendary", "alternative_obtain": "Kraken + Chameleon // Spike + any shard"}, {"category": "Combat", "shard": "Spike", "attribute": "Payback", "family": "-", "type": "💧", "how_to_obtain": "Traps in Murkwater Depths or Murkwater Shallows(both underwater), Catch Spike with Fishing Net", "extra_info": "-", "effects": "When hit, your next hit deals +20% damage", "rarity": "Legendary", "alternative_obtain": "Blizzard + any Combat/Forest shard or any\nWater shard upto Epic"}, {"category": "Combat", "shard": "Hellwisp", "attribute": "Matriarch Cubs", "family": "Demon", "type": "⚔️", "how_to_obtain": "Obtained from Kuudra, Catch Hellwisp using Pocket Blackhole, Kill while\nusing Salts, Traps in Matriarch's Lair", "extra_info": "-", "effects": "+20% chance to get a second Heavy Pearl", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Apex Dragon", "attribute": "Veteran", "family": "Dragon", "type": "⚔️", "how_to_obtain": "Fusing Power Dragon + any shard, Obtained from Catacombs M7", "extra_info": "-", "effects": "+10 Combat Wisdom", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Power Dragon", "attribute": "Elite", "family": "Dragon", "type": "⚔️", "how_to_obtain": "Obtained from Catacombs M7", "extra_info": "Guranteed to drop from Catacombs M7\nEmerald or higher reward chest", "effects": "+30% more damage against bosses & minibosses", "rarity": "Legendary", "alternative_obtain": "Hellwisp + any shard"}, {"category": "Combat", "shard": "Shinyfish", "attribute": "Help from Above\n(Life Regeneration)", "family": "-", "type": "💧", "how_to_obtain": "Caught using Moltenfish shard through Treasure fishing", "extra_info": "-", "effects": "+12.5 Health Regen", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Endstone Protector", "attribute": "Unlimited Fortitude (Fortitude)", "family": "-", "type": "⚔️", "how_to_obtain": "Dropped by Endstone Protector", "extra_info": "-", "effects": "+2% Defense", "rarity": "Legendary", "alternative_obtain": "Tempest + any Water/Forest shard\nor any Combat shard upto Epic"}, {"category": "Combat", "shard": "Thorn", "attribute": "Dominance", "family": "-", "type": "⚔️", "how_to_obtain": "Obtained from Catacombs M4", "extra_info": "Guranteed to drop from Catacombs M4 \nEmerald or higher reward chest", "effects": "+15% more damage when at full health", "rarity": "Epic", "alternative_obtain": "Scarf + any Water/Forest shard\nor any Combat shard upto Rare"}, {"category": "Combat", "shard": "Special Zealot", "attribute": "Special Upgrades", "family": "Elusive", "type": "⚔️", "how_to_obtain": "Fusing Zealot + Combat attribute catergory Elusive family shard", "extra_info": "Recombobulated Summoning Eyes increases\nchance of Superior Dragon", "effects": "Summoning Eyes you drop have a 5% chance to be\nrecombobulated", "rarity": "Epic", "alternative_obtain": "Alligator + any Water/Forest shard\nor any Combat shard upto Rare"}, {"category": "Combat", "shard": "Bonzo", "attribute": "Catacombs Explorer", "family": "Demon", "type": "⚔️", "how_to_obtain": "Obtained from Catacombs M1", "extra_info": "Guranteed to drop from Catacombs M1 \nEmerald or higher reward chest", "effects": "+10% Catacomb XP", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Silkbreeze", "attribute": "Forager's Fortune", "family": "-", "type": "💧", "how_to_obtain": "Catch Silkbreeze using Fishing Net or Lasso, Kill while using Salts", "extra_info": "-", "effects": "+5 Magic Find in Foraging Islands", "rarity": "Epic", "alternative_obtain": "Shellwise + Shellwise or any Water/Forest\nshard upto Rare"}, {"category": "Combat", "shard": "Wolverine", "attribute": "Slayer Progress", "family": "Elusive", "type": "☘️", "how_to_obtain": "Purchased in Sanger's Shop", "extra_info": "Costs 750,000 coins and can be purchased\n3 times per day", "effects": "Slayer Quests start +10% complete", "rarity": "Epic", "alternative_obtain": "Mimic + Chameleon"}, {"category": "Combat", "shard": "Scarf", "attribute": "Catacombs Graduate", "family": "-", "type": "⚔️", "how_to_obtain": "Obtained from Catacombs M2", "extra_info": "Guranteed to drop from Catacombs M2 \nEmerald or higher reward chest", "effects": "+20% more Dungeon Class Exp", "rarity": "Epic", "alternative_obtain": "Bonzo + any Water/Forest shard\nor any Combat shard upto Rare"}, {"category": "Combat", "shard": "King Minos", "attribute": "King of Greed", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Empyrean King Minos using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "Increases Coin gain from Griffin Burrows by 25%", "rarity": "Epic", "alternative_obtain": "Sphinx + any Water/Forest shard\nor any Combat shard upto Rare"}, {"category": "Combat", "shard": "Ghost", "attribute": "Veil", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Catch Ghost using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+10 True Defense", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Sphinx", "attribute": "Mythological Tracker", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Empyrean or Exalted Sphinx using \nPocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+5 Tracking on Griffin Burrows", "rarity": "Epic", "alternative_obtain": "Ghost + any Water/Forest shard\nor any Combat shard upto Rare"}, {"category": "Combat", "shard": "Mimc", "attribute": "Faker", "family": "Poltergeist and Evasive", "type": "⚔️", "how_to_obtain": "Kill Mimic while using Salt", "extra_info": "-", "effects": "+10% stronger Dungeon blessings", "rarity": "Epic", "alternative_obtain": "Prince + any shard"}, {"category": "Combat", "shard": "Shellwise", "attribute": "Shell", "family": "Reptile and Turtle", "type": "💧", "how_to_obtain": "Traps in Murkwater Depths(underwater), Catch Shellwise with Fishing Net", "extra_info": "-", "effects": "+100% Regular Knockback Resistence", "rarity": "Epic", "alternative_obtain": "Loch Emperor + any Combat/Forest shard"}, {"category": "Combat", "shard": "Inferno Demonlord", "attribute": "Attack Speed", "family": "Demon", "type": "⚔️", "how_to_obtain": "Dropped by T2, T3 and T4 Inferno Demonlord", "extra_info": "-", "effects": "+10% Attack Speed", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Barbarian Duke", "attribute": "Warrior", "family": "Elusive", "type": "⚔️", "how_to_obtain": "Obtained from Kuudra, Catch Barbarian Duke X using Pocket \nBlackhole, Kill while using Salts", "extra_info": "-", "effects": "+25% melee damage", "rarity": "Epic", "alternative_obtain": "Mimic + any Water/Forest shard\nor any Combat shard upto Rare"}, {"category": "Combat", "shard": "Flare", "attribute": "Infernal Ruler", "family": "-", "type": "⚔️", "how_to_obtain": "Obtained from Kuudra, Catch Flare using Pocket Blackhole, Kill while \nusing Salts", "extra_info": "-", "effects": "+30% more damage against Infernal mobs", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Folf", "attribute": "Catacombs Cap", "family": "-", "type": "⚔️", "how_to_obtain": "Fusing Soul of the Alpha + any Epic or higher shard", "extra_info": "-", "effects": "+50 Speed Cap while in the Catacombs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Hideyho", "attribute": "Elusive Fortune", "family": "Poltergeist", "type": "☘️", "how_to_obtain": "Catch Hideyho using Critter Capsule in Haunted Safari Biome", "extra_info": "Spawns somewhere in the biome but once\nfound, it'll teleport to another location", "effects": "+5 Magic Find against Elusive mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Giant Water Bug", "attribute": "Aquatic Fortune", "family": "Bug", "type": "💧", "how_to_obtain": "Caught by fishing in Hotspot Haven, Traps in Hotspot Haven(underwater)", "extra_info": "Hotspot Haven located at -650 96 183\nnear Spring Depths", "effects": "+5 Magic Find against Aquatic mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Hideonwall", "attribute": "Arcane Fortune", "family": "Shulker", "type": "☘️", "how_to_obtain": "Catch Hideonwall using Critter Capsule in Haunted Safari Biome", "extra_info": "Found hiding behind paintings in Haunted \nMansion", "effects": "+5 Magic Find against Arcane mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Black Widow", "attribute": "Arthropod Fortune", "family": "Spider and Elusive", "type": "⚔️", "how_to_obtain": "Purchased in Sanger's Shop", "extra_info": "Costs 500,000 coins and can be purchased\n6 times per day", "effects": "+5 Magic Find against Arthropod mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Hideonfloor", "attribute": "Woodland Fortune", "family": "Shulker", "type": "☘️", "how_to_obtain": "Catch Hideonfloor using Critter Capsule in Forest Safari Biome", "extra_info": "Found hidden around the biome. Use F3 + B \nfor ease", "effects": "+5 Magic Find against Woodland mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Chuckwalla", "attribute": "Subterranean Fortune", "family": "Reptile and Lizard", "type": "⚔️", "how_to_obtain": "Catch Chuckwalla using Critter Capsule in Cavern Safari Biome", "extra_info": "Follow it to its hole after hitting it with a Critter\nCapsule. Running into the hole will put you into\ncrawl mode where you can follow it to the end", "effects": "+5 Magic Find against Subterranean mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Billygoat", "attribute": "Frozen Fortune", "family": "Arctic", "type": "⚔️", "how_to_obtain": "Catch Billygoat using Critter Capsule in Icy Safari Biome", "extra_info": "Found on top of the mountain", "effects": "+5 Magic Find against Frozen mobs", "rarity": "Rare", "alternative_obtain": "Drybark + Chuckwalla"}, {"category": "Combat", "shard": "Parakeet", "attribute": "Airborne Fortune", "family": "Bird", "type": "☘️", "how_to_obtain": "Catch Parakeet using Critter Capsule in Forest Safari Biome", "extra_info": "Attracted to the birdfeeder, most common with\nWriggleworms", "effects": "+5 Magic Find against Airborne mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Hivethief", "attribute": "Cubic Fortune", "family": "-", "type": "☘️", "how_to_obtain": "Lather Honeycomb on Helix Trees, Catch Hiveleaf using Lasso", "extra_info": "-", "effects": "+5 Magic Find against Cubic mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Wiki Tiki", "attribute": "Construct Fortune", "family": "Creation and Elusive", "type": "💧", "how_to_obtain": "Fusing Shrieky Tiki/Sneaky Tiki/Cheeky Tiki + Epic or higher\nCreation family shard, Kill Wiki Tiki while using Salts", "extra_info": "-", "effects": "+5 Magic Find against Construct mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Hewver", "attribute": "Critter Fortune", "family": "-", "type": "☘️", "how_to_obtain": "Lather Honeycomb on Fig Trees, Catch Hewver using Lasso", "extra_info": "-", "effects": "+5 Magic Find against Critter mobs", "rarity": "Rare", "alternative_obtain": "Black Widow + Fungloom"}, {"category": "Combat", "shard": "Wild Hog", "attribute": "Animal Fortune", "family": "-", "type": "☘️", "how_to_obtain": "Fusing Groundhog + Honeyhog", "extra_info": "-", "effects": "+5 Magic Find against Animal mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Minotaur", "attribute": "Mythological Fortune", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Empyrean or Exalted or Venerable Minotaur using\nPocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+5 Magic Find against Mythological mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Kada Knight", "attribute": "Lifeline", "family": "-", "type": "⚔️", "how_to_obtain": "Obtained from Kuudra, Catch Kada Knights using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+25% more damage & defense when below 20% max HP", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Wither Spectre", "attribute": "Breeze", "family": "-", "type": "⚔️", "how_to_obtain": "Obtained from Kuudra, Catch Wither Spectre using Pocket Blackhole, Kill \nwhile using Salts", "extra_info": "-", "effects": "Decreases mana cost by 10% when you haven't been damaged in last 5s", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Matcho", "attribute": "Ignition", "family": "-", "type": "⚔️", "how_to_obtain": "Obtained from Kuudra, Catch Matcho using Pocket Blackhole, Kill while\nusing Salts", "extra_info": "-", "effects": "+300% increase in duration of fire damage inflicted on\nenemies", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Drowned", "attribute": "Undead Fortune", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Seacurse, Hydrospear or Tidetot using Pocket Blackhole, Kill while using Salts, Traps in Drowned Reliquary", "extra_info": "Entrance to Drowned Reliquary located at \n-674 63 8 near Murkwater Depths", "effects": "+5 Magic Find against Undead mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Skeletor", "attribute": "Deadeye", "family": "-", "type": "⚔️", "how_to_obtain": "Fusing Lapis Skeleton + any Rare or higher shard, Kill Skeletor while using Salt", "extra_info": "-", "effects": "+25% ranged damage", "rarity": "Rare", "alternative_obtain": "Lapis Skeleton + Glacite Walker"}, {"category": "Combat", "shard": "Solsnatcher", "attribute": "Soul Snatcher", "family": "Phantom", "type": "☘️", "how_to_obtain": "Catch Solsnatcher using Critter Capsule in Haunted Safari Biome, Floor\nDrop in Haunted Safari Biome", "extra_info": "Found flying outside Haunted Mansion", "effects": "+10% chance for mobs to drop their soul", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Gazer", "attribute": "Zealot Tracker", "family": "Demon", "type": "⚔️", "how_to_obtain": "Catch Gazer using Critter Capsule in Haunted Safari Biome", "extra_info": "Sleep on a bed and upon waking up, it will \nspawn in the bedroom in Haunted Mansion", "effects": "+5 Tracking towards Special Zealot", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Queen Ant", "attribute": "Elusive Ruler", "family": "Bug and Elusive", "type": "☘️", "how_to_obtain": "Fusing Ant + any Elusive family shard, Kill Queen Ant while using\nSalts, Traps in Ant's Cave", "extra_info": "-", "effects": "+30% more damage against Elusive mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Minos Hunter", "attribute": "Mythological Ruler", "family": "-", "type": "⚔️", "how_to_obtain": "Catch any Minos Hunter using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+30% more damage against Mythological mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Driftling", "attribute": "Subterranean Ruler", "family": "Cave Dweller", "type": "☘️", "how_to_obtain": "Catch Driftling using Critter Capsule in Cavern Safari Biome", "extra_info": "Follows a set path around the biome", "effects": "+30% more damage against Subterranean mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Shrieky Tiki", "attribute": "Construct Ruler", "family": "Creation", "type": "⚔️", "how_to_obtain": "Catch Shrieky Tiki using Pocket Blackhole", "extra_info": "Found as Tiki Totems across Torrhus Canyon", "effects": "+30% more damage against Construct mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Sprawl", "attribute": "Animal Ruler", "family": "-", "type": "💧", "how_to_obtain": "Catch Sprawl using Fishing Net or Lasso, Kill while using Salts", "extra_info": "-", "effects": "+30% more damage against Animal mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Duplico", "attribute": "Arcane Ruler", "family": "Poltergeist", "type": "⚔️", "how_to_obtain": "Catch Duplico using Critter Capsule in Haunted Safari Biome", "extra_info": "Mimics a block. Right click on it to reveal them. Use F3 + B for ease", "effects": "+30% more damage against Arcane mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Bluebird", "attribute": "Airborne Ruler", "family": "Bird", "type": "☘️", "how_to_obtain": "Catch Bluebird using Critter Capsule in Forest Safari Biome", "extra_info": "Attracted to the birdfeeder, most common with\nYogi Berries", "effects": "+30% more damage against Airborne mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Polaris", "attribute": "Frozen Ruler", "family": "Arctic", "type": "⚔️", "how_to_obtain": "Catch Polaris using Critter Capsule in Icy Safari Biome, Floor Drop in\nIcy Safari Biome", "extra_info": "Found in the cave at -124 82 90", "effects": "+30% more damage against Frozen mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Wetwing", "attribute": "Humanoid Ruler", "family": "Drowned", "type": "💧", "how_to_obtain": "Catch Wetwing using Pocket Blackhole, Kill while using Salts, Traps in\nMurkwater Depths or Shallows(underwater)", "extra_info": "-", "effects": "+30% more damage against Humanoid mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Praying Mantis", "attribute": "Pest Ruler", "family": "Bug", "type": "☘️", "how_to_obtain": "Catch Praying Mantis using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+30% more damage against Pest mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Stridersurfer", "attribute": "Magmatic Ruler", "family": "Drowned", "type": "💧", "how_to_obtain": "Catch Stridersurfer using Pocket Blackhole, Kill while using Salts, Traps in Stride-Ember Fissure", "extra_info": "Stride-Ember Fissure located at -680 83 -73\nnear Red House", "effects": "+30% more damage against Magmatic mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Ent", "attribute": "Woodland Ruler", "family": "-", "type": "💧", "how_to_obtain": "Catch Ent using Pocket Blackhole, Kill while using Salts, Traps in Murkwater Depths or Murkwater Shallows(both underwater)", "extra_info": "Found by fishing in Murkwater Loch", "effects": "Axes deal +30% more damage to Woodland\nmobs", "rarity": "Uncommon", "alternative_obtain": "Salmon + any Combat/Forest shard\nor Common/Uncommon Water shard"}, {"category": "Combat", "shard": "Seer", "attribute": "Dragon Shortbow Improvement", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Seer using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+20% more damage on Dragon Shortbow in the End", "rarity": "Uncommon", "alternative_obtain": "Rain Slime + Rain Slime or any Water/Forest shard"}, {"category": "Combat", "shard": "Soul of the Alpha", "attribute": "Combo", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Soul of the Alpha using Pocket Blackhole, Kill while using Salts, Traps in Howling Cave", "extra_info": "-", "effects": "+1% more damage per Grandma Wolf combo", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Zealot Bruiser", "attribute": "Ender Ruler (Ender)", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Zealot Bruiser using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+30% more damage against Ender mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Sycophant", "attribute": "Life Recovery", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Revenant Sycophant using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "Heals for +1% of Max HP on each mob kill", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Rain Slime", "attribute": "Mana Steal", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Rain Slime or Toxic Rain Slime using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "Regain +5 Mana on every hit on monsters", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Zombie Soldier", "attribute": "Undead Ruler (Undead)", "family": "-", "type": "⚔️", "how_to_obtain": "Kill Zombie Knight, Zombie Commander, Zombie Soldier, Zombie Lord in the Catacombs while using Salts", "extra_info": "-", "effects": "+30% more damage against Undead mobs", "rarity": "Uncommon", "alternative_obtain": "Viper or Obsidian Defender + any\nWater/Forest shard"}, {"category": "Combat", "shard": "Flaming Spider", "attribute": "Arthropod Ruler (Arachno)", "family": "Spider", "type": "⚔️", "how_to_obtain": "Catch Flaming Spider using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+30% more damage against Arthropod mobs", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Blue Jay", "attribute": "Airborne Resistence", "family": "Bird", "type": "☘️", "how_to_obtain": "Catch Blue Jay using Lasso", "extra_info": "-", "effects": "+40 Defense against Airborne mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Brineling", "attribute": "Arcane Resistence", "family": "-", "type": "💧", "how_to_obtain": "Catch Brineling using Fishing Net, Kill while using Salts", "extra_info": "-", "effects": "+40 Defense against Arcane mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Haggard", "attribute": "Skeletal Resistence", "family": "-", "type": "💧", "how_to_obtain": "Catch Haggard using Fishing Net, Kill while using Salts", "extra_info": "-", "effects": "+40 Defense against Skeletal mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Strongarm", "attribute": "Frozen Resistence", "family": "Arctic", "type": "⚔️", "how_to_obtain": "Catch Strongarm using Critter Capsule in Icy Safari Biome, Floor Drop in\nIcy Safari Biome", "extra_info": "Found on the side of the hill", "effects": "+40 Defense against Frozen mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Stag Beetle", "attribute": "Woodland Resistence", "family": "Bug", "type": "☘️", "how_to_obtain": "Lather Honeycomb on Mangrove Trees, Catch Stag Beetle with Lasso", "extra_info": "-", "effects": "+40 Defense against Woodland mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Dumpster Diver", "attribute": "Aquatic Resistence", "family": "Trash Lover", "type": "💧", "how_to_obtain": "Traps in Backwater Bayou(underwater), Kill Dumpster Diver while using Salts", "extra_info": "-", "effects": "+40 Defense against Aquatic mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Howling Spirit", "attribute": "Animal Resistence", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Catch Howling Spirit or Pack Spirit using Pocket Blackhole, Kill while\nusing Salts", "extra_info": "-", "effects": "+40 Defense against Animal mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Cretan Bull", "attribute": "Mythological Resistence", "family": "-", "type": "⚔️", "how_to_obtain": "Catch any Cretan Bull using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+40 Defense against Mythological mobs", "rarity": "Common", "alternative_obtain": "Miner Zombie + any Water/Forest shard"}, {"category": "Combat", "shard": "Azure", "attribute": "Forest Strength", "family": "Tropical Fish", "type": "💧", "how_to_obtain": "Traps in Murkwater Depths or Murkwater Shallows(both underwater), Caught while fishing in Tomb Floodway, Catch Azure Tropical Fish with Fishing Net", "extra_info": "Tomb Floodway located at -584 91 16\nnear Wyrmgrove Tomb", "effects": "+50 Strength on Foraging Islands", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Chill", "attribute": "Skeletal Ruler", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Chillshot or Chillblade using Pocket Blackhole, Kill while using Salts, Traps in Wrymgrove Tomb", "extra_info": "Wyrmgrove Tomb located at -604 90 -4\nnear Moonglade Marsh", "effects": "+30% more damage against Skeletal mobs", "rarity": "Common", "alternative_obtain": "Lapis Zombie + any Water/Forest shard"}, {"category": "Combat", "shard": "Bezal", "attribute": "Blazing Resistence", "family": "-", "type": "⚔️", "how_to_obtain": "Obtained from Kuudra, Catch Bezal using Pocket Blackhole, Kill while \nusing Salts", "extra_info": "-", "effects": "+40 Defense against Infernal mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Zealot", "attribute": "Ender Resistence", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Zealot using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+40 Defense against Ender mobs", "rarity": "Common", "alternative_obtain": "Lapis Zombie + Tank Zombie"}, {"category": "Combat", "shard": "Voracious Spider", "attribute": "Arthropod Resistence", "family": "Spider", "type": "⚔️", "how_to_obtain": "Catch Voracious Spider using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+40 Defense against Arthropod mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Combat", "shard": "Tank Zombie", "attribute": "Undead Resistence", "family": "-", "type": "⚔️", "how_to_obtain": "Kill any Tank Zombie in Catacombs while using Salts", "extra_info": "-", "effects": "+40 Defense against Undead mobs", "rarity": "Common", "alternative_obtain": "Voracious Spider + any Water/Forest shard"}, {"category": "Combat", "shard": "Golden Ghoul", "attribute": "Midas Touch", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Golden Ghoul using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+10 Coins on kill", "rarity": "Common", "alternative_obtain": "Zealot + any Water/Forest shard"}, {"category": "Fishing", "shard": "Ghost Crab", "attribute": "Treasure Fisher", "family": "Crustacean", "type": "💧", "how_to_obtain": "Fusing Blue Crab + Rare or higher Poltergeist family shard", "extra_info": "-", "effects": "+1 Treasure Chance", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Nessie", "attribute": "Loch Hook", "family": "Reptile", "type": "💧", "how_to_obtain": "Catch Nessie using Pocket Blackhole", "extra_info": "-", "effects": "+5 Double Hook Chance in Foraging Islands", "rarity": "Legendary", "alternative_obtain": "Blizzard + Blizzard or any Combat/Forest\nshard or any Water shard upto Epic"}, {"category": "Fishing", "shard": "Titanoboa", "attribute": "Bayou Hook", "family": "Reptile, Serpent, Scaled\nand Elusive", "type": "💧", "how_to_obtain": "Kill while using Salts, Traps in Backwater Bayou", "extra_info": "-", "effects": "+5 Double Hook Chance in Fishing Islands", "rarity": "Legendary", "alternative_obtain": "Lord Jawbus + any Combat/Forest shard\nor any Water shard upto Epic"}, {"category": "Fishing", "shard": "Lord Jawbus", "attribute": "Crimson Hook\n(Double Hook)", "family": "Creation and Elusive", "type": "💧", "how_to_obtain": "Obtained in Kuudra, Catch Lord Jawbus using Pocket Blackhole, Kill while \nusing Salts", "extra_info": "-", "effects": "+5 Double Hook Chance in Combat Islands", "rarity": "Legendary", "alternative_obtain": "Shinyfish + any shard"}, {"category": "Fishing", "shard": "Giant Isopod", "attribute": "Fisher's Fortune", "family": "Crustacean and Elusive", "type": "💧", "how_to_obtain": "Kill Giant Isopod while using Salts", "extra_info": "-", "effects": "+5 Magic Find in Fishing Islands", "rarity": "Epic", "alternative_obtain": "Silkbreeze + any Combat/Forest shard\nor any Water shard upto Rare"}, {"category": "Fishing", "shard": "Blue Crab", "attribute": "Outstanding Fisher", "family": "Crustacean", "type": "💧", "how_to_obtain": "Fusing Rare or higher Crustacean family shard + Rare or higher\nTreasure Fish family shard", "extra_info": "-", "effects": "+10% chance for Treasure catches to be OUTSTANDING", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Loch Emperor", "attribute": "Sea Wisdom\n(Fishing Experience)", "family": "-", "type": "💧", "how_to_obtain": "Catch Loch Emperor using Pocket Blackhole, Kill while using Salts", "extra_info": "Found by fishing in Murkwater Loch", "effects": "+5 Fishing Wisdom", "rarity": "Epic", "alternative_obtain": "Water Hydra + any shard"}, {"category": "Fishing", "shard": "Water Hydra", "attribute": "Fishing Speed", "family": "-", "type": "💧", "how_to_obtain": "Catch Water Hydra using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+30 Fishing Speed", "rarity": "Epic", "alternative_obtain": "Fire Eel or Cyro + any Combat/Forest shard \nor any Water shard upto Epic"}, {"category": "Fishing", "shard": "Fire Eel", "attribute": "Trophy Hunter", "family": "Amphibian and Eel", "type": "💧", "how_to_obtain": "Obtained from Kuudra, Fusing Eel + Moray Eel, Fusing Moray \nEel + Firefly, Catch Fire Eel using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+20 Trophy Fish Chance", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Goldolot", "attribute": "Echo of Buckets", "family": "Axolotl and Amphibian", "type": "💧", "how_to_obtain": "Catch Goldolot using Fishing Net or Lasso, Traps in Torrhus\nSprings(on land) / Spring Depths or Shallows(underwater)", "extra_info": "-", "effects": "+20% stronger \"Bucket\" attributes", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Mantis Shrimp", "attribute": "Great Treasure", "family": "Crustacean", "type": "💧", "how_to_obtain": "Catch Mantis Shrimp using Critter Capsule in Icy Safari Biome", "extra_info": "Found at the bottom of Icy Lake", "effects": "+10% chance for Treasure catches to be GREAT", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Maggot", "attribute": "Boot Fisher", "family": "Bug and Trash Lover", "type": "💧", "how_to_obtain": "Fushing any Trash Lover family shard + Uncommon or higher \nBug family shard", "extra_info": "-", "effects": "+10% chance for Junk catches to be OUTSTANDING", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Seashine", "attribute": "Diamond Frog", "family": "Squid", "type": "💧", "how_to_obtain": "Catch Seashine with Fishing Net", "extra_info": "Spawns from Exploding Lily Pads", "effects": "+5% chance for Trophy Frogs to be DIAMOND", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Lava Flame", "attribute": "Blazing Fortune", "family": "-", "type": "💧", "how_to_obtain": "Obtained from Kuudra, Catch Lava Flame using Pocket Blackhole, Kill\nwhile using Salts, Traps in Crimson Isle(under lava)", "extra_info": "-", "effects": "+10 Magic Find against Magmatic Creatures", "rarity": "Rare", "alternative_obtain": "Eel + any Combat/Forest shard"}, {"category": "Fishing", "shard": "Sneaky Tiki", "attribute": "Tiki Tracker", "family": "Creation", "type": "💧", "how_to_obtain": "Catch Sneaky Tiki using Pocket Blackhole", "extra_info": "Found as Tiki Totems across Torrhus Canyon", "effects": "+5 Tracking towards Wiki Tiki", "rarity": "Uncommon", "alternative_obtain": "Mountain Goat + Cheeky Tiki"}, {"category": "Fishing", "shard": "Cheeky Tiki", "attribute": "Bayou Treasure", "family": "Creation", "type": "💧", "how_to_obtain": "Catch Cheeky Tiki using Pocket Blackhole", "extra_info": "Found as Tiki Totems across Torrhus Canyon", "effects": "+1 Treasure Chance in Backwater Bayou", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Sepialot", "attribute": "Bucket Greed", "family": "Axolotl and Amphibian", "type": "💧", "how_to_obtain": "Catch Sepialot using Fishing Net or Lasso, Traps in Torrhus Canyon\nor Springs(on land) / Spring Depths or Shallows(underwater)", "extra_info": "-", "effects": "+10% extra Coins when Chum is deposited into\nany bucket", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Water Snake", "attribute": "Titanoboa Tracker", "family": "Reptile, Scaled and \nSerpent", "type": "💧", "how_to_obtain": "Catch Water Snake using Fishing Net, Traps in Spring Depths\nor Shallows(underwater)", "extra_info": "-", "effects": "+5 Tracking towards Titanoboa", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Shuddersquid", "attribute": "Yeti Tracker", "family": "Squid", "type": "💧", "how_to_obtain": "Catch Shuddersquid using Critter Capsule in Icy Safari Biome", "extra_info": "Found in the lake located at -124 92 -29", "effects": "+5 Tracking towards Yeti", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Litterbug", "attribute": "Buckle Fisher", "family": "Bug and Trash Lover", "type": "☘️", "how_to_obtain": "Catch Litterbug using Critter Capsule in Haunted Safari Biome, Floor Drop\nin Haunted Safari Biome", "extra_info": "Found across the floor in the attic and the kitchen\nof Haunted Mansion", "effects": "+10% chance for Junk catches to be GREAT", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Osedax", "attribute": "Flexible Fisher", "family": "Elusive", "type": "💧", "how_to_obtain": "Purchased in Sanger's Shop", "extra_info": "Costs 250,000 coins and can be purchased\n10 times per day", "effects": "+25% chance to catch Flexbones while fishing in Tomb\nFloodway", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Tewtil", "attribute": "Lily Puncher", "family": "Reptile and Turtle", "type": "💧", "how_to_obtain": "Traps in Lotus Atoll(underwater or land), Hunting Tewtil in Lotus Atoll", "extra_info": "Feed Trophy Frogs to Tewtil to obtain the shard", "effects": "Punching Exploding Lily Pads applies +50% more force", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Flipflopper", "attribute": "Golden Frog", "family": "Amphibian", "type": "💧", "how_to_obtain": "Catch Flipflopper with Fishing Net", "extra_info": "Spawns from Exploding Lily Pads", "effects": "+5% chance for Trophy Frogs to be Gold", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Lotum", "attribute": "Lily Tracker", "family": "Amphibian and Frog", "type": "💧", "how_to_obtain": "Traps in Lotus Atoll(land), Hunting Lotum in Lotus Atoll", "extra_info": "Punch Lotum till it's exhausted", "effects": "+10 Tracking on Exploding Lily Pads", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Salmon", "attribute": "Lost and Found", "family": "-", "type": "💧", "how_to_obtain": "Traps in Murkwater Depths or Murkwater Shallows(both underwater), Caught by fishing in Tomb Floodway, Catch Salmon with Fishing Net", "extra_info": "Tomb Floodway located at -584 91 16\nnear Wyrmgrove Tomb", "effects": "+1% chance to find a Wet Book when fishing a Treasure", "rarity": "Uncommon", "alternative_obtain": "Mossybit + any Combat/Forest shard"}, {"category": "Fishing", "shard": "Goldfin", "attribute": "Gold Bait", "family": "-", "type": "💧", "how_to_obtain": "Fusing Golden Ghoul + any Water shard", "extra_info": "-", "effects": "Reduces cooldown of Golden Fish by 5m 0s", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Magma Slug", "attribute": "Infection", "family": "-", "type": "💧", "how_to_obtain": "Obtained from Kuudra, Catch Magma Slug using Pocket Blackhole, Kill\nwhile using Salts, Traps in Crimson Isle(under lava)", "extra_info": "-", "effects": "+2% chance of catching corrupted Sea Creatures", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Timil", "attribute": "Torrhus Diver", "family": "Tropical Fish", "type": "💧", "how_to_obtain": "Catch Timil using Fishing Net, Traps in Spring Path(underwater)", "extra_info": "-", "effects": "+5 Pressure Resistence in Torrhus Canyon", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Cavernfish", "attribute": "Cave Fishing", "family": "Cave Dweller and Tropical\nFish", "type": "💧", "how_to_obtain": "Catch Cavernfish using Critter Capsule in Cavern Safari Biome", "extra_info": "Found in an underground pond located at -76 71 68", "effects": "+30 Fishing Speed in Mining Islands", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Tepid", "attribute": "Lake Fishing", "family": "Tropical Fish", "type": "💧", "how_to_obtain": "Catch Tepid using Critter Capsule in Icy Safari Biome", "extra_info": "Found in the Icy Lake", "effects": "+30 Fishing Speed in Fishing Islands", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Lotusfish", "attribute": "Lotus Trophy", "family": "Tropical Fish", "type": "💧", "how_to_obtain": "Traps in Lotus Atoll(underwater), Catch Lotus Fish with Fishing Net", "extra_info": "-", "effects": "+10 Trophy Fish Chance in Lotus Atoll", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Coralot", "attribute": "Bucket Lover", "family": "Axolotl and Amphibian", "type": "💧", "how_to_obtain": "Catch Coralot with Fishing Net or Lasso, Traps in Murkwater Depths(underwater)", "extra_info": "-", "effects": "+50% chance to gain extra Chums", "rarity": "Common", "alternative_obtain": "Tadgang + any Combat/Forest shard\nor Common Water shard"}, {"category": "Fishing", "shard": "Verdant", "attribute": "Forest Fishing", "family": "Tropical Fish", "type": "💧", "how_to_obtain": "Traps in Murkwater Depths or Murkwater Shallows(both underwater), Caught by fishing in Tomb Floodway, Catch Verdant Tropical Fish with Fishing Net", "extra_info": "-", "effects": "+30 Fishing Speed in Foraging Islands", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Fishing", "shard": "Cod", "attribute": "Cheapstake", "family": "Tropical Fish", "type": "💧", "how_to_obtain": "Traps in Murkwater Depths or Murkwater Shallows(both underwater), Caught by fishing in Tomb Floodway, Catch Cod with Fishing Net", "extra_info": "-", "effects": "+10% more coins from fishing up treasures", "rarity": "Common", "alternative_obtain": "Mist + any Combat/Forest shard"}, {"category": "Fishing", "shard": "Bogged", "attribute": "Creature Fisher", "family": "-", "type": "💧", "how_to_obtain": "Catch Bogged using Pocket Blackhole, Kill while using Salts", "extra_info": "Found by fishing in Murkwater Loch", "effects": "+5 Sea Creature Chance", "rarity": "Common", "alternative_obtain": "Verdant + Verdant or any Combat/Forest shard"}, {"category": "Fishing", "shard": "Inkling", "attribute": "Fisherman", "family": "Squid", "type": "💧", "how_to_obtain": "Catch Night Squid using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+10% chance to not consume any bait", "rarity": "Common", "alternative_obtain": "Cod + Cod or any Combat/Forest shard"}, {"category": "Farming", "shard": "Flora", "attribute": "Unique Bonus", "family": "-", "type": "☘️", "how_to_obtain": "Drops rarely from analyzing mutations using the Crop Analyzer", "extra_info": "-", "effects": "Counts as +10 towards the Unique Crop Bonus in\nthe Greenhouse", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Timestalk Clone", "attribute": "Greenhouse Speed", "family": "Poltergeist", "type": "⚔️", "how_to_obtain": "Catch Timestalk Clone using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+5% Greenhouse Growth Speed", "rarity": "Legendary", "alternative_obtain": "Paragon + any shard"}, {"category": "Farming", "shard": "Wartybug", "attribute": "Wart Eater", "family": "Bug", "type": "☘️", "how_to_obtain": "Fusing Dragonfly + Lunar Moth", "extra_info": "-", "effects": "+0.1% chance to obtain a Warty from breaking Nether Warts", "rarity": "Legendary", "alternative_obtain": "Lapis Creeper or Naga + Chameleon"}, {"category": "Farming", "shard": "Dragonfly", "attribute": "Garden Wisdom", "family": "Bug", "type": "☘️", "how_to_obtain": "Fusing Firefly + any Dragon family shard, Catch Dragonfly using Lasso, Kill\nwhile using Salts", "extra_info": "-", "effects": "+5 Farming Wisdom", "rarity": "Epic", "alternative_obtain": "XYZ + Chameleon"}, {"category": "Farming", "shard": "Firefly", "attribute": "Solar Power", "family": "Bug", "type": "☘️", "how_to_obtain": "Fusing Praying Mantis + Bezal, Cinderbat, Flare, Lava Flame, Fire Eel, Bal \nor Flaming Spider, Catch Firefly using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+50 Farming Fortune during the day", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Lunar Moth", "attribute": "Lunar Power", "family": "Bug", "type": "☘️", "how_to_obtain": "Fusing Ladybug + Rare or higher Bug family shard, Catch Lunar Moth\nusing Lasso, Kill while using Salts", "extra_info": "-", "effects": "+50 Farming Fortune during the night", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Zombuddy", "attribute": "Mutation Serendipity", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Zombuddy using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+5% chance for Mutations to instantly re-mutate at their first\ngrowth phase when harvested", "rarity": "Rare", "alternative_obtain": "Stoneworm + Hivethief"}, {"category": "Farming", "shard": "Ladybug", "attribute": "Pretty Clothes", "family": "Bug", "type": "☘️", "how_to_obtain": "Fusing Earthworm + Invisibug", "extra_info": "-", "effects": "+10% more Copper from Garden Visitors", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Beetle", "attribute": "Crop Bug", "family": "Bug and Trash Lover", "type": "☘️", "how_to_obtain": "Catch Beetle using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+10 Overbloom", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Invisibug", "attribute": "Fancy Visit", "family": "Bug", "type": "☘️", "how_to_obtain": "Traps in Galatea(on land), Found in Galatea", "extra_info": "-", "effects": "+10% chance for Rare or higher Garden Visitors to arrive", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Field Mouse", "attribute": "Pest Luck", "family": "Elusive and Trash Lover", "type": "☘️", "how_to_obtain": "Catch Field Mouse using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+5 Overbloom towards Pests", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Mosquito", "attribute": "Enchanted Farmer", "family": "Bug and Trash Lover", "type": "☘️", "how_to_obtain": "Catch Mosquito using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+0.01% chance to find an Enchanted Crop while\nFarming", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Moth", "attribute": "Pest Cooldown", "family": "Bug and Trash Lover", "type": "☘️", "how_to_obtain": "Catch Moth using Lasso, Kill while using Salts", "extra_info": "-", "effects": "Reduces the spawn cooldown of Pests by 5s", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Keeled Slug", "attribute": "Bonus Pest Chance", "family": "Trash Lover", "type": "☘️", "how_to_obtain": "Catch Slug using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+10 Bonus Pet Chance", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Rat", "attribute": "Sprayonator Serendipity", "family": "Trash Lover", "type": "☘️", "how_to_obtain": "Catch Rat using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+10% chance for Pests to drop an extra Sprayonator\nMaterial", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Red Panda", "attribute": "Visitor Plant", "family": "Panda and Elusive", "type": "☘️", "how_to_obtain": "Purchased in Sanger's Shop", "extra_info": "Costs 250,000 coins and can be purchased\n10 times per day", "effects": "+2.5% chance for Garden Visitors to bring Plant Matter", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Woodlouse", "attribute": "Visitor Cheese", "family": "Bug, Crustacean and\nTrash Lover", "type": "☘️", "how_to_obtain": "Lather Honeycomb on Mangrove Trees, Catch Woodlouse using Lasso", "extra_info": "-", "effects": "+2.5% chance for Garden Visitors to bring Tasty Cheese", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Dung Beetle", "attribute": "Visitor Dung", "family": "Bug and Trash Lover", "type": "☘️", "how_to_obtain": "Traps in Torrhus Canyon(on land) or Spring Path, Found in Grass in\nTorrhus Canyon", "extra_info": "-", "effects": "+2.5% chance for Garden Visitors to bring Dung", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Parched", "attribute": "Visitor Compost", "family": "-", "type": "⚔️", "how_to_obtain": "Lather Honeycomb on Helix Trees, Catch Parched using Pocket\nBlackhole, Kill while using Salts", "extra_info": "-", "effects": "+2.5% chance for Garden Visitors to bring Compost", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Honeybug", "attribute": "Visitor Honey", "family": "Bug", "type": "☘️", "how_to_obtain": "Catch Honeybug using Critter Capsule in Forest Safari Biome, Floor Drop\nin Forest Safari Biome", "extra_info": "Punch a Beehive found in the biome", "effects": "+2.5% chance for Garden Visitors to bring Honey Jar", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Bayou Sludge", "attribute": "Compost Speed", "family": "Trash Lover", "type": "💧", "how_to_obtain": "Kill Bayou Sludge while using Sslts, Traps in Backwater \nBayou(underwater)", "extra_info": "-", "effects": "+10% faster Composter", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Cricket", "attribute": "Pest Fortune", "family": "Bug and Trash Lover", "type": "☘️", "how_to_obtain": "Catch Cricket using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+50 Farming Fortune on Pests", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Earthworm", "attribute": "Infiltration", "family": "Trash Lover", "type": "☘️", "how_to_obtain": "Fusing any Bug family shard + Mining attribute catagory shard, Catch \nEarthworm using Lasso or Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+30 Farming Fortune if the Garden Plot has a Pest in it", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Locust", "attribute": "Crop Growth", "family": "Bug and Trash Lover", "type": "☘️", "how_to_obtain": "Catch Locust using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+10 Crop Growth in Garden", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Fly", "attribute": "Fortunate Farmer", "family": "Bug and Trash Lover", "type": "☘️", "how_to_obtain": "Catch Fly using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+25 Farming Fortune", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Farming", "shard": "Mudworm", "attribute": "Visitor Bait", "family": "-", "type": "☘️", "how_to_obtain": "Traps in Galatea(on land), Found in Grass in Galatea", "extra_info": "-", "effects": "Garden Visitors arrive +10% faster", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Grizzly Bear", "attribute": "Tough Claws", "family": "-", "type": "☘️", "how_to_obtain": "Catch Grizzly Bear using Pocket Blackhole or Lasso, Kill while using\nSalts, Found in Helix Tree Gifts", "extra_info": "-", "effects": "Reduces Toughness of trees by +1 whenever cutting them", "rarity": "Legendary", "alternative_obtain": "Cinderbat + Cinderbat\nor any Forest/Water shard"}, {"category": "Foraging", "shard": "Beeheemoth", "attribute": "Lathering Greed", "family": "Bug and Elusive", "type": "☘️", "how_to_obtain": "Fusing Queen Bee + Lunar Moth, Catch Beeheemoth using Lasso, Dropped\nby Beeheemoth", "extra_info": "-", "effects": "+100% more Honeycomb from hunting mobs spawned from\nTrees lathered with Honeycomb", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Queen Bee", "attribute": "Honey Refill", "family": "Bug", "type": "☘️", "how_to_obtain": "Unlocked from Honeycomb Collection 7, Found in Honeyhives", "extra_info": "Recipe: 64x Enchanted Helix Log, 16x Enchanted\nHoneycomb, and 16x Enchanted Egg", "effects": "+5% chance for Honeyhives to refill instantly", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Pandarai", "attribute": "Foraging Wisdom", "family": "Panda", "type": "☘️", "how_to_obtain": "Fusing any Panda family shard + any Rare or higher shard", "extra_info": "-", "effects": "+5 Foraging Wisdom", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Drybark", "attribute": "Axe Cooldown", "family": "-", "type": "☘️", "how_to_obtain": "Catch Drybark using Lasso, Kill while using Salts", "extra_info": "-", "effects": "Reduces the cooldown of throwing axe by 10%", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Torrid", "attribute": "First Sweep", "family": "Poltergeist", "type": "💧", "how_to_obtain": "Catch Torrid using Fishing Net or Lasso, Kill while using Salts", "extra_info": "-", "effects": "First Sweep on each tree is +10% more effective", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Pangolin", "attribute": "Atomized Whispers", "family": "-", "type": "☘️", "how_to_obtain": "Catch Pangolin using Lasso", "extra_info": "-", "effects": "+10% extra Forest Whispers", "rarity": "Rare", "alternative_obtain": "Puck + Billygoat"}, {"category": "Foraging", "shard": "Puck", "attribute": "Forest Serendipity", "family": "Poltergeist", "type": "☘️", "how_to_obtain": "Catch Puck using Lasso, Found in Helix Tree Gifts", "extra_info": "-", "effects": "+1% chance for Tree Gifts to contain double loot", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Stingray", "attribute": "Torrhus Serendipity", "family": "Treasure Fish", "type": "💧", "how_to_obtain": "Caught by fishing in Torrhus Canyon, Traps in Spring Depths\nor Hotspot Haven(underwater)", "extra_info": "-", "effects": "+20% chance to find rare items in Tree Gifts at\nTorrhus Canyon", "rarity": "Rare", "alternative_obtain": "Fluffling + Nozzlenose"}, {"category": "Foraging", "shard": "Fluffling", "attribute": "Foraging Tracker", "family": "Panda", "type": "☘️", "how_to_obtain": "Catch Fluffling using Critter Capsule in Forest Safari Biome", "extra_info": "Found in underground caves in the biome", "effects": "+5 Tracking in Foraging Islands", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Vulture", "attribute": "Helix Sharpening", "family": "Bird", "type": "☘️", "how_to_obtain": "Purchased in Miria's Shop", "extra_info": "Costs 25 Miria's Coupon per shard", "effects": "+150 Sweep towards Helix Trees", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Hummingbird", "attribute": "Chop", "family": "Bird", "type": "☘️", "how_to_obtain": "Found in Fig and Mangrove Tree Gifts", "extra_info": "-", "effects": "+100% chance to Chop an extra log, on top of the ones\nyou swept", "rarity": "Rare", "alternative_obtain": "Gecko + Chameleon"}, {"category": "Foraging", "shard": "Bullfrog", "attribute": "Berry Enjoyer", "family": "Amphibian and Frog", "type": "💧", "how_to_obtain": "Fusing any Frog family shard + Rare or higher Forest shard", "extra_info": "-", "effects": "Berries have +100% chance to grant double points in \nStarlyn Contests", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Beaconmite", "attribute": "Beacon Zealot", "family": "Bug", "type": "☘️", "how_to_obtain": "Obtained by tuning the Moonglade Beacon", "extra_info": "-", "effects": "The effects of beacons are 100% stronger\nGain 1% chance to find Signal Enhancers in Tree Gifts", "rarity": "Rare", "alternative_obtain": "Sylvan + any Combat/Water shard\nor any Forest shard upto Uncommon"}, {"category": "Foraging", "shard": "Bambloom", "attribute": "Animal Expertise", "family": "Panda", "type": "☘️", "how_to_obtain": "Fusing any Panda family shard + any Uncommon or higher shard", "extra_info": "-", "effects": "+100 Foraging Fortune", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Woodpecker", "attribute": "Forest Felling", "family": "Bird", "type": "☘️", "how_to_obtain": "Purchased in Miria's Shop", "extra_info": "Costs 15 Miria's Coupon per shard", "effects": "+1% chance to fell an entire tree", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Ember", "attribute": "Galatea Training", "family": "Tropical Fish", "type": "💧", "how_to_obtain": "Catch Ember using Fishing Net, Traps in Spring Depths or Hotspot\nHaven(underwater)", "extra_info": "-", "effects": "+10% Heart of the Forest Exp", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Solar", "attribute": "Starlyn Training", "family": "Tropical Fish", "type": "💧", "how_to_obtain": "Catch Solar using Fishing Net, Traps in Spring Shallows(underwater)", "extra_info": "-", "effects": "+5% more points in Starlyn Contests", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Hawk", "attribute": "Helix Collector", "family": "Bird", "type": "☘️", "how_to_obtain": "Unlocked from Helix Collection 7", "extra_info": "Recipe: 32x Enchanted Helix Log, 16x Enchanted\nFeather, and 16x Enchanted Egg", "effects": "Grants +10 Helix Fortune for every digit in Helix Log \ncollection(Max at 10M collection)", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Treefrog", "attribute": "Foraging Frog", "family": "Amphibian and Frog", "type": "☘️", "how_to_obtain": "Catch Treefrog using Critter Capsule in Forest Safari Biome, Floor Drop\nin Forest Safari Biome", "extra_info": "Throw a Critter Capsule at it from above\nand far away to catch", "effects": "Frog Pet gains +10 Foraging Fortune", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Mochibear", "attribute": "Strong Legs", "family": "Panda", "type": "☘️", "how_to_obtain": "Traps in Tranquility Sanctum(in Autumn or Winter season), Obtained from Pandas in Galatea", "extra_info": "Entrance to Tranquility Sanctum located at \n-716 95 12 near Moonglade's Edge", "effects": "Axe gains +30 Sweep on melee", "rarity": "Uncommon", "alternative_obtain": "Bambuleaf + any Combat/Water shard\nor Common/Uncommon Forest shard"}, {"category": "Foraging", "shard": "Seagull", "attribute": "Mangrove Collector", "family": "Bird and Trash Lover", "type": "☘️", "how_to_obtain": "Unlocked from Mangrove Collection 7", "extra_info": "Recipe: 32x Enchanted Mangrove Log, 16x Enchanted Feather, and 16x Enchanted Egg", "effects": "Grants +10 Mangrove Fortune for every digit in Mangrove Log collection(Max at 10M collection)", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Bambuleaf", "attribute": "Strong Arms", "family": "Panda", "type": "☘️", "how_to_obtain": "Traps in Tranquility Sanctum(in Spring or Summer season), Obtained from Pandas in Galatea", "extra_info": "-", "effects": "Axe gains +30 Sweep on throw", "rarity": "Uncommon", "alternative_obtain": "Heron + any Combat/Water shard\nor Common/Uncommon Forest shard"}, {"category": "Foraging", "shard": "Heron", "attribute": "Mangrove Sharpening", "family": "Bird", "type": "☘️", "how_to_obtain": "Purchased in Agatha's Shop", "extra_info": "Costs 15 Agatha's Coupon per shard", "effects": "+100 Sweep towards Mangrove Trees", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Sparrow", "attribute": "Fig Collector", "family": "Bird", "type": "☘️", "how_to_obtain": "Unlocked from Fig Collection 7", "extra_info": "Recipe: 32x Enchanted Fig Log, 16x Enchanted Feather, and 16x Enchanted Egg", "effects": "Grants +10 Fig Fortune for every digit in Fig Log collection(Max at 10M collection)", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Pollendart", "attribute": "Honey Luck", "family": "Bug", "type": "☘️", "how_to_obtain": "Lather Honeycomb on Helix Trees, Catch Pollendart using Lasso", "extra_info": "-", "effects": "+50% chance for Trees lathered with Honeycomb to attact\na second mob", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Honeybuzz", "attribute": "Honey Haul", "family": "Bug", "type": "☘️", "how_to_obtain": "Catch Honeybuzz using Lasso, Found in Honeyhives", "extra_info": "-", "effects": "+25% chance for Honeyhives to contain double the\nHoneycombs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Groundhog", "attribute": "Diurnal Animal", "family": "-", "type": "☘️", "how_to_obtain": "Catch Groundhog using Lasso, Found in Helix Tree Gifts", "extra_info": "-", "effects": "+10 Sweep during the day", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Firefox", "attribute": "Torrhus Mastery", "family": "Fox", "type": "☘️", "how_to_obtain": "Catch Firefox using Lasso, Found in Helix Tree Gifts", "extra_info": "-", "effects": "+100 Helix Fortune", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Honeyhog", "attribute": "Honey Speed", "family": "-", "type": "☘️", "how_to_obtain": "Lather Honeycomb on Fig Trees, Catch Honeyhog using Lasso", "extra_info": "-", "effects": "Trees lathered with Honeycomb attract mobs +10% faster", "rarity": "Common", "alternative_obtain": "Strongarm + any Water/Forest shard"}, {"category": "Foraging", "shard": "Crow", "attribute": "Fig Sharpening", "family": "Bird and Trash Lover", "type": "☘️", "how_to_obtain": "Purchased in Agatha's Shop", "extra_info": "Costs 15 Agatha's Coupon per shard", "effects": "+50 Sweep towards Fig Trees", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Foraging", "shard": "Birries", "attribute": "Yummy", "family": "-", "type": "💧", "how_to_obtain": "Traps in Galatea(on land), Catch Birries with Fishing Net or Lasso", "extra_info": "-", "effects": "+100% chance to drop double Berries and Sea Lumies", "rarity": "Common", "alternative_obtain": "Bogged + Bogged or any Combat shard"}, {"category": "Foraging", "shard": "Phanflare", "attribute": "Moonglade Mastery", "family": "Phantom", "type": "☘️", "how_to_obtain": "Catch Phanflare with Lasso, Traps in Galatea(on land), Found in Fig and Mangrove Tree Gifts", "extra_info": "-", "effects": "+100 Fig Fortune and +100 Mangrove Fortune", "rarity": "Common", "alternative_obtain": "Phanpyre + any shard\nexcept Dreadwing"}, {"category": "Foraging", "shard": "Phanpyre", "attribute": "Nocturnal Animal", "family": "Phantom", "type": "☘️", "how_to_obtain": "Catch Phanpyre with Lasso, Traps in Galatea(on land), Found in Fig and Mangrove Tree Gifts", "extra_info": "-", "effects": "+10 Sweep during the night", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Nilbog", "attribute": "Royal Riches", "family": "Cave Dweller and Poltergeist", "type": "⚔️", "how_to_obtain": "Fusing Gimmegold + any Legendary or higher shard", "extra_info": "-", "effects": "+50 Mining Speed and +25 Ore Fortune while in\nMines of Divan", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Scatha", "attribute": "Glossy Fortune", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Catch Scatha using Pocket Blackhole", "extra_info": "Effects are doubled if you have a Fiesta Flask\nactive", "effects": "+10% chance to find Glossy Gemstones during Mining Fiesta", "rarity": "Epic", "alternative_obtain": "Thorn + Thorn or any Water/Forest shard\nor any Combat shard upto Rare"}, {"category": "Mining", "shard": "Gemzie", "attribute": "Devouring Spread", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Catch Gemzie using Critter Capsule in Cavern Safari Biome", "extra_info": "Find the 3 Gems from Floor Drops and place them \non the corresponding Froglights at -140 61 50", "effects": "+2.5 Gemstone Spread", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Abyssal Miner", "attribute": "Pickaxe Cooldown", "family": "Cave Dweller and Elusive", "type": "💧", "how_to_obtain": "Kill Abyssal Miner while using Salts", "extra_info": "-", "effects": "Reduces the cooldown of Pickaxe Ability by +10%", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Littlefoot", "attribute": "Freezing Spread", "family": "Arctic", "type": "⚔️", "how_to_obtain": "Catch Littlefoot using Pocket Blackhole Kill while using Salts", "extra_info": "-", "effects": "+0.5 Gemstone Spread for every 20 Cold Resistance while\nin the Glacite Mineshafts", "rarity": "Epic", "alternative_obtain": "King Minos + Chameleon"}, {"category": "Mining", "shard": "Carvernshade", "attribute": "Carvern Wisdom", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Fusing Rare or higher Cave Dweller family shard + Epic or higher Cave Dweller family shard", "extra_info": "-", "effects": "+5 Mining Wisdom", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Bal", "attribute": "Deep Technique", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Kill Bal while using Salts", "extra_info": "-", "effects": "Each block you mine has +10% chance to grant +1 Pristine for that block", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Stoneworm", "attribute": "Refined Luck", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Kill Worm while using Salts", "extra_info": "Effects are doubled if you have a Fiesta Flask\nactive", "effects": "+10% chance to find Refined Minerals during Mining Fiesta", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Scrappy", "attribute": "Scrap Chance", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Catch Scrappy using Critter Capsule in Cavern Safari Biome", "extra_info": "Feed it either Flavor-packed Fish, Lush Lily Pad or\nWholesale Wheat. All of these can be found\naround -110 81 35", "effects": "+10% chance to find a Suspicious Scrap while mining in\nthe Glacite Mineshafts", "rarity": "Rare", "alternative_obtain": "Iguana + Rockmite"}, {"category": "Mining", "shard": "Snoozle", "attribute": "Sleepy Spread", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Snoozle using Critter Capsule in Cavern Safari Biome", "extra_info": "Found behind breakable walls near TNT. Run into\nthem 3 times to break them", "effects": "+10 Mining Spread", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Stalagmight", "attribute": "Atomized Glacite", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Fusing Quartzfang + Cave Dweller family shard or Silentdepth", "extra_info": "-", "effects": "+10% Glacite powder", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Star Sentry", "attribute": "Atomized Mithril", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Star Sentry using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+10% Mithril powder", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Thyst", "attribute": "Atomized Crystals", "family": "Cave Dweller", "type": "☘️", "how_to_obtain": "Traps in the Jungle in Crystal Hollows", "extra_info": "-", "effects": "+10% Gemstone powder", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Fungloom", "attribute": "Fungi Luck", "family": "Cave Dweller", "type": "☘️", "how_to_obtain": "Fusing Cave Dweller family shard + any Epic or higher Forest shard", "extra_info": "-", "effects": "+100% chance to gain extra Chisel charge in Fossil Excavator", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Silentdepth", "attribute": "Crystal Serendipity", "family": "Treasure Fish", "type": "💧", "how_to_obtain": "Traps in Crystal Hollows(underwater), Caught by fishing in Crystal Hollows", "extra_info": "-", "effects": "+10% chance to double any loot from ALL Treasure Chests in Crystal Hollows", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Quartzfang", "attribute": "Quartz Speed", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Fusing Troglobyte + any Cave Dweller family shard or Abyssal Lanternfish", "extra_info": "-", "effects": "+100% Mining Speed on Mining Islands while Weather\nis active", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Packrat", "attribute": "Fiesta Fortune", "family": "Cave Dweller", "type": "☘️", "how_to_obtain": "Purchased in Brynmor's Shop", "extra_info": "Costs 250,000 coins and can be purchased\n64 times per Skyblock Year", "effects": "+50 Gemstone Fortune while Mayor Cole's Mining Fiesta\nperk is active", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Honeymite", "attribute": "Mite Spawner", "family": "-", "type": "⚔️", "how_to_obtain": "Lather Honeycomb on Fig Trees, Catch Honeymite using Pocket\nBlackhole, Kill while using Salts", "extra_info": "-", "effects": "+25% chance to spawn an additional Nest Endermite\nwhen mining Ender Nodes", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Treasure Hoarder", "attribute": "Dwarven Training", "family": "Cave Dweller", "type": "💧", "how_to_obtain": "Catch Treasure Hoarder using Pocket Blackhole, Kill while using\nSalts, Traps in Dwarven Mines(underwater)", "extra_info": "-", "effects": "+10% more Heart of the Mountain Exp", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Hideoncave", "attribute": "Bigger Box", "family": "Shulker", "type": "☘️", "how_to_obtain": "Fusing any Shulker family shard + any Cave Dweller family shard", "extra_info": "-", "effects": "+50% chance to find an extra item in Treasure Chests and the Crystal Nucleus in Crystal Hollows", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Troglobyte", "attribute": "Mountain Climber", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Fusing any Cave Dweller family shard + any Combat shard", "extra_info": "-", "effects": "+10% more HOTM Exp from Commissions", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Hideonsun", "attribute": "Gold Box", "family": "Shulker", "type": "☘️", "how_to_obtain": "Hunted in Torrhus Canyon", "extra_info": "-", "effects": "+50 Ore Fortune", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Flitter", "attribute": "Fortunate Miner", "family": "Cave Dweller", "type": "☘️", "how_to_obtain": "Catch Flitter using Critter Capsule in Cavern Safari Biome, Floor Drop in\nCavern Safari Biome", "extra_info": "Found flying around in underground caves", "effects": "+25 Mining Fortune", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Miner Zombie", "attribute": "Rotten Pickaxe", "family": "Cave Dweller", "type": "⚔️", "how_to_obtain": "Catch Miner Zombie using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+30 Mining Speed", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Mining", "shard": "Hideonleaf", "attribute": "Mossy Box", "family": "Shulker", "type": "☘️", "how_to_obtain": "Obtained by hunting Hideonleaf in Galatea", "extra_info": "-", "effects": "+50 Block Fortune", "rarity": "Common", "alternative_obtain": "Phanflare + Phanflare or any Water/Combat\nshard"}, {"category": "Taming", "shard": "Condor", "attribute": "Pet Wisdom", "family": "Bird", "type": "☘️", "how_to_obtain": "Fusing any Bird family shard + any Legendary or higher shard", "extra_info": "-", "effects": "+5 Taming Wisdom", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Taming", "shard": "Toucan", "attribute": "Why Not More", "family": "Bird", "type": "☘️", "how_to_obtain": "Fusing any Bird family shard + any Epic or higher shard", "extra_info": "-", "effects": "Pet's Exp Share grants +10% more Exp", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Taming", "shard": "Gimmiegold", "attribute": "Greedy Goblin", "family": "Treasure Fish", "type": "💧", "how_to_obtain": "Catch Gimmegold using Critter Capsule in Haunted Safari Biome", "extra_info": "Spawns when a Shining Coin is thrown into water\nin the basement of Haunted Mansion", "effects": "Goblin Pet gains +10 Ore Fortune", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Taming", "shard": "Falcon", "attribute": "Battle Experience", "family": "Bird", "type": "☘️", "how_to_obtain": "Fusing any Bird family shard + any Rare or higher shard", "extra_info": "-", "effects": "+10% more Pet Exp from Combat", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Taming", "shard": "Areita", "attribute": "Battle Arachnid", "family": "Spider", "type": "⚔️", "how_to_obtain": "Catch Areita using Critter Capsule in Haunted Safari Biome", "extra_info": "Found in the attic of Haunted Mansion", "effects": "Spider and Tarantula Pets gains +20 Crit Damage", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Taming", "shard": "Rana", "attribute": "Battle Frog", "family": "Amphibian and Frog", "type": "⚔️", "how_to_obtain": "Fusing any Frog family shard + any Combat shard", "extra_info": "-", "effects": "Frog pet gains +30 Strength", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Taming", "shard": "Kiwi", "attribute": "Kat's Favorite", "family": "Bird", "type": "☘️", "how_to_obtain": "Fusing any Bird family shard + any Uncommon or higher shard", "extra_info": "-", "effects": "Kat takes +10% less time to upgrade a Pet", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Taming", "shard": "Boreal Owl", "attribute": "Owl Friend", "family": "Bird", "type": "☘️", "how_to_obtain": "Fusing any Bird Family shard + any Common or higher shard", "extra_info": "-", "effects": "Pets gain +20% more Pet Exp from Fann", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Enchanting", "shard": "Lapis Creeper", "attribute": "Book Wisdom", "family": "Lapis", "type": "⚔️", "how_to_obtain": "Fusing Lapis Skeleton + Ghost or any Legendary or higher shard", "extra_info": "-", "effects": "+5 Enchanting Wisdom", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Enchanting", "shard": "Lapis Skeleton", "attribute": "Bone Font", "family": "Lapis", "type": "⚔️", "how_to_obtain": "Fusing Lapis Zombie + any Rare or higher shard", "extra_info": "-", "effects": "+20% chance to find Level 6+ books or higher in Superpairs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Enchanting", "shard": "Lapis Zombie", "attribute": "Experience", "family": "Lapis", "type": "⚔️", "how_to_obtain": "Catch Lapis Zombie using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+100% more experience orbs from mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Alchemy", "shard": "Sea Witch", "attribute": "Witch's Fortune", "family": "-", "type": "💧", "how_to_obtain": "Kill Sea Witch while using Salt", "extra_info": "-", "effects": "+10% chance to drop Ingredients during Year of the Witch", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Macaw", "attribute": "Splendor", "family": "Bird", "type": "☘️", "how_to_obtain": "Catch Macaw using Critter Capsule in Forest Safari Biome", "extra_info": "Attracted to the birdfeeder, most common with\nBag of Seeds. Affected by Tracking and 2 show up\nat a time", "effects": "+20% chance to get a bonus Rainbow Feather when hunting\na SPARKLING Critter", "rarity": "Legendary", "alternative_obtain": "Wyvern / Wartybug / Tenebris + any\nCombat/Water shard or any Forest shard\nupto Epic"}, {"category": "Hunting", "shard": "Megalith", "attribute": "Hunter's Karma", "family": "Reptile and Turtle", "type": "💧", "how_to_obtain": "Fusing Tortoise + Epic or higher Water shard", "extra_info": "-", "effects": "+10 Hunter Fortune", "rarity": "Legendary", "alternative_obtain": "Hellwisp + Chameleon"}, {"category": "Hunting", "shard": "Naga", "attribute": "Charmed", "family": "Amphibian and Eel", "type": "💧", "how_to_obtain": "Fusing Sea Serpent + Epic or higher Water shard", "extra_info": "-", "effects": "+0.5% chance to charm the Shard of monsters you kill", "rarity": "Legendary", "alternative_obtain": "Endstone Protector + Chameleon"}, {"category": "Hunting", "shard": "Tortoise", "attribute": "Cloak Improvement", "family": "Reptile and Turtle", "type": "💧", "how_to_obtain": "Fusing Leatherback + Epic or higher Water shard", "extra_info": "-", "effects": "David's Cloak gains +10 True Defense", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Wyvern", "attribute": "Echo of Wisdom", "family": "Reptile and Scaled", "type": "☘️", "how_to_obtain": "Fusing Komodo Dragon + Epic or higher Forest shard", "extra_info": "-", "effects": "+20% stronger \"Wisdom\" attributes", "rarity": "Legendary", "alternative_obtain": "Chameleon + Chameleon"}, {"category": "Hunting", "shard": "Tiamat", "attribute": "Echo of Echoes", "family": "Croco and Reptile", "type": "⚔️", "how_to_obtain": "Fusing Caiman + Epic or higher Combat shard", "extra_info": "-", "effects": "+50% stronger \"Echo\" attributes", "rarity": "Legendary", "alternative_obtain": "Chameleon + Chameleon"}, {"category": "Hunting", "shard": "Cocoaleech", "attribute": "Groovy Radar", "family": "Bug", "type": "☘️", "how_to_obtain": "Crafting", "extra_info": "Recipe: 32x Designer Coffee Beans, and \n1x Devourer", "effects": "+25% chance for Pests to drop a second Vinyl", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Chameleon", "attribute": "Reptiloid", "family": "Reptile", "type": "☘️", "how_to_obtain": "Found in Fig and Mangrove Tree Gifts", "extra_info": "Requires only 1 shard to fuse with others and can\nbe given to Kiara for her Abiphone Contact", "effects": "Fusions with Chameleons grants the next 3 IDs as results", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Leatherback", "attribute": "Hunt Wisdom", "family": "Reptile and Turtle", "type": "💧", "how_to_obtain": "Fusing Shellwise + Rare or higher Water shard", "extra_info": "-", "effects": "+5 Hunting Wisdom", "rarity": "Epic", "alternative_obtain": "Ghost + Chameleon"}, {"category": "Hunting", "shard": "Sea Serpent", "attribute": "Echo of Hunter", "family": "Amphibian, Eel and Serpent", "type": "💧", "how_to_obtain": "Fusing Moray Eel + Rare or higher Water shard", "extra_info": "-", "effects": "+20% stronger Hunting attributes", "rarity": "Epic", "alternative_obtain": "Inferno Demonlord + Chameleon"}, {"category": "Hunting", "shard": "Caiman", "attribute": "Echo of Ruler", "family": "Croco and Reptile", "type": "⚔️", "how_to_obtain": "Fusing Alligator + Rare or higher Combat shard", "extra_info": "-", "effects": "+20% stronger Ruler attributes", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Komodo Dragon", "attribute": "Echo of Essence", "family": "Reptile and Scaled", "type": "☘️", "how_to_obtain": "Fusing Iguana + Rare or higher Forest shard", "extra_info": "-", "effects": "+20% stronger Essence attributes", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Iguana", "attribute": "Echo of Atomized", "family": "Reptile and Scaled", "type": "☘️", "how_to_obtain": "Fusing Gecko + Rare or higher Forest shard", "extra_info": "-", "effects": "+20% stronger Atomized attributes", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Moray Eel", "attribute": "Lucky Rod", "family": "Amphibian and Eel", "type": "💧", "how_to_obtain": "Fusing Eel + Rare or higher Water shard", "extra_info": "-", "effects": "+10% chance to fish up Treasure shards", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Basilisk", "attribute": "Hunter's Suppress", "family": "Reptile and Serpent", "type": "⚔️", "how_to_obtain": "Fusing King Cobra + Rare or higher Combat shard", "extra_info": "-", "effects": "Lassos deplete Stamina +20% faster", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Fenlord", "attribute": "Berry Mogul", "family": "Amphibian and Frog", "type": "☘️", "how_to_obtain": "Fusing Bullfrog + Rare or higher Forest shard", "extra_info": "-", "effects": "Salts lasts +10% longer", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Alligator", "attribute": "Echo of Resistence", "family": "Croco and Reptile", "type": "⚔️", "how_to_obtain": "Fusing Crocodile + Rare or higher Combat shard, Kill Alligator while using\nSalts, Traps in Backwater Bayou", "extra_info": "-", "effects": "+20% stronger Resistence Attributes", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Leviathan", "attribute": "Execellent Karma", "family": "Lizard and Reptile", "type": "💧", "how_to_obtain": "Fusing any Lizard family shard + Rare or higher Water shard", "extra_info": "-", "effects": "+10 Hunter Fortune towards Epic attributes", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Nozzlenose", "attribute": "Underwater Tracker", "family": "-", "type": "💧", "how_to_obtain": "Catch Nozzlenose using Critter Capsule in Icy Safari Biome", "extra_info": "Found at the bottom of Icy Lake", "effects": "+5 Tracking in Fishing Islands", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Rockmite", "attribute": "Cavernous Tracker", "family": "Bug and Cave Dweller", "type": "⚔️", "how_to_obtain": "Catch Rockmite using Critter Capsule in Cavern Safari Biome", "extra_info": "Break small rocks found on the floor with your\nhand. Use F3 + B for ease", "effects": "+5 Tracking in Mining Islands", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Badger", "attribute": "Battle Tracker", "family": "-", "type": "☘️", "how_to_obtain": "Purchased in Sanger's Shop", "extra_info": "Costs 500,000 coins and can be purcahsed\n6 times per day", "effects": "+5 Tracking in Combat Islands", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Gecko", "attribute": "Echo of Sharpening", "family": "Reptile and Scaled", "type": "☘️", "how_to_obtain": "Purchased from Kiara's Shop", "extra_info": "Costs 600,000 coins and can be purchased\n4 times per day", "effects": "+20% stronger Sharpening attributes", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "King Cobra", "attribute": "Hunter's Grasp", "family": "Reptile and Serpent", "type": "⚔️", "how_to_obtain": "Fusing Python + Uncommon or higher Combat shard", "extra_info": "-", "effects": "Blackholes gain +10% Hunter Fortune when\ncapturing mobs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Eel", "attribute": "Eelastic", "family": "Amphibian and Eel", "type": "💧", "how_to_obtain": "Purchased from Kiara's Shop, Caught by fishing in Moonglade Marsh", "extra_info": "Costs 350,000 coins and can be purchased\n6 times per day", "effects": "+10 Pull when using Fishing Net", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Crocodile", "attribute": "Pure Reptile", "family": "Croco and Reptile", "type": "⚔️", "how_to_obtain": "Purchased from Kiara's Shop", "extra_info": "Costs 300,000 coins and can be purchased\n6 times per day", "effects": "+20% chance to double shards from Reptile family fusing", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Python", "attribute": "Hunter's Pressure", "family": "Reptile and Serpent", "type": "⚔️", "how_to_obtain": "Fusing Viper + Uncommon or higher Combat shard", "extra_info": "-", "effects": "Blackholes capture creatures +50% faster", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Lizard King", "attribute": "Great Karma", "family": "Lizard and Reptile", "type": "💧", "how_to_obtain": "Fusing any Lizard family shard + Uncommon or higher Water shard", "extra_info": "-", "effects": "+10 Hunter Fortune towards Rare attributes", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Toad", "attribute": "Frog Legs", "family": "Amphibian and Frog", "type": "💧", "how_to_obtain": "Fusing any Frog family shard + Uncommon or higher Forest shard", "extra_info": "-", "effects": "+100% chance for Frogs to jump 1 less time", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Dustybit", "attribute": "Combat Trap", "family": "Frog", "type": "💧", "how_to_obtain": "Tadgang + any Combat shard, Hunted in Torrhus Canyon, Traps in\nSpring Path or Torrhus Springs(on land)", "extra_info": "-", "effects": "Combat shards get caught by Traps 10% faster", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Honey Badger", "attribute": "Honey Serendipity", "family": "-", "type": "⚔️", "how_to_obtain": "Unlocked from Honeycomb Collection 4", "extra_info": "Recipe: 32x Enchanted Helix Log, 4x Enchanted\nHoneycomb, and 16x Enchanted Egg", "effects": "+5% chance to instantly attract a mob when lathering\na tree with Honeycomb", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Viper", "attribute": "Hunter's Fang", "family": "Reptile and Serpent", "type": "⚔️", "how_to_obtain": "Fusing Cuboa + any Combat shard, Purchased from Kiara's Shop", "extra_info": "Costs 100,000 coins and can be purchased\n10 times per day", "effects": "+10% stats on Hunting Axes from the weapon they hold", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Mossybit", "attribute": "Forest Trap", "family": "Amphibian and Frog", "type": "💧", "how_to_obtain": "Fusing Tadgang + any Forest shard, Traps in Galatea(on land), Hunting Mossybit in Galatea", "extra_info": "-", "effects": "Forest shards get caught by Traps +10% faster", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Cuboa", "attribute": "Echo of Boxes", "family": "Reptile and Serpent", "type": "⚔️", "how_to_obtain": "Fusing any Shulker family shard + any Reptile family shard", "extra_info": "-", "effects": "+20% stronger \"Box\" attributes", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Salamander", "attribute": "Good Karma", "family": "Lizard and Reptile", "type": "💧", "how_to_obtain": "Fusing Newt + any Water shard", "extra_info": "-", "effects": "+20 Hunter Fortune on Uncommon attributes", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Ant", "attribute": "Queen Tracker", "family": "Bug", "type": "☘️", "how_to_obtain": "Kill Ant while using Salts, Traps in Ant's Cave", "extra_info": "Ant's Cave located at -640 73 188\nnear Spring Depths", "effects": "+5 Tracking towards Queen Ant", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Newt", "attribute": "Decent Karma", "family": "Lizard and Reptile", "type": "💧", "how_to_obtain": "Fusing any Axolotl family shard + any Water shard", "extra_info": "-", "effects": "+20 Hunter Fortune on Common attributes", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Harpy", "attribute": "Tree Lurker", "family": "Bird", "type": "⚔️", "how_to_obtain": "Fusing any Bird family shard + any Combat shard, Catch Harpy using Pocket\nBlackhole, Kill while using Salts", "extra_info": "-", "effects": "+50% chance of finding monsters from Tree Gifts", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Hunting", "shard": "Tadgang", "attribute": "Unity of Strength", "family": "Amphibian and Frog", "type": "💧", "how_to_obtain": "Catch Tadgang using Pocket Blackhole, Kill while using Salt, Traps in Murkwater Depths or Murkwater Shallows(both underwater)", "extra_info": "Tadgang can be found by fishing in Murkwater Loch", "effects": "+0.2 Sweep for every unique Common attribute owned", "rarity": "Common", "alternative_obtain": "Birries + Birries or any Combat/Forest shard"}, {"category": "Global", "shard": "Wumpa", "attribute": "Cold Resistence", "family": "Arctic", "type": "⚔️", "how_to_obtain": "Catch Wumpa using Critter Capsule in Icy Safari Biome", "extra_info": "Catch every unique Critter in Icy Safari Biome in \none visit and it'll spawn in the cave at -124 82 90", "effects": "+5 Cold Resistence", "rarity": "Legendary", "alternative_obtain": "Timestalk Clone + any Water/Forest shard\nor any Combat shard upto Epic"}, {"category": "Global", "shard": "Rainbug", "attribute": "Miracle Chance", "family": "Miracle and Bug", "type": "☘️", "how_to_obtain": "Ring the 7 hidden bells found across the Critter Safari.\n2 in Icy Biome, 2 in Haunted Biome, 1 in Forest Biome, and \n1 in Cavern Biome", "extra_info": "Check the note of this cell to see more info.\nAwards you with full max attribute after finding all\nthe bells", "effects": "+1% chance to find Dyes", "rarity": "Legendary", "alternative_obtain": "Cinderbat + Cocoaleech // Cocoaleech +\nChameleon"}, {"category": "Global", "shard": "Queen Snake", "attribute": "Queenly Echo", "family": "Reptile, Scaled and\nSerpent", "type": "💧", "how_to_obtain": "Fusing Queen Bee + Queen Ant", "extra_info": "-", "effects": "+50% stronger \"Visitor\" attributes", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Doomspiral", "attribute": "Echo of Tracking", "family": "Demon and Elemental", "type": "⚔️", "how_to_obtain": "Catch Doomspiral using Critter Capsule in Haunted Safari Biome", "extra_info": "Find the ritual room at 48 68 -20 and light the\n4 candles using Soothing Incense. Destroy the\nSculk Shriekers if spawned", "effects": "+20% stronger \"Tracker\" attributes", "rarity": "Legendary", "alternative_obtain": "Kraken + any shard"}, {"category": "Global", "shard": "Rabbit Godfather", "attribute": "Egg Finder", "family": "Crime", "type": "☘️", "how_to_obtain": "Fusing Rabbit Godmother + Combat category Legendary or higher shard", "extra_info": "-", "effects": "Finds a Hitman Egg every 300s during Hoppity's Hunt", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Starborn", "attribute": "Echo of Elemental", "family": "Elemental", "type": "💧", "how_to_obtain": "Fusing Legendary Elemental family shard + Galaxy Fish", "extra_info": "-", "effects": "+20% buff to all other Elemental family shards", "rarity": "Legendary", "alternative_obtain": "Molthorn + Chameleon"}, {"category": "Global", "shard": "Molthorn", "attribute": "Almighty", "family": "Demon and Dragon", "type": "⚔️", "how_to_obtain": "Fusing Etherdrake + Jormurg", "extra_info": "-", "effects": "+50% stronger \"Unlimited\" attributes", "rarity": "Legendary", "alternative_obtain": "Etherdrake + Chameleon"}, {"category": "Global", "shard": "Galaxy Fish", "attribute": "Ultimate DNA", "family": "-", "type": "💧", "how_to_obtain": "Fusing Sun Fish + Sun Fish", "extra_info": "-", "effects": "+10 Mining Fortune, Farming Fortune and Foraging Fortune", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Etherdrake", "attribute": "Unlimted Energy", "family": "Demon and Dragon", "type": "⚔️", "how_to_obtain": "Fusing Apex Dragon + Kraken", "extra_info": "-", "effects": "+1% Crit Damage", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Jormurg", "attribute": "Unlimited Power", "family": "Demon and Dragon", "type": "⚔️", "how_to_obtain": "Fusing Power Dragon + Kraken", "extra_info": "-", "effects": "+1% Strength", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Sun Fish", "attribute": "Starborn", "family": "-", "type": "💧", "how_to_obtain": "Fusing Shiny Fish + Bezal, Cinderbat, Flare, Lava Flame, Fire Eel, Bal\nor Flaming Spider", "extra_info": "-", "effects": "+10% stronger effect of Starborn Temples", "rarity": "Legendary", "alternative_obtain": "Power Dragon + Chameleon"}, {"category": "Global", "shard": "Dodo", "attribute": "Rare Bird", "family": "Bird", "type": "☘️", "how_to_obtain": "Fusing Condor + any Legendary or higher shard", "extra_info": "-", "effects": "+5 Tracking", "rarity": "Legendary", "alternative_obtain": "Apex Dragon + Chameleon"}, {"category": "Global", "shard": "Hideonbox", "attribute": "Tuning Box", "family": "Shulker", "type": "☘️", "how_to_obtain": "Fusing Epic Shulker family shard + any Legendary or higher shard", "extra_info": "-", "effects": "+10 Tuning points", "rarity": "Legendary", "alternative_obtain": "Shinyfish + Chameleon"}, {"category": "Global", "shard": "Ananke", "attribute": "Wings of Destiny", "family": "Bird and Demon", "type": "⚔️", "how_to_obtain": ", Obtained from Kuudra, Fusing Kraken + any Bird family shard", "extra_info": "-", "effects": "+20% chance to find Ananke Feathers", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Moltenfish", "attribute": "Star Bait", "family": "Demon", "type": "💧", "how_to_obtain": "Fusing Kraken + any Water shard", "extra_info": "-", "effects": "+1% chance to fish up Shinyfish", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Daemon", "attribute": "Pity", "family": "Demon", "type": "⚔️", "how_to_obtain": "Fusing Kraken + Kraken", "extra_info": "-", "effects": "RNG meter fill up +10% faster", "rarity": "Legendary", "alternative_obtain": "Kraken + Chameleon"}, {"category": "Global", "shard": "Kraken", "attribute": "Vitality", "family": "Demon", "type": "⚔️", "how_to_obtain": "Obtained from Kuudra", "extra_info": "Guranteed to drop from any Kuudra Tier", "effects": "+10 Vitality", "rarity": "Legendary", "alternative_obtain": "Endstone Protector + any Water/Forest shard"}, {"category": "Global", "shard": "Cinderbat", "attribute": "Magic Find", "family": "-", "type": "☘️", "how_to_obtain": "Obtained from Kuudra, Catch Cinderbat using Pocket Blackhole or\nLasso, Kill while using Salts, Traps in Smoldering Tomb", "extra_info": "-", "effects": "+5 Magic Find", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Mountain Goat", "attribute": "Social Wisdom", "family": "-", "type": "☘️", "how_to_obtain": "Catch Mountain Goat using Lasso, Kill while using Salts", "extra_info": "-", "effects": "+5 Social Wisdom", "rarity": "Epic", "alternative_obtain": "Dive Ghast / Queen Bee + any Combat/Water\nshard or any Forest shard upto Rare"}, {"category": "Global", "shard": "Rabbit Godmother", "attribute": "Divine Rabbit Luck", "family": "Crime", "type": "☘️", "how_to_obtain": "Purchased in Chocolate Shop", "extra_info": "Costs 20B Chocolate and can be purchased\n6 times per Skyblock Year", "effects": "+!0% chance to find DIVINE Rabbits during\nHoppity's Hunt", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Global", "shard": "Dive Ghast", "attribute": "Ghastly Distraction", "family": "-", "type": "☘️", "how_to_obtain": "Catch Dive Ghast using Lasso, Kill while using Salts", "extra_info": "-", "effects": "Pacifies enemies for +10s after mining Opal Gemstones\nin Smoldering Tomb", "rarity": "Epic", "alternative_obtain": "Dragonfly + any Combat/Water shard"}, {"category": "Global", "shard": "Murderwing", "attribute": "Sky High", "family": "Phantom", "type": "☘️", "how_to_obtain": "Fusing any Phantom family shard + any Epic or higher shard", "extra_info": "-", "effects": "Increases the distance you can fall before taking\nfall damage by +5 blocks", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Global", "shard": "Prince", "attribute": "Reborn", "family": "-", "type": "⚔️", "how_to_obtain": "Kill Prince Bernhard, Prince Christian, Prince Pieter, Prince Nicholas, Prince Alexdander, Prince Marius, Prince Valentin or Prince Friedrich in the Catacombs while using Salts", "extra_info": "Sends a message in chat when\nit procs", "effects": "+100% chance to add 1 bonus score to Dungeon run when killing a Prince", "rarity": "Epic", "alternative_obtain": "Flare + Flare or any Water/Forest shard\nor any Combat shard upto Rare"}, {"category": "Global", "shard": "Hideonsack", "attribute": "Sack Size", "family": "Shulker", "type": "☘️", "how_to_obtain": "Fusing Rare Shulker family shard + any Epic or higher shard", "extra_info": "-", "effects": "Sacks can hold +10% more items", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Global", "shard": "XYZ", "attribute": "Mana Regeneration", "family": "-", "type": "☘️", "how_to_obtain": "Obtained from Kuudra, Catch XYZ using Atomizer or Lasso, Kill while \nusing Salts, Traps in Mystic Marsh", "extra_info": "-", "effects": "+10% Mana Regen", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Global", "shard": "Rabbit Neighbor", "attribute": "Mythic Rabbit Luck", "family": "Crime", "type": "☘️", "how_to_obtain": "Purchased in Chocolate Shop", "extra_info": "Costs 10B Chocolate and can be purchased\n12 times per Skyblock Year", "effects": "+!0% chance to find MYTHIC Rabbits during\nHoppity's Hunt", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Murkbat", "attribute": "Rekindle", "family": "-", "type": "☘️", "how_to_obtain": "Catch Murkbat using Lasso, Lather Honeycomb on Mangrove Trees", "extra_info": "-", "effects": "+100% chance to add 1 Bonus Score to a Dungeon\nRun, when killing a Bat", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Troodon", "attribute": "Essence of Fossils", "family": "Dinosaur", "type": "💧", "how_to_obtain": "Catch Troodon using Critter Capsule in Icy Safari Biome", "extra_info": "Found in ice walls, use Icebreaker to free it", "effects": "+10% more Fossil Essence", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Anteater", "attribute": "Floor Fortune", "family": "-", "type": "☘️", "how_to_obtain": "Fusing Queen Ant + King Cobra", "extra_info": "-", "effects": "+1% chance to gain double loot from Floor Drops", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Thunder", "attribute": "Thunder Speed", "family": "Elusive", "type": "💧", "how_to_obtain": "Kill Thunder while using Salts", "extra_info": "-", "effects": "Thunder, Storm, and Hurricane Bottles fill +10% faster", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Lava Leech", "attribute": "Essence of Crimson", "family": "-", "type": "💧", "how_to_obtain": "Kill Lava Leech while using Salts", "extra_info": "-", "effects": "+10% more Crimson Essence", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Wither", "attribute": "Essence of Wither", "family": "-", "type": "⚔️", "how_to_obtain": "Obtained from Catacombs F7 and M7", "extra_info": "-", "effects": "+10% more Wither Essence", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Inferno Koi", "attribute": "Crimson Serendipity", "family": "Treasure Fish", "type": "💧", "how_to_obtain": "Traps in Crimson Isle(under lava), Caught by Fishing in Crimson Isle", "extra_info": "-", "effects": "+20% chance to find a Vanquisher", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Draconic", "attribute": "Essence of Dragon", "family": "Dragon", "type": "⚔️", "how_to_obtain": "Dropped by Dragons in The End", "extra_info": "-", "effects": "+10% more Dragon Essence", "rarity": "Rare", "alternative_obtain": "Crocodile + any Water/Forest shard"}, {"category": "Global", "shard": "Joydive", "attribute": "Deep Diving", "family": "-", "type": "💧", "how_to_obtain": "Traps in Murkwater Depths(underwater), Catch Joydive with Fishing Net", "extra_info": "-", "effects": "+50 Respiration", "rarity": "Rare", "alternative_obtain": "Bullfrog + any Combat/Forest shard\nor any Water shard upto Uncommon"}, {"category": "Global", "shard": "Dreadwing", "attribute": "Essence of Forest", "family": "Phantom", "type": "⚔️", "how_to_obtain": "Fusing Phanpyre or Phanflare + any Rare or higher shard, Catch Dreadwing using Pocket Blackhole or Lasso, Kill while using Salts, Traps in Galatea(on land), Found in Fig and Mangrove Tree Gifts", "extra_info": "-", "effects": "+10% more Forest Essence", "rarity": "Rare", "alternative_obtain": "Invisibug + Invisibug or any Water/Combat\nshard"}, {"category": "Global", "shard": "Lumisquid", "attribute": "Extreme Pressure", "family": "Squid", "type": "💧", "how_to_obtain": "Traps in Squid Cave(underwater), Catch Lumisquid with Fishing Net", "extra_info": "Squid Cave located at -612 45 2, with its \nentrance at -658 56 -13 near Murkwater Depths", "effects": "+50 Pressure Resistence", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Carrot King", "attribute": "Rabbit Crew", "family": "-", "type": "💧", "how_to_obtain": "Catch Rabbit King using Pocket Blackhole, Kill while using Salt", "extra_info": "-", "effects": "+20 more Chocolate per second to Chocolate Factory", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Snowfin", "attribute": "Winter's Serendipity", "family": "Treasure Fish", "type": "💧", "how_to_obtain": "Traps in Jerry's Workshop(underwater)", "extra_info": "-", "effects": "+20% chance to find Rare items in Winter Gifts", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Hideonring", "attribute": "Accessory Size", "family": "Shulker", "type": "☘️", "how_to_obtain": "Fusing Rare Shulker family + any Rare or higher shard", "extra_info": "-", "effects": "+10 Accessory Bag slot", "rarity": "Rare", "alternative_obtain": "Thyst + Chameleon"}, {"category": "Global", "shard": "Revenant", "attribute": "Essence of Unliving", "family": "-", "type": "⚔️", "how_to_obtain": "Dropped by Revenant Horror", "extra_info": "-", "effects": "+10% more Undead Essence", "rarity": "Rare", "alternative_obtain": "Arachne + any Water/Forest shard\nor any Combat shard upto Uncommon"}, {"category": "Global", "shard": "Bitbug", "attribute": "Cookie Eater", "family": "Bug", "type": "☘️", "how_to_obtain": "Purchased in the Bits Shop", "extra_info": "Costs 5,000 Bits per shard", "effects": "Gain +50% Bits upfront by eating Booster Cookie", "rarity": "Rare", "alternative_obtain": "Hideondra or Abyssal Lanternfish or Arachne\n+ Chameleon"}, {"category": "Global", "shard": "Arachne", "attribute": "Essence of Arthropods", "family": "Spider", "type": "⚔️", "how_to_obtain": "Kill Arachne while using Salts", "extra_info": "-", "effects": "+10% more Spider Essence", "rarity": "Rare", "alternative_obtain": "Star Sentry + Star Sentry\nor any Water/Forest shard"}, {"category": "Global", "shard": "Abyssal Lanternfish", "attribute": "Dwarven Serendipity", "family": "Treasure Fish", "type": "💧", "how_to_obtain": "Traps in Dwarven Mines(underwater), Caught by fishing in Dwarven Mines", "extra_info": "-", "effects": "+100% chance of finding Golden and Diamond Goblins", "rarity": "Rare", "alternative_obtain": "Piranha + any Combat/Forest shard\nor any Water shard upto Uncommon"}, {"category": "Global", "shard": "Hideondra", "attribute": "Kuudra's Box", "family": "Shulker", "type": "☘️", "how_to_obtain": "Fusing any Shulker family shard + any Demon family shard", "extra_info": "-", "effects": "+50% chance to have an extra Kuudra Teeth in the Paid Reward Chest", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Hideongeon", "attribute": "Catacombs Box", "family": "Shulker", "type": "☘️", "how_to_obtain": "Fusing any Shulker family shard + Wither", "extra_info": "-", "effects": "+10 increase in quality of boss rewards in The Catacombs", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Piranha", "attribute": "Moonglade Serendipity", "family": "Treasure Fish", "type": "💧", "how_to_obtain": "Traps in Murkwater Depths or Murkwater Shallows(both underwater), Caught by fishing in Moonglade Marsh", "extra_info": "-", "effects": "+20% chance to find Rare items in Tree Gifts at Moonglade Marsh", "rarity": "Rare", "alternative_obtain": "Cascade + any Combat/Forest shard"}, {"category": "Global", "shard": "Glacite Walker", "attribute": "Essence of Ice", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Glacite Walker using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+10% more Ice Essence", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Mite", "attribute": "Filter Upgrade", "family": "Trash Lover", "type": "☘️", "how_to_obtain": "Catch Mite using Lasso, Kill while using Salts", "extra_info": "-", "effects": "Increases effects of Atmospheric Filter by +20%", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Global", "shard": "June Bug", "attribute": "Ticket Discount", "family": "Bug", "type": "☘️", "how_to_obtain": "Unlocked from Ruby Veilshroom Collection 4", "extra_info": "Recipe: 32x Enchanted Helix Log, 4x Enchanted\nRuby Veilshroom, and 16x Enchanted Egg", "effects": "Upgrading Safari Tickets at Safari Manager costs +10%\nless Forest Essence", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Global", "shard": "Rabbit Cat", "attribute": "Legendary Rabbit Luck", "family": "Crime", "type": "☘️", "how_to_obtain": "Purchased in Chocolate Shop", "extra_info": "Costs 4B Chocolate and can be purchased\n18 times per Skyblock Year", "effects": "+!0% chance to find LEGENDARY Rabbits during\nHoppity's Hunt", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Global", "shard": "Bloodbat", "attribute": "Bartender Discount", "family": "-", "type": "☘️", "how_to_obtain": "Catch Bloodbat using Critter Capsule in Haunted Safari Biome", "extra_info": "Found inside and outside Haunted Mansion", "effects": "Reduces cost of items in Bartender's Shop by +10%", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Global", "shard": "Woodchucker", "attribute": "Builder Discount", "family": "-", "type": "☘️", "how_to_obtain": "Catch Woodchucker using Critter Capsule in Forest Safari Biome", "extra_info": "Found on top of the trees", "effects": "Reduces cost of items in Builder's Shop by +10%", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Global", "shard": "Obsidian Defender", "attribute": "Speed", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Obsidian Defender using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+10 Speed", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Global", "shard": "Chocobun", "attribute": "Rabbit Youth", "family": "Crime", "type": "☘️", "how_to_obtain": "Fusing Bunbun + any Crime family shard or Cocoaleech", "extra_info": "-", "effects": "+10 extra levels to Rabbit Bro, Cousin and Sis", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Global", "shard": "Bunbun", "attribute": "Chocolate Speed", "family": "-", "type": "☘️", "how_to_obtain": "Catch Bunbun using Lasso, Traps in Torrhus Canyon(on land)", "extra_info": "-", "effects": "Increases Chocolate Factory speed by +2.5%", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Global", "shard": "Foxtrot", "attribute": "Foraging Speed", "family": "Fox", "type": "☘️", "how_to_obtain": "Catch Foxtrot using Critter Capsule in Forest Safari Biome, Floor Drop\nin Forest Safari Biome", "extra_info": "Follows a set path around Forest Safari Biome", "effects": "+30 Speed in Foraging Islands", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Global", "shard": "Shyworm", "attribute": "Subterranean Resistence", "family": "Cave Dweller", "type": "☘️", "how_to_obtain": "Catch Shyworm using Critter Capsule in Cavern Safari Biome, Floor Drop\nin Cavern Safari Biome", "extra_info": "Found popping up from the ground in the main\ncave. It'll try to hide if you're too close", "effects": "+40 Defense against Subterranean mobs", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Global", "shard": "Rabbit Mafioso", "attribute": "Hitman Cooldown", "family": "Crime", "type": "☘️", "how_to_obtain": "Purchased in Chocolate Shop", "extra_info": "Costs 1B Chocolate and can be purchased\n24 times per Skyblock Year", "effects": "+25% cooldown reduction of the Rabbit Hitman", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Global", "shard": "Yog", "attribute": "Yog Membrane", "family": "-", "type": "⚔️", "how_to_obtain": "Catch Yog while using Pocket Blackhole, Kill while using Salts", "extra_info": "-", "effects": "+10 Heat Resistence", "rarity": "Common", "alternative_obtain": "Bezal + any Water/Forest shard"}, {"category": "Global", "shard": "Hideongift", "attribute": "Happy Box", "family": "Shulker", "type": "☘️", "how_to_obtain": "Fusing any Shulker family shard + any Common or higher shard", "extra_info": "-", "effects": "+20% chance to obtain an extra Winter Gift", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Global", "shard": "Tenebris", "attribute": "Shadow Elemental", "family": "Elemental\n(Health)", "type": "☘️", "how_to_obtain": "Fusing Legendary Forest shard + Epic or higher Elemental family shard", "extra_info": "-", "effects": "+20 Health", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Terra", "attribute": "Earth Elemental", "family": "-", "type": "☘️", "how_to_obtain": "Fusing Epic Forest shard + any Legendary or higher shard", "extra_info": "-", "effects": "+20 Health", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Global", "shard": "Sylvan", "attribute": "Forest Elemental", "family": "-", "type": "☘️", "how_to_obtain": "Fusing Rare Combat shard + any Epic or higher shard", "extra_info": "-", "effects": "+20 Health", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Bramble", "attribute": "Wood Elemental", "family": "-", "type": "☘️", "how_to_obtain": "Fusing Uncommon Forest shard + any Rare or higher shard", "extra_info": "-", "effects": "+20 Health", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Global", "shard": "Grove", "attribute": "Nature Elemental", "family": "-", "type": "☘️", "how_to_obtain": "Fusing Common Forest shard + any Uncommon or higher shard", "extra_info": "-", "effects": "+20 Health", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Global", "shard": "Blizzard", "attribute": "Snow Elemental", "family": "Elemental\n(Intelligence)", "type": "💧", "how_to_obtain": "Fusing Legendary Water shard + Epic or higher Elemental family shard", "extra_info": "Mana Pool has been split into 5 shards", "effects": "+10 Intelligence", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Cyro", "attribute": "Frost Elemental", "family": "-", "type": "💧", "how_to_obtain": "Fusing Epic Water shard + any Legendary or higher shard", "extra_info": "-", "effects": "+10 Intelligence", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Global", "shard": "Cascade", "attribute": "Torrent Elemental", "family": "-", "type": "💧", "how_to_obtain": "Fusing Rare Water shard + any Epic or higher shard", "extra_info": "-", "effects": "+10 Intelligence", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Tide", "attribute": "Water Elemental", "family": "-", "type": "💧", "how_to_obtain": "Fusing Uncommon Water shard + any Rare or higher shard", "extra_info": "-", "effects": "+10 Intelligence", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Global", "shard": "Mist", "attribute": "Fog Elemental", "family": "-", "type": "💧", "how_to_obtain": "Fusing Common Water shard + any Uncommon or higher shard", "extra_info": "-", "effects": "+10 Intelligence", "rarity": "Common", "alternative_obtain": "-"}, {"category": "Global", "shard": "Tempest", "attribute": "Storm Elemental", "family": "Elemental\n(Strength)", "type": "⚔️", "how_to_obtain": "Fusing Legendary Combat shard + Epic or higher Elemental family shard", "extra_info": "-", "effects": "+10 Strength", "rarity": "Legendary", "alternative_obtain": "-"}, {"category": "Global", "shard": "Aero", "attribute": "Wind Elemental", "family": "-", "type": "⚔️", "how_to_obtain": "Fusing Epic Combat shard + any Legendary or higher shard", "extra_info": "-", "effects": "+10 Strength", "rarity": "Epic", "alternative_obtain": "-"}, {"category": "Global", "shard": "Bolt", "attribute": "Lightning Elemental", "family": "-", "type": "⚔️", "how_to_obtain": "Fusing Rare Combat shard + any Epic or higher shard", "extra_info": "-", "effects": "+10 Strength", "rarity": "Rare", "alternative_obtain": "-"}, {"category": "Global", "shard": "Quake", "attribute": "Stone Elemental", "family": "-", "type": "⚔️", "how_to_obtain": "Fusing Uncommon Combat shard + any Rare or higher shard", "extra_info": "-", "effects": "+10 Strength", "rarity": "Uncommon", "alternative_obtain": "-"}, {"category": "Global", "shard": "Flash", "attribute": "Light Elemental", "family": "-", "type": "⚔️", "how_to_obtain": "Fusing Common Combat + any Uncommon or higher shard", "extra_info": "-", "effects": "+10 Strength", "rarity": "Common", "alternative_obtain": "-"}];
+
+        let currentCategory = 'ALL';
+        let isCardsView = false;
+
+        const tableBody = document.getElementById('tableBody');
+        const cardsViewContainer = document.getElementById('cardsViewContainer');
+        const tableViewContainer = document.getElementById('tableViewContainer');
+        const searchInput = document.getElementById('searchInput');
+        const raritySelect = document.getElementById('raritySelect');
+
+        const statTotal = document.getElementById('statTotal');
+        const statShown = document.getElementById('statShown');
+        const statLegendary = document.getElementById('statLegendary');
+
+        const btnViewTable = document.getElementById('btnViewTable');
+        const btnViewCards = document.getElementById('btnViewCards');
+        const tableNoResults = document.getElementById('tableNoResults');
+        const cardsNoResults = document.getElementById('cardsNoResults');
+
+        const detailModal = document.getElementById('detailModal');
+        const modalClose = document.getElementById('modalClose');
+
+        statTotal.textContent = attributesData.length;
+
+        // Category Pills Listener
+        document.querySelectorAll('.pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.getAttribute('data-category');
+                render();
+            });
+        });
+
+        function getFilteredData() {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedRarity = raritySelect.value;
+
+            return attributesData.filter(item => {
+                const matchesCat = (currentCategory === 'ALL' || item.category === currentCategory);
+                const matchesRarity = (selectedRarity === 'ALL' || item.rarity.toUpperCase() === selectedRarity);
+                
+                const searchHaystack = (
+                    item.shard + " " + 
+                    item.attribute + " " + 
+                    item.category + " " + 
+                    item.how_to_obtain + " " + 
+                    item.effects + " " + 
+                    item.alternative_obtain + " " + 
+                    item.extra_info
+                ).toLowerCase();
+
+                const matchesSearch = !query || searchHaystack.includes(query);
+
+                return matchesCat && matchesRarity && matchesSearch;
+            });
+        }
+
+        function openModal(item) {
+            document.getElementById('modalCat').textContent = item.category;
+            const rarityBadge = document.getElementById('modalRarity');
+            rarityBadge.className = `badge-rarity rarity-${item.rarity.toUpperCase()}`;
+            rarityBadge.textContent = item.rarity;
+
+            document.getElementById('modalShard').textContent = item.shard;
+            document.getElementById('modalAttribute').textContent = item.attribute;
+            document.getElementById('modalTypeFamily').textContent = `${item.type} Family: ${item.family}`;
+            document.getElementById('modalEffects').textContent = item.effects;
+            document.getElementById('modalHowToObtain').textContent = item.how_to_obtain;
+            document.getElementById('modalAlternative').textContent = item.alternative_obtain;
+            document.getElementById('modalExtra').textContent = item.extra_info;
+
+            detailModal.classList.add('active');
+        }
+
+        modalClose.addEventListener('click', () => detailModal.classList.remove('active'));
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) detailModal.classList.remove('active');
+        });
+
+        function render() {
+            const filtered = getFilteredData();
+            statShown.textContent = filtered.length;
+            
+            const legendaries = filtered.filter(item => item.rarity.toUpperCase() === 'LEGENDARY').length;
+            statLegendary.textContent = legendaries;
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = '';
+                cardsViewContainer.innerHTML = '';
+                tableNoResults.style.display = 'block';
+                cardsNoResults.style.display = 'block';
+                return;
+            }
+
+            tableNoResults.style.display = 'none';
+            cardsNoResults.style.display = 'none';
+
+            // Render Table
+            tableBody.innerHTML = filtered.map((item) => `
+                <tr data-index="${attributesData.indexOf(item)}">
+                    <td><span class="badge-cat">${item.category}</span></td>
+                    <td><strong style="color: var(--accent-gold);">${item.shard}</strong></td>
+                    <td>${item.attribute}</td>
+                    <td style="text-align: center;">${item.type}</td>
+                    <td><span class="badge-rarity rarity-${item.rarity.toUpperCase()}">${item.rarity}</span></td>
+                    <td>${item.how_to_obtain}</td>
+                    <td>${item.effects}</td>
+                </tr>
+            `).join('');
+
+            document.querySelectorAll('#tableBody tr').forEach(row => {
+                row.addEventListener('click', () => {
+                    const idx = row.getAttribute('data-index');
+                    openModal(attributesData[idx]);
+                });
+            });
+
+            // Render Cards
+            cardsViewContainer.innerHTML = filtered.map((item) => `
+                <div class="card" data-index="${attributesData.indexOf(item)}">
+                    <div class="card-header">
+                        <span class="badge-cat">${item.category}</span>
+                        <span class="badge-rarity rarity-${item.rarity.toUpperCase()}">${item.rarity}</span>
+                    </div>
+                    <div>
+                        <div class="card-title">${item.shard} <span style="font-size: 0.9rem;">${item.type}</span></div>
+                        <div class="card-attribute">${item.attribute}</div>
+                    </div>
+                    <div class="card-body">
+                        <div><strong>Effect:</strong> ${item.effects}</div>
+                        <div><strong>How to obtain:</strong> ${item.how_to_obtain}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.cards-container .card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const idx = card.getAttribute('data-index');
+                    openModal(attributesData[idx]);
+                });
+            });
+        }
+
+        btnViewTable.addEventListener('click', () => {
+            isCardsView = false;
+            btnViewTable.classList.add('active');
+            btnViewCards.classList.remove('active');
+            tableViewContainer.style.display = 'block';
+            cardsViewContainer.style.display = 'none';
+        });
+
+        btnViewCards.addEventListener('click', () => {
+            isCardsView = true;
+            btnViewCards.classList.add('active');
+            btnViewTable.classList.remove('active');
+            tableViewContainer.style.display = 'none';
+            cardsViewContainer.style.display = 'grid';
+        });
+
+        searchInput.addEventListener('input', render);
+        raritySelect.addEventListener('change', render);
+
+        // Initial Render
+        render();
+    </script>
+</body>
+</html>
