@@ -1,1 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypixel Skyblock Armours</title>
+    <style>
+        :root {
+            --bg-dark: #0B0E14;
+            --bg-header: #111622;
+            --bg-card: #161C2A;
+            --bg-input: #1C2436;
+            --border-color: #2A364F;
+            --text-main: #E2E8F0;
+            --text-muted: #8E9BAE;
+            --accent-gold: #F59E0B;
+            --accent-gold-hover: #D97706;
+            --accent-cyan: #38BDF8;
+            --pill-inactive: #1E293B;
+            --pill-inactive-hover: #2D3D58;
+            --accent-orange: #F97316;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1650px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #F97316 0%, #C2410C 100%);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+            font-size: 24px;
+        }
+
+        .title-group h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -0.02em;
+        }
+
+        .title-group h1 span {
+            color: #F97316;
+        }
+
+        .title-group p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-badge {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .stat-badge .num-yellow {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .stat-badge .num-cyan {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 420px;
+            min-width: 280px;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #F97316;
+            box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
+        }
+
+        .top-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .rarity-select {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        .view-switch-group {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background-color: #F97316;
+            color: #FFFFFF;
+        }
+
+        .view-btn:not(.active):hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .back-hub-btn {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--accent-cyan);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .back-hub-btn:hover {
+            background-color: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .category-pills {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+
+        .pill-btn {
+            background-color: var(--pill-inactive);
+            border: 1px solid var(--border-color);
+            color: #C0C9D6;
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .pill-btn:hover {
+            background-color: var(--pill-inactive-hover);
+            color: #FFFFFF;
+        }
+
+        .pill-btn.active {
+            background-color: #F97316;
+            border-color: #F97316;
+            color: #FFFFFF;
+        }
+
+        .table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            max-height: 72vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        th {
+            background-color: var(--bg-header);
+            color: #F97316;
+            padding: 16px 18px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        th.col-cat, td.col-cat {
+            white-space: nowrap;
+            width: 1%;
+        }
+
+        th.col-mp, td.col-mp {
+            text-align: center;
+            white-space: nowrap;
+            width: 80px;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.015);
+        }
+
+        tr:hover {
+            background-color: rgba(249, 115, 22, 0.08);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 20px;
+            max-height: 72vh;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #F97316;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #F97316;
+        }
+
+        .card-body {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .badge-rarity {
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+        }
+
+        .rarity-COMMON { color: #F8FAFC; background: rgba(248, 250, 252, 0.12); }
+        .rarity-UNCOMMON { color: #4ADE80; background: rgba(74, 222, 128, 0.12); }
+        .rarity-RARE { color: #60A5FA; background: rgba(96, 165, 250, 0.12); }
+        .rarity-EPIC { color: #A855F7; background: rgba(168, 85, 247, 0.12); }
+        .rarity-LEGENDARY { color: #FACC15; background: rgba(250, 204, 21, 0.15); }
+        .rarity-MYTHIC { color: #FF55FF; background: rgba(255, 85, 255, 0.15); }
+
+        .badge-cat {
+            background: #1E293B;
+            color: #94A3B8;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .badge-mp {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 720px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 22px;
+            right: 22px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-main);
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .modal-group {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            border-radius: 10px;
+        }
+
+        .modal-group.full {
+            grid-column: span 2;
+        }
+
+        .modal-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .modal-value {
+            font-size: 1.02rem;
+            color: var(--text-main);
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+
+        .no-results {
+            padding: 50px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <div class="logo-icon">🛡️</div>
+                <div class="title-group">
+                    <h1>Hypixel Skyblock <span>Armours</span></h1>
+                    <p>Interactive database and guide for all Armor Sets, Helmets, Chestplates, Leggings, and Boots</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <a href="index.html" class="back-hub-btn">🏠 Hub</a>
+                <div class="stat-badge">Total: <span class="num-yellow" id="statTotal">0</span></div>
+                <div class="stat-badge">Shown: <span class="num-cyan" id="statShown">0</span></div>
+            </div>
+        </header>
+
+        <div class="controls-wrapper">
+            <div class="top-controls">
+                <div class="search-area">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="searchInput" placeholder="Search armor name, stats, abilities...">
+                    </div>
+                </div>
+
+                <div class="top-right-controls">
+                    <select class="rarity-select" id="raritySelect">
+                        <option value="ALL">All Rarities</option>
+                        <option value="COMMON">Common</option>
+                        <option value="UNCOMMON">Uncommon</option>
+                        <option value="RARE">Rare</option>
+                        <option value="EPIC">Epic</option>
+                        <option value="LEGENDARY">Legendary</option>
+                        <option value="MYTHIC">Mythic</option>
+                    </select>
+
+                    <div class="view-switch-group">
+                        <button class="view-btn active" id="btnViewTable">
+                            <span>📋</span> Table
+                        </button>
+                        <button class="view-btn" id="btnViewCards">
+                            <span>🔲</span> Cards
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-pills" id="categoryPills">
+                <button class="pill-btn active" data-category="ALL">All</button>
+                <button class="pill-btn" data-category="Armor Sets">Armor Sets</button>
+                <button class="pill-btn" data-category="Dungeon Armor Sets">Dungeon Sets</button>
+                <button class="pill-btn" data-category="Helmets">Helmets</button>
+                <button class="pill-btn" data-category="Chestplates">Chestplates</button>
+                <button class="pill-btn" data-category="Leggings">Leggings</button>
+                <button class="pill-btn" data-category="Boots">Boots</button>
+            </div>
+        </div>
+
+        <div class="table-container" id="tableViewContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-cat">Category</th>
+                        <th>Name</th>
+                        <th>Rarity</th>
+                        <th class="col-mp">MP</th>
+                        <th>Stats</th>
+                        <th>Abilities & Bonuses</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="tableNoResults" class="no-results" style="display: none;">No armors match the selected filters.</div>
+        </div>
+
+        <div class="cards-container" id="cardsViewContainer" style="display: none;"></div>
+        <div id="cardsNoResults" class="no-results" style="display: none;">No armors match the selected filters.</div>
+    </div>
+
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <span class="badge-cat" id="modalCat"></span>
+                <span class="badge-rarity" id="modalRarity"></span>
+                <span class="badge-mp" id="modalMP"></span>
+            </div>
+            <h2 id="modalName" style="color: #F97316; font-size: 1.7rem; margin-bottom: 12px;"></h2>
+
+            <div class="modal-grid">
+                <div class="modal-group">
+                    <div class="modal-label">Stats</div>
+                    <div class="modal-value" id="modalStats"></div>
+                </div>
+                <div class="modal-group">
+                    <div class="modal-label">Abilities & Bonuses</div>
+                    <div class="modal-value" id="modalAbility" style="color: var(--accent-gold);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getMagicalPower(rarityName) {
+            const r = rarityName.toUpperCase();
+            if (r.includes('MYTHIC')) return 22;
+            if (r.includes('LEGENDARY')) return 16;
+            if (r.includes('EPIC')) return 12;
+            if (r.includes('RARE')) return 8;
+            if (r.includes('UNCOMMON')) return 5;
+            if (r.includes('COMMON')) return 3;
+            return 3;
+        }
+
+        const armoursData = [
+            // Armor Sets
+            { category: "Armor Sets", name: "Farm Suit", rarity: "COMMON", stats: "❈ Defense +100\n☘ Farming Fortune +20", ability: "Full Set Bonus: Bonus Speed & Farmer Aura." },
+            { category: "Armor Sets", name: "Mushroom Armor", rarity: "COMMON", stats: "❤ Health +55\n❈ Defense +15", ability: "Full Set Bonus: Night Affinity - Permanent Night Vision and tripled stats in The Garden at night." },
+            { category: "Armor Sets", name: "Angler Armor", rarity: "COMMON", stats: "❈ Defense +100", ability: "Full Set Bonus: Depth Champion (-30% damage from Sea Creatures, +4% spawn chance) & Darkness Within." },
+            { category: "Armor Sets", name: "Pumpkin Armor", rarity: "COMMON", stats: "❤ Health +40\n❈ Defense +40", ability: "Full Set Bonus: Pumpkin Buff - Reduces damage taken by 10% and deals +10% damage." },
+            { category: "Armor Sets", name: "Cactus Armor", rarity: "COMMON", stats: "❤ Health +35\n❈ Defense +65", ability: "Full Set Bonus: Deflect - Rebound 33% of damage taken back to enemy." },
+            { category: "Armor Sets", name: "Leaflet Armor", rarity: "COMMON", stats: "❤ Health +100", ability: "Full Set Bonus: Energy of the Forest - Regain 5 ❤/s in forest zones." },
+            { category: "Armor Sets", name: "Lapis Armor", rarity: "UNCOMMON", stats: "❤ Health +60 (set)\n❈ Defense +120", ability: "Full Set Bonus: Health (+60 HP) & +50% mining exp per piece." },
+            { category: "Armor Sets", name: "Rosetta's Armor", rarity: "UNCOMMON", stats: "❤ Health +60\n❈ Defense +110", ability: "None" },
+            { category: "Armor Sets", name: "Squire Armor", rarity: "UNCOMMON", stats: "❤ Health +115\n❈ Defense +115", ability: "None" },
+            { category: "Armor Sets", name: "Celeste Armor", rarity: "UNCOMMON", stats: "❤ Health +40\n❈ Defense +50\n✎ Intelligence +120", ability: "None" },
+            { category: "Armor Sets", name: "Prospecting Armor", rarity: "UNCOMMON", stats: "❈ Defense +100", ability: "Full Set Bonus: Haste - Permanent Haste II." },
+            { category: "Armor Sets", name: "Ember Ash Armor", rarity: "UNCOMMON", stats: "⸕ Mining Speed +60\n☘ Mining Fortune +20", ability: "New version of Flamebreaker Armor (not obtainable)." },
+            { category: "Armor Sets", name: "Bronze Hunter Armor", rarity: "UNCOMMON", stats: "❤ Health +545\n❈ Defense +545", ability: "Full Set Bonus: Peace Treaty - Immunity from Sea Creatures (and vice versa)." },
+            { category: "Armor Sets", name: "Biohazard Armor", rarity: "UNCOMMON", stats: "❤ Health +80\n❈ Defense +50\nൠ Bonus Pest Chance +6", ability: "Piece Bonus: Stats tripled in The Garden at night." },
+            { category: "Armor Sets", name: "Golem Armor", rarity: "RARE", stats: "❤ Health +205\n❈ Defense +250", ability: "Full Set Bonus: Absorption 3 for 20s when killing an enemy." },
+            { category: "Armor Sets", name: "Miner Armor", rarity: "RARE", stats: "❈ Defense +20 (Inside mine: +275)", ability: "Full Set Bonus: Regeneration (5% max HP/s out of combat for 8s)." },
+            { category: "Armor Sets", name: "Hardened Diamond Armor", rarity: "RARE", stats: "❈ Defense +330", ability: "None" },
+            { category: "Armor Sets", name: "Fairy Armor", rarity: "RARE", stats: "❤ Health +4\n❈ Defense +4\n✦ Speed +40%\n✎ Intelligence -4", ability: "Full Set Bonus: Fairy's Outfit - Gain 1❤ per Fairy Soul found." },
+            { category: "Armor Sets", name: "Farm Armor", rarity: "RARE", stats: "❤ Health +80\n❈ Defense +200", ability: "Full Set Bonus: Bonus Speed near farming minion/islands." },
+            { category: "Armor Sets", name: "Armor of Growth", rarity: "RARE", stats: "❤ Health +280\n❈ Defense +145", ability: "Ability: Growth - Heals 1.0% HP on kill and increases HP bonus per piece (max +100 per piece)." },
+            { category: "Armor Sets", name: "Salmon Armor", rarity: "RARE", stats: "❤ Health +330\n❈ Defense +190\nα Sea Creature Chance +6", ability: "Full Set Bonus: Water Burst - Sneak to burst forward in water." },
+            { category: "Armor Sets", name: "Monster Hunter Armor", rarity: "RARE", stats: "❤ Health +220\n❈ Defense +235\n✎ Intelligence +50\n✦ Speed +5%", ability: "Secret Set Bonus: Monster Hunter - Take -25% damage from Monsters, deal +25% damage." },
+            { category: "Armor Sets", name: "Monster Raider Armor", rarity: "RARE-EPIC", stats: "❤ Health +290\n❈ Defense +290\n✎ Intelligence +50\n✦ Speed +5%", ability: "Secret Set Bonus: Monster Raider - Take -35% damage from Monsters, deal +35% damage." },
+            { category: "Armor Sets", name: "Perfect Armor I-III", rarity: "RARE", stats: "❈ Defense +500-660", ability: "Upgradable defense set." },
+            { category: "Armor Sets", name: "Goblin Armor", rarity: "RARE", stats: "❤ Health +395\n✎ Intelligence -4\n⸕ Mining Speed +40", ability: "Full Set Bonus: Smart Miner - Converts Intelligence into Mining Speed." },
+            { category: "Armor Sets", name: "Arachne's Armor", rarity: "RARE", stats: "❤ Health +260\n❈ Defense +180", ability: "Tiered Bonus: Arachne's Faithful (+5 HP and +5 Defense)." },
+            { category: "Armor Sets", name: "Heat Armor", rarity: "RARE", stats: "❤ Health +105\n❈ Defense +105\n⸕ Mining Speed +40\n☘ Mining Fortune +20", ability: "Full Set Bonus: Heat Resistance - 2x reduced heat in Magma Fields." },
+            { category: "Armor Sets", name: "Silver Hunter Armor", rarity: "RARE", stats: "❤ Health +585\n❈ Defense +585", ability: "Full Set Bonus: Peace Treaty & Odger's Blessing (+5% Trophy Fish chance)." },
+            { category: "Armor Sets", name: "Shimmering Light Armor", rarity: "RARE", stats: "❤ Health +400\n❈ Defense +350\n✦ Speed +10\n✎ Intelligence +350", ability: "Tiered Bonus: Shimmer - Increases Monster and Ore Xp orbs gained." },
+            { category: "Armor Sets", name: "Yog Armor", rarity: "EPIC", stats: "❤ Health +200\n❈ Defense +60\n⸕ Mining Speed +100\n☘ Mining Fortune +80", ability: "Full Set Bonus: Absorb - +1 Mining Speed per 5 Yogs killed (max 500)." },
+            { category: "Armor Sets", name: "Mercenary Armor", rarity: "RARE", stats: "❤ Health +200\n❈ Defense +200", ability: "Full Set Bonus: Death Tax - Earn 5 coins and heal 20 HP per kill on level 10+ mobs." },
+            { category: "Armor Sets", name: "Rampart Armor", rarity: "RARE", stats: "❤ Health +500\n❈ Defense +200\n✎ Intelligence +30", ability: "Grants +50 HP, +20 Strength, +15 Crit Damage on Crimson Isle." },
+            { category: "Armor Sets", name: "Flamebreaker Armor", rarity: "EPIC", stats: "❤ Health +205\n❈ Defense +205\n⸕ Mining Speed +100\n☘ Mining Fortune +40", ability: "Full Set Bonus: Heat Resistance - 5x reduced heat in Magma Fields." },
+            { category: "Armor Sets", name: "Armor of the Pack", rarity: "EPIC", stats: "❤ Health +300\n❈ Defense +280", ability: "Full Set Bonus: Gain +35 Strength and +80 Defense per nearby Pack wearer." },
+            { category: "Armor Sets", name: "Armor of Magma", rarity: "EPIC", stats: "❤ Health +270\n❈ Defense +85", ability: "Full Set Bonus: Absorb - +1 HP and Intelligence per 10 Magma Cubes killed (max 200)." },
+            { category: "Armor Sets", name: "Emerald Armor", rarity: "EPIC", stats: "❈ Defense +270 (Max HP +350, Def +620)", ability: "Full Set Bonus: Tank - HP and Defense scale with Emerald collection." },
+            { category: "Armor Sets", name: "Ember Armor", rarity: "EPIC", stats: "❤ Health +200\n❈ Defense +180\n✎ Intelligence +25", ability: "Full Set Bonus: Nether Lord - Obsidian on lava, fire/lava immunity, +20% rare drop chance." },
+            { category: "Armor Sets", name: "Crystal Armor", rarity: "EPIC", stats: "❈ Defense +100\n✎ Intelligence +345", ability: "Full Set Bonus: Refraction - Stats change from 0 to 200% based on light level." },
+            { category: "Armor Sets", name: "Zombie Armor", rarity: "EPIC", stats: "❤ Health +480\n❈ Defense +100", ability: "Full Set Bonus: Projectile Absorption - Heals 10 HP/s for 5s when hit by projectile." },
+            { category: "Armor Sets", name: "Blaze Armor", rarity: "EPIC", stats: "❈ Defense +410\n❁ Strength +40\n✦ Speed +8%", ability: "Full Set Bonus: Blazing Aura - Damages nearby mobs for 3% max HP/s. Fire/lava immunity." },
+            { category: "Armor Sets", name: "Cheap Tuxedo", rarity: "EPIC", stats: "☠ Crit Damage +100%\n✎ Intelligence +100", ability: "Full Set Bonus: Dashing - Max health set to 75 HP, deals +50% damage." },
+            { category: "Armor Sets", name: "Ender Armor", rarity: "EPIC", stats: "❤ Health +90\n❈ Defense +170", ability: "Piece Bonus: Stats are doubled while in The End island." },
+            { category: "Armor Sets", name: "Speedster Armor", rarity: "EPIC", stats: "❈ Defense +350\n✦ Speed +80%", ability: "Full Set Bonus: Bonus Speed (+20%)." },
+            { category: "Armor Sets", name: "Sponge Armor", rarity: "EPIC", stats: "❈ Defense +385\nα Sea Creature Chance +7.2", ability: "Full Set Bonus: Absorb - Doubles Defense while in water." },
+            { category: "Armor Sets", name: "Mastiff Armor", rarity: "EPIC", stats: "❤ Health +2000\n❈ Defense -4,000,000\n✎ Intelligence +150", ability: "Full Set Bonus: Absolute Unit - +50 HP per 1% Crit Damage. 2% max HP regen on hit." },
+            { category: "Armor Sets", name: "Tarantula Armor", rarity: "EPIC", stats: "❤ Health +350\n❈ Defense +300\n✎ Intelligence +250\n✦ Speed +5%", ability: "Full Set Bonus: Octodexterity & Spider Bulwark. Double jump boots." },
+            { category: "Armor Sets", name: "Revenant Armor", rarity: "EPIC", stats: "❈ Defense +150\n❤ Health +400", ability: "Full Set Bonus: Trolling - Reaper Wands heal +50%, +100 Defense against Zombies." },
+            { category: "Armor Sets", name: "Spooky Armor", rarity: "EPIC", stats: "❈ Defense +135", ability: "Piece Bonus: +5% Candy drop chance during Spooky Festival. Full set: Candy Man." },
+            { category: "Armor Sets", name: "Snow Suit", rarity: "EPIC", stats: "❤ Health +310\n❈ Defense +125", ability: "Full Set Bonus: Cold Thumb - Unlimited snowballs. Stats doubled in Jerry's Workshop." },
+            { category: "Armor Sets", name: "Mineral Armor", rarity: "EPIC", stats: "❈ Defense +390\n✦ Speed +50", ability: "Automatically mines 2 extra nearby blocks while mining." },
+            { category: "Armor Sets", name: "Glacite Armor", rarity: "EPIC", stats: "❈ Defense +415\n✦ Speed +50\n⸕ Mining Speed +40\n❂ True Defense +30", ability: "Full Set Bonus: Expert Miner - +2 Mining Speed per mining level. Defense doubled on mining islands." },
+            { category: "Armor Sets", name: "Rising Sun Armor", rarity: "EPIC", stats: "❤ Health +45\n❈ Defense +45", ability: "Full Set Bonus: Power of the Resistance - Damage bonus against Dante and reduced damage taken." },
+            { category: "Armor Sets", name: "Perfect Armor IV-VII", rarity: "EPIC", stats: "❈ Defense +740-980", ability: "High defense upgrade set." },
+            { category: "Armor Sets", name: "Perfect Armor VIII-XII", rarity: "LEGENDARY", stats: "❈ Defense +1060-1380", ability: "Maximum defense perfect armor." },
+            { category: "Armor Sets", name: "Great Spook Armor", rarity: "EPIC", stats: "☠ Fear +20", ability: "Full Set Bonus: Spooky - Spook other players with Great Spook Staff." },
+            { category: "Armor Sets", name: "Gold Hunter Armor", rarity: "EPIC", stats: "❤ Health +625\n❈ Defense +625", ability: "Full Set Bonus: Peace Treaty & Odger's Blessing (+10% Trophy Fish chance)." },
+            { category: "Armor Sets", name: "Berserker Armor", rarity: "EPIC", stats: "❁ Strength +170\n☠ Crit Damage +170", ability: "Tiered Bonus: Berserk - Halves health/defense, reduces health-cost ability mana by 20%." },
+            { category: "Armor Sets", name: "Rekindled Ember Armor", rarity: "EPIC", stats: "❤ Health +785\n❈ Defense +230\n❁ Strength +120\n☠ Crit Damage +75\n✎ Intelligence +30", ability: "Ability: Rekindle - Increases burning damage." },
+            { category: "Armor Sets", name: "Thunder Armor", rarity: "EPIC", stats: "❤ Health +820\n❈ Defense +750\n❁ Strength +100\nα Sea Creature Chance +16", ability: "Tiered Bonus: Static Charge - Deals extra discharge damage." },
+            { category: "Armor Sets", name: "Shark Scale Armor", rarity: "LEGENDARY", stats: "❤ Health +545\n❈ Defense +545\nα Sea Creature Chance +10", ability: "Full Set Bonus: Absorb (doubles defense in water) & Reflect (15% damage reflected)." },
+            { category: "Armor Sets", name: "Bat Person Armor", rarity: "LEGENDARY", stats: "❈ Defense +85", ability: "Piece Bonus: x2 item stats at night / x3 during Spooky Festival. Bat Power!" },
+            { category: "Armor Sets", name: "Diver's Armor", rarity: "LEGENDARY", stats: "❤ Health +300\n❈ Defense +600\nα Sea Creature Chance +8", ability: "Full Set Bonus: One with the Fish - Incredible speed in water and permanent breathing." },
+            { category: "Armor Sets", name: "Nutcracker Armor", rarity: "LEGENDARY", stats: "❤ Health +355\n❈ Defense +145\nα Sea Creature Chance +6\n✯ Magic Find +8", ability: "Full Set Bonus: Cold Thumb & Battalion (buffs nearby players)." },
+            { category: "Armor Sets", name: "Werewolf Armor", rarity: "LEGENDARY", stats: "❈ Defense +700\n✎ Intelligence +200", ability: "Full Set Bonus: Regenerative Howl - Heals nearby players on Ferocity activation." },
+            { category: "Armor Sets", name: "Fancy Tuxedo", rarity: "LEGENDARY", stats: "☠ Crit Damage +150%\n✎ Intelligence +300", ability: "Full Set Bonus: Dashing - Max health set to 150 HP, deals +100% damage." },
+            { category: "Armor Sets", name: "Elegant Tuxedo", rarity: "LEGENDARY", stats: "☠ Crit Damage +200%\n✎ Intelligence +500", ability: "Full Set Bonus: Dashing - Max health set to 250 HP, deals +150% damage." },
+            { category: "Armor Sets", name: "Frozen Blaze Armor", rarity: "LEGENDARY", stats: "❈ Defense +530\n❁ Strength +160\n✦ Speed +8%", ability: "Full Set Bonus: Frozen Blazing Aura - Damages mobs and applies Slowness." },
+            { category: "Armor Sets", name: "Young Dragon Armor", rarity: "LEGENDARY", stats: "❤ Health +350\n❈ Defense +500\n✦ Speed +80%", ability: "Full Set Bonus: Young Blood - +70% Walk Speed above 50% HP." },
+            { category: "Armor Sets", name: "Old Dragon Armor", rarity: "LEGENDARY", stats: "❤ Health +450\n❈ Defense +490", ability: "Full Set Bonus: Old Blood - Buffs Growth, Protection, Feather Falling enchants." },
+            { category: "Armor Sets", name: "Wise Dragon Armor", rarity: "LEGENDARY", stats: "❤ Health +350\n❈ Defense +500\n✎ Intelligence +350", ability: "Full Set Bonus: Wise Blood - Abilities cost 2/3 of Mana." },
+            { category: "Armor Sets", name: "Protector Dragon Armor", rarity: "LEGENDARY", stats: "❤ Health +350\n❈ Defense +600", ability: "Full Set Bonus: Protective Blood - Increases defense based on missing HP." },
+            { category: "Armor Sets", name: "Strong Dragon Armor", rarity: "LEGENDARY", stats: "❤ Health +350\n❈ Defense +500\n❁ Strength +100", ability: "Full Set Bonus: Strong Blood - Buffs Aspect of the End." },
+            { category: "Armor Sets", name: "Unstable Dragon Armor", rarity: "LEGENDARY", stats: "❤ Health +350\n❈ Defense +500\n☣ Crit Chance +20%\n☠ Crit Damage +60%\n✎ Intelligence +25", ability: "Full Set Bonus: Unstable Blood - Lightning strikes nearby mobs." },
+            { category: "Armor Sets", name: "Superior Dragon Armor", rarity: "LEGENDARY", stats: "❤ Health +450\n❈ Defense +600\n❁ Strength +40\n☣ Crit Chance +8%\n☠ Crit Damage +40%\n✦ Speed +12%\n✎ Intelligence +100", ability: "Full Set Bonus: Superior Blood - Most stats increased by 5%, +50% AOTD damage." },
+            { category: "Armor Sets", name: "Holy Dragon Armor", rarity: "LEGENDARY", stats: "❤ Health +545\n❈ Defense +500", ability: "Full Set Bonus: Holy Blood - Triples natural health regen for nearby players." },
+            { category: "Armor Sets", name: "Sorrow Armor", rarity: "LEGENDARY", stats: "✯ Magic Find +20\n⸕ Mining Speed +200\n☘ Mining Fortune +80\n❂ True Defense +525", ability: "Full Set Bonus: Mist Aura - Hides wearer in mist." },
+            { category: "Armor Sets", name: "Reaper Armor", rarity: "LEGENDARY", stats: "❤ Health +400\n❈ Defense +150\n❁ Strength +75\n✎ Intelligence +750", ability: "Full Set Bonus: Enrage and Trolling the Reaper." },
+            { category: "Armor Sets", name: "Final Destination Armor", rarity: "LEGENDARY", stats: "❤ Health +600\n❈ Defense +400\n✎ Intelligence +400", ability: "Full Set Bonus: Vivacious Darkness - Endermen combat buffs." },
+            { category: "Armor Sets", name: "Divan Armor", rarity: "LEGENDARY", stats: "❤ Health +510\n❈ Defense +540\n⸕ Mining Speed +320\n☘ Mining Fortune +120", ability: "None (Top tier gemstone mining armor)." },
+            { category: "Armor Sets", name: "Diamond Hunter Armor", rarity: "LEGENDARY", stats: "❤ Health +665\n❈ Defense +665", ability: "Full Set Bonus: Peace Treaty & Odger's Blessing (+15% Trophy Fish chance)." },
+            { category: "Armor Sets", name: "Magma Lord Armor", rarity: "LEGENDARY", stats: "❤ Health +895\n❈ Defense +805\n❁ Strength +40\n☠ Crit Damage +140\nα Sea Creature Chance +18", ability: "Tiered Bonus: Fireproof & Lord's Blessing." },
+            { category: "Armor Sets", name: "Crimson Armor", rarity: "LEGENDARY", stats: "❤ Health +725\n❈ Defense +210\n❁ Strength +120\n☠ Crit Damage +80%\n✎ Intelligence +30", ability: "Tiered Bonus: Dominus - Gain stacks on melee kills for melee range and swipe." },
+            { category: "Armor Sets", name: "Hot Crimson Armor", rarity: "LEGENDARY", stats: "❤ Health +915\n❈ Defense +264\n❁ Strength +152\n☠ Crit Damage +100%\n✎ Intelligence +37", ability: "Tiered Bonus: Dominus." },
+            { category: "Armor Sets", name: "Burning Crimson Armor", rarity: "LEGENDARY", stats: "❤ Health +1150\n❈ Defense +333\n❁ Strength +192\n☠ Crit Damage +128%\n✎ Intelligence +48", ability: "Tiered Bonus: Dominus." },
+            { category: "Armor Sets", name: "Fiery Crimson Armor", rarity: "LEGENDARY", stats: "❤ Health +1450\n❈ Defense +420\n❁ Strength +240\n☠ Crit Damage +160%\n✎ Intelligence +60", ability: "Tiered Bonus: Dominus." },
+            { category: "Armor Sets", name: "Infernal Crimson Armor", rarity: "LEGENDARY", stats: "❤ Health +1828\n❈ Defense +530\n❁ Strength +304\n☠ Crit Damage +200%\n✎ Intelligence +77", ability: "Tiered Bonus: Dominus." },
+            { category: "Armor Sets", name: "Aurora Armor", rarity: "LEGENDARY", stats: "❤ Health +725\n❈ Defense +210\n✎ Intelligence +565", ability: "Tiered Bonus: Arcane Vision - Runic spell buffs." },
+            { category: "Armor Sets", name: "Hot Aurora Armor", rarity: "LEGENDARY", stats: "❤ Health +915\n❈ Defense +264\n✎ Intelligence +713", ability: "Tiered Bonus: Arcane Vision." },
+            { category: "Armor Sets", name: "Burning Aurora Armor", rarity: "LEGENDARY", stats: "❤ Health +1150\n❈ Defense +333\n✎ Intelligence +896", ability: "Tiered Bonus: Arcane Vision." },
+            { category: "Armor Sets", name: "Fiery Aurora Armor", rarity: "LEGENDARY", stats: "❤ Health +1450\n❈ Defense +420\n✎ Intelligence +1130", ability: "Tiered Bonus: Arcane Vision." },
+            { category: "Armor Sets", name: "Infernal Aurora Armor", rarity: "LEGENDARY", stats: "❤ Health +1828\n❈ Defense +530\n✎ Intelligence +1424", ability: "Tiered Bonus: Arcane Vision." },
+            { category: "Armor Sets", name: "Fervor Armor", rarity: "LEGENDARY", stats: "❤ Health +815\n❈ Defense +440\n✎ Intelligence +30", ability: "Tiered Bonus: Fervor - Damage reduction when blocking with sword." },
+            { category: "Armor Sets", name: "Hot Fervor Armor", rarity: "LEGENDARY", stats: "❤ Health +1028\n❈ Defense +554\n✎ Intelligence +37", ability: "Tiered Bonus: Fervor." },
+            { category: "Armor Sets", name: "Burning Fervor Armor", rarity: "LEGENDARY", stats: "❤ Health +1294\n❈ Defense +699\n✎ Intelligence +48", ability: "Tiered Bonus: Fervor." },
+            { category: "Armor Sets", name: "Fiery Fervor Armor", rarity: "LEGENDARY", stats: "❤ Health +1630\n❈ Defense +880\n✎ Intelligence +60", ability: "Tiered Bonus: Fervor." },
+            { category: "Armor Sets", name: "Infernal Fervor Armor", rarity: "LEGENDARY", stats: "❤ Health +2054\n❈ Defense +1109\n✎ Intelligence +77", ability: "Tiered Bonus: Fervor." },
+            { category: "Armor Sets", name: "Hollow Armor", rarity: "LEGENDARY", stats: "❤ Health +725\n❈ Defense +210\n❁ Strength +60\n✦ Speed +20\n☠ Crit Damage +40\n✎ Intelligence +385", ability: "None (Unreleased)." },
+            { category: "Armor Sets", name: "Hot Hollow Armor", rarity: "LEGENDARY", stats: "❤ Health +915\n❈ Defense +264\n❁ Strength +76\n✦ Speed +24\n☠ Crit Damage +39\n✎ Intelligence +485", ability: "None (Unreleased)." },
+            { category: "Armor Sets", name: "Burning Hollow Armor", rarity: "LEGENDARY", stats: "❤ Health +1150\n❈ Defense +333\n❁ Strength +96\n✦ Speed +32\n☠ Crit Damage +64\n✎ Intelligence +611", ability: "None (Unreleased)." },
+            { category: "Armor Sets", name: "Fiery Hollow Armor", rarity: "LEGENDARY", stats: "❤ Health +1450\n❈ Defense +420\n❁ Strength +120\n✦ Speed +40\n☠ Crit Damage +80\n✎ Intelligence +770", ability: "None (Unreleased)." },
+            { category: "Armor Sets", name: "Infernal Hollow Armor", rarity: "LEGENDARY", stats: "❤ Health +1828\n❈ Defense +530\n❁ Strength +152\n✦ Speed +52\n☠ Crit Damage +100\n✎ Intelligence +970", ability: "None (Unreleased)." },
+            { category: "Armor Sets", name: "Terror Armor", rarity: "LEGENDARY", stats: "❤ Health +725\n❈ Defense +210\n✦ Speed +48\n☠ Crit Damage +200\n✎ Intelligence +30", ability: "Tiered Bonus: Hydra Strike - Arrow speed and extra arrows on hit." },
+            { category: "Armor Sets", name: "Hot Terror Armor", rarity: "LEGENDARY", stats: "❤ Health +915\n❈ Defense +264\n✦ Speed +60\n☠ Crit Damage +252\n✎ Intelligence +37", ability: "Tiered Bonus: Hydra Strike." },
+            { category: "Armor Sets", name: "Burning Terror Armor", rarity: "LEGENDARY", stats: "❤ Health +1150\n❈ Defense +333\n✦ Speed +76\n☠ Crit Damage +316\n✎ Intelligence +48", ability: "Tiered Bonus: Hydra Strike." },
+            { category: "Armor Sets", name: "Fiery Terror Armor", rarity: "LEGENDARY", stats: "❤ Health +1450\n❈ Defense +420\n✦ Speed +96\n☠ Crit Damage +400\n✎ Intelligence +60", ability: "Tiered Bonus: Hydra Strike." },
+            { category: "Armor Sets", name: "Infernal Terror Armor", rarity: "LEGENDARY", stats: "❤ Health +1828\n❈ Defense +530\n✦ Speed +120\n☠ Crit Damage +504\n✎ Intelligence +77", ability: "Tiered Bonus: Hydra Strike." },
+
+            // Dungeon Armor Sets
+            { category: "Dungeon Armor Sets", name: "Rotten Armor", rarity: "RARE", stats: "❤ Health +252\n❈ Defense +60\n❁ Strength +60", ability: "Full Set Bonus: Sieve Body - Knockback resistance to arrows." },
+            { category: "Dungeon Armor Sets", name: "Bouncy Armor", rarity: "RARE", stats: "❤ Health +483\n☣ Crit Chance +24", ability: "Full Set Bonus: Bouncing Arrow - Arrows bounce to another target." },
+            { category: "Dungeon Armor Sets", name: "Heavy Armor", rarity: "RARE", stats: "❈ Defense +413\n✦ Speed -20", ability: "Full Set Bonus: Vindicate - Walk speed for defense." },
+            { category: "Dungeon Armor Sets", name: "Skeleton Grunt Armor", rarity: "EPIC", stats: "❤ Health +72\n❈ Defense +115\n☠ Crit Damage +60", ability: "Increases arrow damage by 5% per piece." },
+            { category: "Dungeon Armor Sets", name: "Skeleton Soldier Armor", rarity: "EPIC", stats: "❤ Health +80\n❈ Defense +128\n☣ Crit Chance +8\n☠ Crit Damage +67", ability: "Full Set Bonus: Skeleton Soldier - Arrow damage boost." },
+            { category: "Dungeon Armor Sets", name: "Skeleton Master Armor", rarity: "EPIC", stats: "❤ Health +84-170\n❈ Defense +140-272", ability: "Chestplate prevents arrow consumption. Full Set Bonus: Arrow damage boost." },
+            { category: "Dungeon Armor Sets", name: "Skeleton Lord Armor", rarity: "EPIC", stats: "❤ Health +133-170\n❈ Defense +265-340", ability: "Full Set Bonus: Dungeon Lord - Strength and Crit Damage over time in dungeons." },
+            { category: "Dungeon Armor Sets", name: "Zombie Soldier Armor", rarity: "EPIC", stats: "❤ Health +140-270\n❈ Defense +279-440", ability: "Full Set Bonus: Shoal - Defense per nearby Zombie Soldier set." },
+            { category: "Dungeon Armor Sets", name: "Zombie Commander Armor", rarity: "EPIC", stats: "❤ Health +304-470\n❈ Defense +177-270", ability: "Full Set Bonus: Training - Gain HP for zombies killed." },
+            { category: "Dungeon Armor Sets", name: "Zombie Knight Armor", rarity: "EPIC", stats: "❈ Defense +341-691\n❁ Strength +55-128\n✦ Speed +20-37", ability: "Full Set Bonus: Zombie Knight - Defense bonus with Zombie Knight Sword." },
+            { category: "Dungeon Armor Sets", name: "Skeletor Armor", rarity: "EPIC", stats: "❤ Health +87-182\n❈ Defense +140-292", ability: "Bone plating cooldown reduction. Full Set Bonus: Skeletor." },
+            { category: "Dungeon Armor Sets", name: "Zombie Lord Armor", rarity: "EPIC", stats: "❤ Health +488-732\n❈ Defense +218-328", ability: "Full Set Bonus: Dungeon Lord - Strength and Defense over time." },
+            { category: "Dungeon Armor Sets", name: "Super Heavy Armor", rarity: "EPIC", stats: "❈ Defense +403-965\n✦ Speed -40", ability: "Reduces Seismic Wave cooldown. Full Set Bonus: Vindicate." },
+            { category: "Dungeon Armor Sets", name: "Adaptive Armor", rarity: "EPIC", stats: "❤ Health +515\n❈ Defense +245\n❁ Strength +60\n✎ Intelligence +60", ability: "Full Set Bonus: Efficient training - Stats gain per Catacombs level." },
+            { category: "Dungeon Armor Sets", name: "Shadow Assassin Armor", rarity: "EPIC", stats: "❤ Health +735\n❈ Defense +330\n❁ Strength +100\n✦ Speed +28%\n☠ Crit Damage +100", ability: "Full Set Bonus: Shadow Assassin - Strength per kill in dungeon." },
+            { category: "Dungeon Armor Sets", name: "Necromancer Lord Armor", rarity: "LEGENDARY", stats: "❤ Health +930\n❈ Defense +780\n✎ Intelligence +45", ability: "Full Set Bonus: Soul Whisper - Summoned mob damage and extra soul slot." },
+            { category: "Dungeon Armor Sets", name: "Wither Armor", rarity: "LEGENDARY", stats: "❤ Health +930\n❈ Defense +720\n✎ Intelligence +60", ability: "Full Set Bonus: Witherborn - Spawn a wither minion and wither damage reduction." },
+            { category: "Dungeon Armor Sets", name: "Goldor's Armor", rarity: "LEGENDARY", stats: "❤ Health +935\n❈ Defense +895\n✎ Intelligence +90", ability: "Full Set Bonus: Witherborn - Tank Wither set." },
+            { category: "Dungeon Armor Sets", name: "Storm's Armor", rarity: "LEGENDARY", stats: "❤ Health +815\n❈ Defense +370\n✎ Intelligence +1150", ability: "Full Set Bonus: Witherborn - Mage Wither set." },
+            { category: "Dungeon Armor Sets", name: "Necron's Armor", rarity: "LEGENDARY", stats: "❤ Health +815\n❈ Defense +450\n❁ Strength +160\n☠ Crit Damage +120\n✎ Intelligence +60", ability: "Full Set Bonus: Witherborn - Berserk/Archer Wither set." },
+            { category: "Dungeon Armor Sets", name: "Maxor's Armor", rarity: "LEGENDARY", stats: "❤ Health +815\n❈ Defense +370\n✦ Speed +120%\n☠ Crit Damage +180\n✎ Intelligence +45", ability: "Full Set Bonus: Witherborn - Speed/Archer Wither set." },
+
+            // Helmets
+            { category: "Helmets", name: "Blaze Hat", rarity: "COMMON", stats: "❁ Strength +20", ability: "-" },
+            { category: "Helmets", name: "Chicken Head", rarity: "COMMON", stats: "❤ Health +20", ability: "Lays eggs when you sneak. Reduces fall damage." },
+            { category: "Helmets", name: "Creeper Hat", rarity: "COMMON", stats: "❁ Strength +5\n☣ Crit Chance +5%\n☠ Crit Damage +5%\n❤ Health +5\n❈ Defense +5\n✎ Intelligence +5", ability: "Grants immunity to explosion damage." },
+            { category: "Helmets", name: "Cow Head", rarity: "COMMON", stats: "❤ Health +10\n❈ Defense +5", ability: "Grants immunity to debuffs." },
+            { category: "Helmets", name: "Ghast Head", rarity: "COMMON", stats: "❤ Health +100", ability: "Restores 1% max HP every second." },
+            { category: "Helmets", name: "Fish Hat", rarity: "COMMON", stats: "❤ Health +5", ability: "Ability: Splash - Crouch to splash water. ✎ Mana Cost: 10" },
+            { category: "Helmets", name: "Magma Cube Head", rarity: "COMMON", stats: "❤ Health +25\n❈ Defense +25", ability: "-" },
+            { category: "Helmets", name: "Pufferfish Hat", rarity: "COMMON", stats: "❁ Strength +10\n❤ Health +20", ability: "Ability: Spiky - Attacks deal bonus damage." },
+            { category: "Helmets", name: "Salmon Hat", rarity: "COMMON", stats: "❁ Strength +15\n✦ Speed +2", ability: "Comes with Aqua Affinity, Depth Strider, and Respiration enchants." },
+            { category: "Helmets", name: "Skeleton Hat", rarity: "COMMON", stats: "✦ Speed +2%\n✎ Intelligence +10", ability: "Arrows have 20% chance to explode on impact." },
+            { category: "Helmets", name: "Slime Hat", rarity: "COMMON", stats: "❤ Health +50", ability: "Grants immunity to mob knockback." },
+            { category: "Helmets", name: "Spider Hat", rarity: "COMMON", stats: "☣ Crit Chance +25%", ability: "Spiders and Cave Spiders deal -30% damage." },
+            { category: "Helmets", name: "Squid Hat", rarity: "COMMON", stats: "✦ Speed +1%", ability: "Extra chance to fish up Squids." },
+            { category: "Helmets", name: "Zombie Hat", rarity: "COMMON", stats: "❈ Defense +10", ability: "Gains +10 Defense for each Zombie within 8 blocks." },
+            { category: "Helmets", name: "Golem Hat", rarity: "COMMON", stats: "-", ability: "Sneak for a bonus iron ingot. Cooldown: 5s" },
+            { category: "Helmets", name: "Blobfish Hat", rarity: "UNCOMMON", stats: "❁ Strength +25\n✎ Intelligence -10", ability: "-" },
+            { category: "Helmets", name: "Clownfish Hat", rarity: "UNCOMMON", stats: "✎ Intelligence +50", ability: "-" },
+            { category: "Helmets", name: "Magmafish Hat", rarity: "UNCOMMON", stats: "✎ Intelligence +50", ability: "Ability: Splash - Crouch to splash magma. ✎ Mana Cost: 10" },
+            { category: "Helmets", name: "Sea Lantern Hat", rarity: "UNCOMMON", stats: "-", ability: "Breathe 5 times longer underwater." },
+            { category: "Helmets", name: "Enderman Mask", rarity: "UNCOMMON", stats: "❁ Strength +1\n❤ Health +1\n❈ Defense +1\n✎ Intelligence -99", ability: "Look Endermen in the eyes without aggro." },
+            { category: "Helmets", name: "Lantern Helmet", rarity: "UNCOMMON", stats: "❤ Health +20 (max 240)\n❈ Defense +10 (max 130)", ability: "Gains stats for every Farming skill level." },
+            { category: "Helmets", name: "Rabbit Hat", rarity: "UNCOMMON", stats: "✦ Speed +5%\n✎ Intelligence +5", ability: "Permanent Jump Boost IV." },
+            { category: "Helmets", name: "Happy Mask", rarity: "UNCOMMON", stats: "-", ability: "Allowed access to Official Buildings during Dante's mayoralty." },
+            { category: "Helmets", name: "Crystallized Heart", rarity: "RARE", stats: "❤ Health +50\n❈ Defense +10\n✎ Intelligence +50", ability: "Ability: Healing Boost - Doubles all healing effects." },
+            { category: "Helmets", name: "Skeleton's Helmet", rarity: "RARE", stats: "❈ Defense +75", ability: "Ability: Bone Shield - Nullifies damage consuming a bone." },
+            { category: "Helmets", name: "Taurus Helmet", rarity: "RARE", stats: "☠ Crit Damage +20%\nα Sea Creature Chance +3%\n❤ Health +190\n❈ Defense +150", ability: "Lava sea creature damage reduction." },
+            { category: "Helmets", name: "Witch Mask", rarity: "EPIC", stats: "❤ Health +66\n❈ Defense +111", ability: "Ability: Bat Swarm - Summons bats that attack and explode." },
+            { category: "Helmets", name: "Vampire Mask", rarity: "RARE", stats: "❈ Defense +111", ability: "Ability: Rejuvenate - Drains 5 HP/s from nearby monsters." },
+            { category: "Helmets", name: "Vampire Witch Mask", rarity: "EPIC", stats: "❤ Health +132\n❈ Defense +222", ability: "Bat Swarm & Rejuvenate abilities." },
+            { category: "Helmets", name: "Zombie's Heart", rarity: "RARE", stats: "❤ Health +50", ability: "Ability: Healing Boost - Doubles all healing effects." },
+            { category: "Helmets", name: "Krampus Helmet", rarity: "EPIC", stats: "-", ability: "Gains max HP per 50 gifts given." },
+            { category: "Helmets", name: "Reaper Mask", rarity: "LEGENDARY", stats: "❤ Health +100\n❈ Defense +60\n✎ Intelligence +100", ability: "Ability: Disgusting Healing - 2x healing from all sources, 2x Reaper Scythe zombies." },
+            { category: "Helmets", name: "Revived Heart", rarity: "EPIC", stats: "❤ Health +100\n❈ Defense +35\n✎ Intelligence +100", ability: "Ability: Healing Boost - Doubles all healing effects." },
+            { category: "Helmets", name: "Spirit Mask", rarity: "EPIC", stats: "❤ Health +100\n❈ Defense +50\n✦ Speed +15%\n✎ Intelligence +20", ability: "Ability: Second Wind - Prevents death once with 3s damage immunity." },
+            { category: "Helmets", name: "Water Hydra Head", rarity: "EPIC", stats: "❤ Health +100\n❈ Defense +100\nα SCC +1.8", ability: "-" },
+            { category: "Helmets", name: "Crown of Greed", rarity: "LEGENDARY", stats: "❤ Health +130\n❈ Defense +90\n✯ Magic Find +4", ability: "Hits have +25% base damage, costing 100x weapon base damage in coins." },
+            { category: "Helmets", name: "Warden Helmet", rarity: "LEGENDARY", stats: "❤ Health +300\n❈ Defense +100", ability: "Ability: Brute Force - Halves speed but grants +20% base weapon damage per 25 speed." },
+            { category: "Helmets", name: "Pig Mask", rarity: "LEGENDARY", stats: "✦ Speed +1", ability: "-" },
+            { category: "Helmets", name: "Clover Helmet", rarity: "LEGENDARY", stats: "✯ Magic Find +5%\nAll others: -5%", ability: "-" },
+            { category: "Helmets", name: "Racing Helmet", rarity: "LEGENDARY", stats: "✦ Speed +400", ability: "Increases speed cap to 500." },
+
+            // Chestplates
+            { category: "Chestplates", name: "Guardian Chestplate", rarity: "RARE", stats: "❤ Health +20\n❈ Defense +50", ability: "Ability: Block Defense - Nullifies first damage taken at full HP. Cooldown: 60s" },
+            { category: "Chestplates", name: "Flaming Chestplate", rarity: "RARE", stats: "❁ Strength +25\nα Sea Creature Chance +3%\n❤ Health +210\n❈ Defense +210", ability: "Lava sea creature damage reduction and damage boost." },
+            { category: "Chestplates", name: "Obsidian Chestplate", rarity: "EPIC", stats: "❈ Defense +250", ability: "+1 Speed per 20 obsidian in inventory. Wither effect immunity." },
+            { category: "Chestplates", name: "Mithril Coat", rarity: "EPIC", stats: "❈ Defense +125\n✦ Speed +15", ability: "Ability: Mithril's Protection - Max damage taken is 40% of max HP." },
+            { category: "Chestplates", name: "Stone Chestplate", rarity: "RARE", stats: "❈ Defense +130", ability: "Nearby dungeon players take 5% less damage." },
+            { category: "Chestplates", name: "Metal Chestplate", rarity: "EPIC", stats: "❈ Defense +230", ability: "Nearby dungeon players take 8% less damage." },
+            { category: "Chestplates", name: "Steel Chestplate", rarity: "EPIC", stats: "❈ Defense +330", ability: "Nearby dungeon players take 10% less damage." },
+            { category: "Chestplates", name: "Wyld Chain Top", rarity: "UNCOMMON", stats: "ф Rift Time +15s", ability: "Rift armor piece." },
+            { category: "Chestplates", name: "etalptsehC norI", rarity: "RARE", stats: "ф Rift Time +30s", ability: "Rift armor piece." },
+            { category: "Chestplates", name: "Orange Chestplate", rarity: "EPIC", stats: "ф Rift Time +45s\n✎ Intelligence +5\n⚡ Mana Regen +10%", ability: "Rift armor piece." },
+            { category: "Chestplates", name: "Lively Sepulture Chestplate", rarity: "LEGENDARY", stats: "ф Rift Time +65s\n❤ Hearts +1\n✎ Intelligence +30\n⚡ Mana Regen +25%", ability: "Rift armor piece." },
+
+            // Leggings
+            { category: "Leggings", name: "Wyld Leggings", rarity: "UNCOMMON", stats: "ф Rift Time +15s", ability: "Rift leggings." },
+            { category: "Leggings", name: "Chicken Leggs", rarity: "RARE", stats: "ф Rift Time +35s", ability: "Rift leggings." },
+            { category: "Leggings", name: "Femurgrowth Leggings", rarity: "EPIC", stats: "ф Rift Time +65s\n-4 ✦ Speed\n+5% ⚡ Mana Regen", ability: "Infected slime leggings." },
+            { category: "Leggings", name: "Leggings of the Coven", rarity: "EPIC", stats: "ф Rift Time +80s\n❤ Hearts +1\n+6% ⚡ Mana Regen", ability: "Ability: Friendship is Power - Stats bonus for nearby wearers." },
+
+            // Boots
+            { category: "Boots", name: "Farmer Boots", rarity: "UNCOMMON", stats: "❤ Health +40\n❈ Defense +20\n✦ Speed +10%", ability: "Gain defense and speed for Golden Hoe Farming level." },
+            { category: "Boots", name: "Squid Boots", rarity: "UNCOMMON", stats: "❤ Health +100\nα SCC +1.5", ability: "Spits out squid ink." },
+            { category: "Boots", name: "Spider's Boots", rarity: "RARE", stats: "❈ Defense +45\n✎ Intelligence +50\n✦ Speed +5%", ability: "Ability: Double Jump - Allows double jumping. ✎ Mana Cost: 50" },
+            { category: "Boots", name: "Spirit Boots", rarity: "EPIC", stats: "❤ Health +150\n❈ Defense +50\n❁ Strength +25\n✦ Speed +25\n✎ Intelligence +50", ability: "Ability: Spirit Glide - Double jump to fly as a spirit. Cooldown: 60s" },
+            { category: "Boots", name: "Rancher's Boots", rarity: "EPIC", stats: "❤ Health +100\n❈ Defense +70\n✦ Speed +50", ability: "Customizable speed cap, prevents crop trampling." },
+            { category: "Boots", name: "Slug Boots", rarity: "RARE", stats: "❤ Health +110\n❈ Defense +110\n❁ Strength +20\nα Sea Creature Chance +3%", ability: "Ability: Bouncy - Bounce straight up after falling." },
+            { category: "Boots", name: "Spring Boots", rarity: "RARE", stats: "Feather Falling XX", ability: "Ability: To the moon! - Charge jump by sneaking." },
+            { category: "Boots", name: "Wyld Boots", rarity: "UNCOMMON", stats: "ф Rift Time +15s", ability: "Rift boots." },
+            { category: "Boots", name: "Gunther's Sneakers", rarity: "RARE", stats: "ф Rift Time +30s\n✦ Speed +4", ability: "Rift boots." },
+            { category: "Boots", name: "Exceedingly Comfy Sneakers", rarity: "RARE", stats: "ф Rift Time +45s\n✦ Speed +5", ability: "Rift boots." },
+            { category: "Boots", name: "Snake-in-a-Boot", rarity: "EPIC", stats: "ф Rift Time +60s\n✦ Speed +7", ability: "Rift boots." }
+        ];
+
+        let currentCategory = 'ALL';
+
+        const tableBody = document.getElementById('tableBody');
+        const cardsViewContainer = document.getElementById('cardsViewContainer');
+        const tableViewContainer = document.getElementById('tableViewContainer');
+        const searchInput = document.getElementById('searchInput');
+        const raritySelect = document.getElementById('raritySelect');
+
+        const statTotal = document.getElementById('statTotal');
+        const statShown = document.getElementById('statShown');
+
+        const btnViewTable = document.getElementById('btnViewTable');
+        const btnViewCards = document.getElementById('btnViewCards');
+        const tableNoResults = document.getElementById('tableNoResults');
+        const cardsNoResults = document.getElementById('cardsNoResults');
+
+        const detailModal = document.getElementById('detailModal');
+        const modalClose = document.getElementById('modalClose');
+
+        statTotal.textContent = armoursData.length;
+
+        document.querySelectorAll('.pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.getAttribute('data-category');
+                render();
+            });
+        });
+
+        function getFilteredData() {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedRarity = raritySelect.value;
+
+            return armoursData.filter(item => {
+                const matchesCat = (currentCategory === 'ALL' || item.category === currentCategory);
+                const matchesRarity = (selectedRarity === 'ALL' || item.rarity.toUpperCase().includes(selectedRarity));
+                const mpValue = getMagicalPower(item.rarity);
+                const searchHaystack = (item.name + " " + item.stats + " " + item.ability + " " + item.category + " " + mpValue + "mp").toLowerCase();
+                const matchesSearch = !query || searchHaystack.includes(query);
+
+                return matchesCat && matchesRarity && matchesSearch;
+            });
+        }
+
+        function openModal(item) {
+            document.getElementById('modalCat').textContent = item.category;
+            const rarityBadge = document.getElementById('modalRarity');
+            const cleanRarity = item.rarity.split('-')[0].split(',')[0].trim().toUpperCase().replace(' ', '_');
+            rarityBadge.className = `badge-rarity rarity-${cleanRarity}`;
+            rarityBadge.textContent = item.rarity;
+
+            const mpValue = getMagicalPower(item.rarity);
+            document.getElementById('modalMP').textContent = `⚡ ${mpValue} MP`;
+
+            document.getElementById('modalName').textContent = item.name;
+            document.getElementById('modalStats').textContent = item.stats;
+            document.getElementById('modalAbility').textContent = item.ability;
+
+            detailModal.classList.add('active');
+        }
+
+        modalClose.addEventListener('click', () => detailModal.classList.remove('active'));
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) detailModal.classList.remove('active');
+        });
+
+        function render() {
+            const filtered = getFilteredData();
+            statShown.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = '';
+                cardsViewContainer.innerHTML = '';
+                tableNoResults.style.display = 'block';
+                cardsNoResults.style.display = 'block';
+                return;
+            }
+
+            tableNoResults.style.display = 'none';
+            cardsNoResults.style.display = 'none';
+
+            tableBody.innerHTML = filtered.map((item) => {
+                const cleanRarity = item.rarity.split('-')[0].split(',')[0].trim().toUpperCase().replace(' ', '_');
+                const mp = getMagicalPower(item.rarity);
+                return `
+                <tr data-index="${armoursData.indexOf(item)}">
+                    <td class="col-cat"><span class="badge-cat">${item.category}</span></td>
+                    <td><strong style="color: #F97316;">${item.name}</strong></td>
+                    <td><span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span></td>
+                    <td class="col-mp"><span class="badge-mp">⚡ ${mp}</span></td>
+                    <td style="white-space: pre-line;">${item.stats}</td>
+                    <td>${item.ability}</td>
+                </tr>
+            `}).join('');
+
+            document.querySelectorAll('#tableBody tr').forEach(row => {
+                row.addEventListener('click', () => {
+                    const idx = row.getAttribute('data-index');
+                    openModal(armoursData[idx]);
+                });
+            });
+
+            cardsViewContainer.innerHTML = filtered.map((item) => {
+                const cleanRarity = item.rarity.split('-')[0].split(',')[0].trim().toUpperCase().replace(' ', '_');
+                const mp = getMagicalPower(item.rarity);
+                return `
+                <div class="card" data-index="${armoursData.indexOf(item)}">
+                    <div class="card-header">
+                        <span class="badge-cat">${item.category}</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <span class="badge-mp">⚡ ${mp} MP</span>
+                            <span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card-title">${item.name}</div>
+                    </div>
+                    <div class="card-body">
+                        <div><strong>Stats:</strong> ${item.stats}</div>
+                        <div><strong>Abilities:</strong> ${item.ability}</div>
+                    </div>
+                </div>
+            `}).join('');
+
+            document.querySelectorAll('.cards-container .card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const idx = card.getAttribute('data-index');
+                    openModal(armoursData[idx]);
+                });
+            });
+        }
+
+        btnViewTable.addEventListener('click', () => {
+            btnViewTable.classList.add('active');
+            btnViewCards.classList.remove('active');
+            tableViewContainer.style.display = 'block';
+            cardsViewContainer.style.display = 'none';
+        });
+
+        btnViewCards.addEventListener('click', () => {
+            btnViewCards.classList.add('active');
+            btnViewTable.classList.remove('active');
+            tableViewContainer.style.display = 'none';
+            cardsViewContainer.style.display = 'grid';
+        });
+
+        searchInput.addEventListener('input', render);
+        raritySelect.addEventListener('change', render);
+
+        render();
+    </script>
+</body>
+</html>
