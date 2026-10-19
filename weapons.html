@@ -1,1 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypixel Skyblock Weapons</title>
+    <style>
+        :root {
+            --bg-dark: #0B0E14;
+            --bg-header: #111622;
+            --bg-card: #161C2A;
+            --bg-input: #1C2436;
+            --border-color: #2A364F;
+            --text-main: #E2E8F0;
+            --text-muted: #8E9BAE;
+            --accent-gold: #F59E0B;
+            --accent-gold-hover: #D97706;
+            --accent-cyan: #38BDF8;
+            --pill-inactive: #1E293B;
+            --pill-inactive-hover: #2D3D58;
+            --accent-purple: #A855F7;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1650px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+            font-size: 24px;
+        }
+
+        .title-group h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -0.02em;
+        }
+
+        .title-group h1 span {
+            color: #EF4444;
+        }
+
+        .title-group p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-badge {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .stat-badge .num-yellow {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .stat-badge .num-cyan {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 420px;
+            min-width: 280px;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #EF4444;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
+        }
+
+        .top-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .rarity-select {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        .view-switch-group {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background-color: #EF4444;
+            color: #FFFFFF;
+        }
+
+        .view-btn:not(.active):hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .back-hub-btn {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--accent-cyan);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .back-hub-btn:hover {
+            background-color: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .category-pills {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+
+        .pill-btn {
+            background-color: var(--pill-inactive);
+            border: 1px solid var(--border-color);
+            color: #C0C9D6;
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .pill-btn:hover {
+            background-color: var(--pill-inactive-hover);
+            color: #FFFFFF;
+        }
+
+        .pill-btn.active {
+            background-color: #EF4444;
+            border-color: #EF4444;
+            color: #FFFFFF;
+        }
+
+        .table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            max-height: 72vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        th {
+            background-color: var(--bg-header);
+            color: #EF4444;
+            padding: 16px 18px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        th.col-cat, td.col-cat {
+            white-space: nowrap;
+            width: 1%;
+        }
+
+        th.col-mp, td.col-mp {
+            text-align: center;
+            white-space: nowrap;
+            width: 80px;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.015);
+        }
+
+        tr:hover {
+            background-color: rgba(239, 68, 68, 0.08);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 20px;
+            max-height: 72vh;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #EF4444;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #EF4444;
+        }
+
+        .card-body {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .badge-rarity {
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+        }
+
+        .rarity-COMMON { color: #F8FAFC; background: rgba(248, 250, 252, 0.12); }
+        .rarity-UNCOMMON { color: #4ADE80; background: rgba(74, 222, 128, 0.12); }
+        .rarity-RARE { color: #60A5FA; background: rgba(96, 165, 250, 0.12); }
+        .rarity-EPIC { color: #A855F7; background: rgba(168, 85, 247, 0.12); }
+        .rarity-LEGENDARY { color: #FACC15; background: rgba(250, 204, 21, 0.15); }
+        .rarity-MYTHIC { color: #FF55FF; background: rgba(255, 85, 255, 0.15); }
+
+        .badge-cat {
+            background: #1E293B;
+            color: #94A3B8;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .badge-mp {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 720px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 22px;
+            right: 22px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-main);
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .modal-group {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            border-radius: 10px;
+        }
+
+        .modal-group.full {
+            grid-column: span 2;
+        }
+
+        .modal-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .modal-value {
+            font-size: 1.02rem;
+            color: var(--text-main);
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+
+        .no-results {
+            padding: 50px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <div class="logo-icon">⚔️</div>
+                <div class="title-group">
+                    <h1>Hypixel Skyblock <span>Weapons</span></h1>
+                    <p>Interactive database and guide for all Swords, Bows, and Wands</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <a href="index.html" class="back-hub-btn">🏠 Hub</a>
+                <div class="stat-badge">Total: <span class="num-yellow" id="statTotal">0</span></div>
+                <div class="stat-badge">Shown: <span class="num-cyan" id="statShown">0</span></div>
+            </div>
+        </header>
+
+        <div class="controls-wrapper">
+            <div class="top-controls">
+                <div class="search-area">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="searchInput" placeholder="Search weapon name, stats, ability...">
+                    </div>
+                </div>
+
+                <div class="top-right-controls">
+                    <select class="rarity-select" id="raritySelect">
+                        <option value="ALL">All Rarities</option>
+                        <option value="COMMON">Common</option>
+                        <option value="UNCOMMON">Uncommon</option>
+                        <option value="RARE">Rare</option>
+                        <option value="EPIC">Epic</option>
+                        <option value="LEGENDARY">Legendary</option>
+                        <option value="MYTHIC">Mythic</option>
+                    </select>
+
+                    <div class="view-switch-group">
+                        <button class="view-btn active" id="btnViewTable">
+                            <span>📋</span> Table
+                        </button>
+                        <button class="view-btn" id="btnViewCards">
+                            <span>🔲</span> Cards
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-pills" id="categoryPills">
+                <button class="pill-btn active" data-category="ALL">All</button>
+                <button class="pill-btn" data-category="Swords">Swords</button>
+                <button class="pill-btn" data-category="Dungeon Swords">Dungeon Swords</button>
+                <button class="pill-btn" data-category="Bows">Bows</button>
+                <button class="pill-btn" data-category="Support Wands">Support Wands</button>
+                <button class="pill-btn" data-category="Offensive Wands">Offensive Wands</button>
+                <button class="pill-btn" data-category="Other Wands">Other Wands</button>
+            </div>
+        </div>
+
+        <div class="table-container" id="tableViewContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-cat">Category</th>
+                        <th>Name</th>
+                        <th>Rarity</th>
+                        <th class="col-mp">MP</th>
+                        <th>Stats</th>
+                        <th>Ability / Effect</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="tableNoResults" class="no-results" style="display: none;">No weapons match the selected filters.</div>
+        </div>
+
+        <div class="cards-container" id="cardsViewContainer" style="display: none;"></div>
+        <div id="cardsNoResults" class="no-results" style="display: none;">No weapons match the selected filters.</div>
+    </div>
+
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <span class="badge-cat" id="modalCat"></span>
+                <span class="badge-rarity" id="modalRarity"></span>
+                <span class="badge-mp" id="modalMP"></span>
+            </div>
+            <h2 id="modalName" style="color: #EF4444; font-size: 1.7rem; margin-bottom: 12px;"></h2>
+
+            <div class="modal-grid">
+                <div class="modal-group">
+                    <div class="modal-label">Stats</div>
+                    <div class="modal-value" id="modalStats"></div>
+                </div>
+                <div class="modal-group">
+                    <div class="modal-label">Ability / Effect</div>
+                    <div class="modal-value" id="modalAbility" style="color: var(--accent-gold);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getMagicalPower(rarityName) {
+            const r = rarityName.toUpperCase();
+            if (r.includes('MYTHIC')) return 22;
+            if (r.includes('LEGENDARY')) return 16;
+            if (r.includes('EPIC')) return 12;
+            if (r.includes('RARE')) return 8;
+            if (r.includes('UNCOMMON')) return 5;
+            if (r.includes('COMMON')) return 3;
+            return 3;
+        }
+
+        const weaponsData = [
+            // Swords
+            { category: "Swords", name: "Aspect of the Jerry", rarity: "COMMON", stats: "+1 ❁ Damage", ability: "Ability: Parley - Channel your inner Jerry. Cooldown: 5s" },
+            { category: "Swords", name: "Fancy Sword", rarity: "COMMON", stats: "+20 ❁ Damage", ability: "Ability: Bejeweled Blade - Deals +150% damage to mobs on Mining Islands." },
+            { category: "Swords", name: "Rogue Sword", rarity: "COMMON", stats: "+50 ❁ Damage", ability: "Ability: Speed Boost - Grants +100 ✦ Speed for 30 seconds. ✎ Mana Cost: 50, Cooldown: 5s" },
+            { category: "Swords", name: "Spider Sword", rarity: "COMMON", stats: "+30 ❁ Damage", ability: "Deals +100% damage to Ж Arthropod mobs." },
+            { category: "Swords", name: "Undead Sword", rarity: "COMMON", stats: "+30 ❁ Damage", ability: "Deals +100% damage to ༕ Undead mobs." },
+            { category: "Swords", name: "End Sword", rarity: "UNCOMMON", stats: "+35 ❁ Damage", ability: "Deals +100% damage to ⊙ Ender mobs." },
+            { category: "Swords", name: "Cleaver", rarity: "UNCOMMON", stats: "+40 ❁ Damage\n+10 ❁ Strength", ability: "Ability: Cleave - Hits nearby enemies in a 3 block range." },
+            { category: "Swords", name: "Squire Sword", rarity: "UNCOMMON", stats: "+50 ❁ Damage\n+10 ❁ Strength", ability: "-" },
+            { category: "Swords", name: "Flaming Sword", rarity: "UNCOMMON", stats: "+50 ❁ Damage\n+20 ❁ Strength", ability: "Ignites enemies for 3s." },
+            { category: "Swords", name: "Hunter Knife", rarity: "UNCOMMON", stats: "+50 ❁ Damage\n+40 ✦ Speed", ability: "-" },
+            { category: "Swords", name: "Prismarine Blade", rarity: "UNCOMMON", stats: "+50 ❁ Damage\n+25 ❁ Strength", ability: "Deals +200% damage while in water." },
+            { category: "Swords", name: "Voidwalker Katana", rarity: "UNCOMMON", stats: "+80 ❁ Damage\n+40 ❁ Strength\n+10% ☠ Crit Damage", ability: "Deal +150% to Endermen. Take 3% less damage from Endermen while held." },
+            { category: "Swords", name: "Sword of Bad Health", rarity: "UNCOMMON", stats: "+200 ❁ Damage\n+50 ❁ Strength\n+50% ☠ Crit Damage", ability: "Ability: Bad Health - Use 5% max health to gain +5% ❁ Strength (capped at +100). Cooldown: 5s" },
+            { category: "Swords", name: "Tribal Spear", rarity: "RARE", stats: "+100 ❁ Strength", ability: "Ability: Thwack - Throw the spear like an arrow which will return to you." },
+            { category: "Swords", name: "Mercenary Sword", rarity: "RARE", stats: "+70 ❁ Damage\n+20 ❁ Strength", ability: "-" },
+            { category: "Swords", name: "Frozen Scythe", rarity: "RARE", stats: "+80 ❁ Damage", ability: "Ability: Ice Bolt - Shoots 1 Ice Bolt dealing 1,000 ๑ Ability Damage and slows enemies. ✎ Mana Cost: 50" },
+            { category: "Swords", name: "Golem Sword", rarity: "RARE", stats: "+80 ❁ Damage\n+125 ❁ Strength\n+25 ❈ Defense", ability: "Ability: Iron Punch - Deals 250 base magical damage. ✎ Mana Cost: 70, Cooldown: 3s" },
+            { category: "Swords", name: "Raider Sword", rarity: "RARE", stats: "+80-115 ❁ Damage\n+50-150 ❁ Strength", ability: "Earn +20 coins from kills. +1 Damage per 500 kills (max +35), +1 Strength per 500 wood (max +100)." },
+            { category: "Swords", name: "Firedust Dagger", rarity: "RARE", stats: "+90 ❁ Damage\n+45 ❁ Strength\n+15% ☠ Crit Damage", ability: "Ability: Attunement - Deal 1.2x damage to ♨ Infernal mobs, 1.1x to ☠ Wither mobs. +15 Combat Wisdom." },
+            { category: "Swords", name: "Twilight Dagger", rarity: "RARE", stats: "+90 ❁ Damage\n+45 ❁ Strength\n+15% ☠ Crit Damage", ability: "Ability: Attunement - Deal 1.5x damage to ♨ Infernal mobs, 1.2x to 🦴 Skeletal. +15 Combat Wisdom." },
+            { category: "Swords", name: "Revenant Falchion", rarity: "RARE", stats: "+90 ❁ Damage\n+50 ❁ Strength\n+100 ✎ Intelligence", ability: "Deals +150% damage to ༕ Undead mobs." },
+            { category: "Swords", name: "Aspect of the End", rarity: "RARE", stats: "+100 ❁ Damage\n+100 ❁ Strength", ability: "Ability: Instant Transmission - Teleport 8 blocks ahead, +50 ✦ Speed for 3s. ✎ Mana Cost: 50" },
+            { category: "Swords", name: "Zombie Sword", rarity: "RARE", stats: "+100 ❁ Damage\n+50 ❁ Strength\n+50 ✎ Intelligence", ability: "Ability: Instant Heal - Heal yourself for 120 + 5%❤. ✎ Mana Cost: 70, Charges: 4" },
+            { category: "Swords", name: "Recluse Fang", rarity: "RARE", stats: "+60 ❁ Damage\n+30 ❁ Strength\n+10% ☠ Crit Damage", ability: "Deals +150% damage to Ж Arthropod mobs. Clears spider webs." },
+            { category: "Swords", name: "Edible Mace", rarity: "RARE", stats: "+125 ❁ Damage\n+25 ❁ Strength", ability: "Ability: ME SMASH HEAD - Next attack deals double damage and weakens ☮ Animal mobs. ✎ Mana Cost: 100" },
+            { category: "Swords", name: "Voidedge Katana", rarity: "RARE", stats: "+155 ❁ Damage\n+60 ❁ Strength\n+25% ☠ Crit Damage\n+50 ✎ Intelligence", ability: "Deal +200% to Endermen. Ability: Soulcry - Gain +200 Ferocity. ✎ Mana Cost: 200" },
+            { category: "Swords", name: "Tactician's Sword", rarity: "RARE", stats: "+50-200 ❁ Damage\n+20% ☣ Crit Chance", ability: "Gains +15 Damage per Combat collection Tier VII+ (max +150)." },
+            { category: "Swords", name: "Blade of the Volcano", rarity: "RARE", stats: "+220 ❁ Damage\n+70 ❁ Strength\n+20% ☠ Crit Damage", ability: "Gain +100 ❁ Strength against enemies in lava." },
+            { category: "Swords", name: "Ragnarock", rarity: "RARE", stats: "+200 ❁ Damage\n+70 ❁ Strength", ability: "Ability: Ragnarock - Gain 1.5x weapon Strength after not taking damage for 3s. ✎ Mana Cost: 300" },
+            { category: "Swords", name: "Arack", rarity: "EPIC", stats: "+90 ❁ Damage", ability: "Ability: Venom Mold - Grants +100 ❁ Strength while poisoned." },
+            { category: "Swords", name: "Fire Freeze Staff", rarity: "EPIC", stats: "+50 ❁ Damage\n+20 ❁ Strength", ability: "Ability: Firestorm - Freezes mobs inside a 5 block circle for 10s. ✎ Mana Cost: 500" },
+            { category: "Swords", name: "Jerry-chine Gun", rarity: "EPIC", stats: "+80 ❁ Damage\n+200 ✎ Intelligence", ability: "Ability: Rapid-fire - Shoots a Jerry bullet dealing 500+ damage. ✎ Mana Cost: 30 + 30/shot" },
+            { category: "Swords", name: "Ember Rod", rarity: "EPIC", stats: "+80 ❁ Damage\n+35 ❁ Strength\n+50 ✎ Intelligence", ability: "Ability: Fire Blast - Shoots 3 fireballs. ✎ Mana Cost: 150, Cooldown: 30s" },
+            { category: "Swords", name: "Fire Fury Staff", rarity: "EPIC", stats: "+100 ❁ Damage\n+300 ✎ Intelligence", ability: "Ability: Firestorm - Deals up to 42,000 damage over 10s. ✎ Mana Cost: 1,000" },
+            { category: "Swords", name: "Scorpion Foil", rarity: "EPIC", stats: "+120 ❁ Damage\n+60 ❁ Strength\n+30% ☠ Crit Damage", ability: "Deal +250% damage and +30 Combat Wisdom to Ж Arthropod mobs." },
+            { category: "Swords", name: "Shaman Sword", rarity: "EPIC", stats: "+100 ❁ Damage\n+20 ❁ Strength\n+5% ✦ Speed", ability: "Deal +1 Damage per 50 max ❤. Take -20% damage from ☮ Animal mobs." },
+            { category: "Swords", name: "Ornate Zombie Sword", rarity: "EPIC", stats: "+110 ❁ Damage\n+60 ❁ Strength\n+50 ✎ Intelligence", ability: "Ability: Instant Heal - Heal yourself for 144 + 5%❤. Charges: 5" },
+            { category: "Swords", name: "Void Sword", rarity: "EPIC", stats: "+125 ❁ Damage", ability: "Gain +20 ❁ Strength per piece of Ender Armor worn." },
+            { category: "Swords", name: "Aspect of the Void", rarity: "EPIC", stats: "+120 ❁ Damage\n+100 ❁ Strength", ability: "Ability: Instant Transmission - Teleport 8 blocks ahead. ✎ Mana Cost: 45" },
+            { category: "Swords", name: "End Stone Sword", rarity: "EPIC", stats: "+120 ❁ Damage\n+80 ❁ Strength", ability: "Ability: Extreme Focus - Consume all Mana to gain Damage Reduction and Next Hit Damage." },
+            { category: "Swords", name: "Reaper Falchion", rarity: "EPIC", stats: "+120 ❁ Damage\n+100 ❁ Strength\n+200 ✎ Intelligence", ability: "Heal 10❤ per hit, deal +200% damage to ༕ Undead mobs." },
+            { category: "Swords", name: "Emerald Blade", rarity: "EPIC", stats: "+130 ❁ Damage", ability: "Gets stronger as you carry coins in your purse (capped at 2B coins). Receives Curse of Greed." },
+            { category: "Swords", name: "Ink Wand", rarity: "EPIC", stats: "+130 ❁ Damage\n+90 ❁ Strength", ability: "Ability: Ink Bomb - Shoots an ink bomb dealing 10,000 ๑ Ability Damage and blindness. ✎ Mana Cost: 60" },
+            { category: "Swords", name: "Kindlebane Dagger", rarity: "EPIC", stats: "+130 ❁ Damage\n+55 ❁ Strength\n+20% ☠ Crit Damage\n+10% ⚔ Attack Speed", ability: "Ability: Attunement - Deal 1.5x damage to ♨ Infernal mobs, 1.2x to ☠ Wither." },
+            { category: "Swords", name: "Mawdredge Dagger", rarity: "EPIC", stats: "+130 ❁ Damage\n+55 ❁ Strength\n+20% ☠ Crit Damage\n+10% ⚔ Attack Speed", ability: "Ability: Attunement - Deal 2.5x damage to ♨ Infernal mobs, 1.5x to 🦴 Skeletal." },
+            { category: "Swords", name: "Leaping Sword", rarity: "EPIC", stats: "+150 ❁ Damage\n+100 ❁ Strength\n+25% ☠ Crit Damage", ability: "Ability: Leap - Deal 350 Ability Damage and freeze nearby enemies. ✎ Mana Cost: 50" },
+            { category: "Swords", name: "Vorpal Katana", rarity: "EPIC", stats: "+155 ❁ Damage\n+80 ❁ Strength\n+25% ☠ Crit Damage\n+200 ✎ Intelligence", ability: "Deal +250% to Endermen. Ability: Soulcry - Gain +300 Ferocity." },
+            { category: "Swords", name: "Sword of Revelations", rarity: "EPIC", stats: "+180 ❁ Damage\n+50 ❁ Strength", ability: "Deals +150% damage to ✿ Mythological mobs and grants +5 ✯ Magic Find." },
+            { category: "Swords", name: "Enrager", rarity: "EPIC", stats: "+270 ❁ Damage\n+150 ❁ Strength", ability: "Ability: Enrage - Taunt enemies in a 10 block radius and reduce their damage by 10%. ✎ Mana Cost: 500" },
+            { category: "Swords", name: "Ghoul Buster", rarity: "EPIC", stats: "+140 ❁ Damage\n+90 ❁ Strength\n+25% ☠ Crit Damage", ability: "Ability: Spooktacular - Deal 100% more damage to Spooky enemies during Spooky Festival." },
+            { category: "Swords", name: "Soul Whip", rarity: "LEGENDARY", stats: "+145 ❁ Damage\n+175 ❁ Strength", ability: "Ability: Flay - Flay whip in an arc dealing melee damage to all enemies in path." },
+            { category: "Swords", name: "Pooch Sword", rarity: "LEGENDARY", stats: "+120 ❁ Damage\n+20 ❁ Strength\n+5 ✦ Speed", ability: "Deal +1 Damage per 50 max ❤. +150 Strength against ☮ Animal mobs." },
+            { category: "Swords", name: "Midas Staff", rarity: "LEGENDARY", stats: "+130 ❁ Damage\n+150 ❁ Strength\n+50 ✎ Intelligence", ability: "Ability: Molten Wave - Cast a wave of molten gold dealing up to 12,000 damage. ✎ Mana Cost: 500" },
+            { category: "Swords", name: "Halberd of the Shredded", rarity: "LEGENDARY", stats: "+140 ❁ Damage\n+115 ❁ Strength", ability: "Heal 50❤ per hit. Deal +250% damage to ༕ Undead mobs." },
+            { category: "Swords", name: "Midas' Sword ($100k)", rarity: "LEGENDARY", stats: "+150 ❁ Damage", ability: "Ability: Greed - Strength and Damage depend on price paid at Dark Auction." },
+            { category: "Swords", name: "Pyrochaos Dagger", rarity: "LEGENDARY", stats: "+160 ❁ Damage\n+75 ❁ Strength\n+10% ☣ Crit Chance\n+25% ☠ Crit Damage\n+20% ⚔ Attack Speed", ability: "Ability: Attunement - Deal 2x damage to ♨ Infernal mobs, 1.5x to ☠ Wither." },
+            { category: "Swords", name: "Deathripper Dagger", rarity: "LEGENDARY", stats: "+160 ❁ Damage\n+75 ❁ Strength\n+10% ☣ Crit Chance\n+25% ☠ Crit Damage\n+20% ⚔ Attack Speed", ability: "Ability: Attunement - Deal 3.5x damage to ♨ Infernal mobs, 2x to 🦴 Skeletal." },
+            { category: "Swords", name: "Yeti Sword", rarity: "LEGENDARY", stats: "+150 ❁ Damage\n+170 ❁ Strength\n+50 ✎ Intelligence", ability: "Ability: Terrain Toss - Throws terrain chunk dealing up to 15,000 Ability Damage. ✎ Mana Cost: 250" },
+            { category: "Swords", name: "Silk-Edge Sword", rarity: "LEGENDARY", stats: "+175 ❁ Damage\n+125 ❁ Strength\n+25% ☠ Crit Damage", ability: "Ability: Leap - Deal 400 Ability Damage and freeze nearby enemies. ✎ Mana Cost: 50" },
+            { category: "Swords", name: "Florid Zombie Sword", rarity: "LEGENDARY", stats: "+150 ❁ Damage\n+80 ❁ Strength\n+100 ✎ Intelligence", ability: "Ability: Instant Heal - Heal for 168 + 5%❤. ✎ Mana Cost: 70" },
+            { category: "Swords", name: "Gemstone Gauntlet", rarity: "LEGENDARY", stats: "+200 ❁ Damage\n+50 ❁ Strength\n+1600 ⸕ Mining Speed", ability: "Ability: Reduced To Atoms - Drop Gemstones corresponding to filled slots on Mining Islands." },
+            { category: "Swords", name: "Daedalus Blade (Spawn Egg Taming 50)", rarity: "LEGENDARY", stats: "+200 ❁ Damage", ability: "Gains +4 Damage per Taming level. Copies stats from active pet. +200% damage to ✿ Mythological mobs." },
+            { category: "Swords", name: "Pigman Sword", rarity: "LEGENDARY", stats: "+200 ❁ Damage\n+100 ❁ Strength\n+5% ☣ Crit Chance\n+30% ☠ Crit Damage\n+300 ✎ Intelligence", ability: "Ability: Burning Souls - Gain +300 ❈ Defense and cast flame vortex. ✎ Mana Cost: 400" },
+            { category: "Swords", name: "Aspect of the Dragons", rarity: "LEGENDARY", stats: "+225 ❁ Damage\n+100 ❁ Strength", ability: "Ability: Dragon Rage - Monsters in front take 12,000 Ability Damage with knockback. ✎ Mana Cost: 100" },
+            { category: "Swords", name: "Atomsplit Katana", rarity: "LEGENDARY", stats: "+305 ❁ Damage\n+100 ❁ Strength\n+50% ☠ Crit Damage\n+300 ✎ Intelligence", ability: "Deal +300% to Endermen. Ability: Soulcry - Gain +400 Ferocity. ✎ Mana Cost: 200" },
+            { category: "Swords", name: "Midas' Sword ($50 Mil)", rarity: "LEGENDARY", stats: "+270 ❁ Damage\n+120 ❁ Strength", ability: "Ability: Greed - Max bonus for $50M bid gives +120 Damage and Strength." },
+            { category: "Swords", name: "Reaper Scythe", rarity: "LEGENDARY", stats: "+333 ❁ Damage\n+10 ✦ Speed", ability: "Ability: Raise Souls - Absorb souls of killed monsters and summon them to fight." },
+            { category: "Swords", name: "Aurora Staff", rarity: "LEGENDARY", stats: "+20 ❁ Damage\n+250 ✎ Intelligence", ability: "Ability: Runic Zap - Fires energy beam hitting first enemy for 10,000 damage." },
+
+            // Dungeon Swords
+            { category: "Dungeon Swords", name: "Super Cleaver", rarity: "RARE", stats: "+85 ❁ Damage\n+20 ❁ Strength\n+20% ☠ Crit Damage", ability: "Ability: Cleave - Hits nearby enemies in a 3 block range." },
+            { category: "Dungeon Swords", name: "Bonzo's Staff", rarity: "RARE", stats: "+160 ❁ Damage\n+250 ✎ Intelligence", ability: "Ability: Showtime - Shoots balloons creating large explosion dealing up to 1,000 damage. ✎ Mana Cost: 100" },
+            { category: "Dungeon Swords", name: "Dreadlord Sword", rarity: "RARE", stats: "+52-140 ❁ Damage\n+25-63 ❁ Strength\n+85-249 ✎ Intelligence", ability: "Ability: Dreadlord - Shoots a Skull. ✎ Mana Cost: 40" },
+            { category: "Dungeon Swords", name: "Zombie Soldier Cutlass", rarity: "RARE", stats: "+60-120 ❁ Damage\n+30-60 ❁ Strength\n+100% ⚔ Attack Speed", ability: "Ability: Love Tap - Heals you for +10 ❤ Health when hitting an entity." },
+            { category: "Dungeon Swords", name: "Silent Death", rarity: "RARE", stats: "+100-210 ❁ Damage\n+44-78 ❁ Strength\n+2-3% ☣ Crit Chance\n+13-24% ☠ Crit Damage", ability: "Ability: Shadowstep - Teleport behind enemy, gaining +25 Strength for 10s. Cooldown: 60s" },
+            { category: "Dungeon Swords", name: "Conjuring", rarity: "RARE", stats: "+84-158 ❁ Damage\n+45-84 ❁ Strength\n+109-210 ✎ Intelligence", ability: "Reduces cooldown of Guided Sheep by 5s." },
+            { category: "Dungeon Swords", name: "Adaptive Blade", rarity: "EPIC", stats: "+170 ❁ Damage", ability: "Automatically adapts stats to user's class inside Dungeons." },
+            { category: "Dungeon Swords", name: "Crypt Witherlord Sword", rarity: "EPIC", stats: "+62 ❁ Damage\n+50 ❁ Strength\n+113 ✎ Intelligence", ability: "Ability: Witherlord - Shoot 3 Skulls." },
+            { category: "Dungeon Swords", name: "Zombie Commander Whip", rarity: "EPIC", stats: "+65-98 ❁ Damage\n+5-8 ❁ Strength", ability: "Ability: Commander Whip - Every 1 Zombie killed gives +1 Strength." },
+            { category: "Dungeon Swords", name: "Hyper Cleaver", rarity: "EPIC", stats: "+175 ❁ Damage\n+100 ❁ Strength\n+100% ☠ Crit Damage", ability: "Ability: Cleave - Hits nearby enemies in a 4 block range." },
+            { category: "Dungeon Swords", name: "Spirit Sword", rarity: "EPIC", stats: "+210 ❁ Damage\n+50 ❁ Strength", ability: "Deal +2% damage to ༕ Undead for every 1% missing health. Ghost Ability: Spirit Bomb." },
+            { category: "Dungeon Swords", name: "Zombie Knight Sword", rarity: "EPIC", stats: "+91-167 ❁ Damage\n+24-48 ❁ Strength", ability: "Ability: Zombie Knight - Gains +30 Strength when used with Zombie Knight Armor." },
+            { category: "Dungeon Swords", name: "Giant Cleaver", rarity: "LEGENDARY", stats: "+235 ❁ Damage\n+120 ❁ Strength\n+120% ☠ Crit Damage", ability: "Ability: Cleave - Hits nearby enemies in a 5 block range." },
+            { category: "Dungeon Swords", name: "Spirit Sceptre", rarity: "LEGENDARY", stats: "+180 ❁ Damage\n+300 ✎ Intelligence", ability: "Ability: Guided Bat - Shoots a guided spirit bat exploding for X damage. ✎ Mana Cost: 250" },
+            { category: "Dungeon Swords", name: "Ice Spray Wand", rarity: "RARE", stats: "+65-120 ❁ Damage\n+153-293 ✎ Intelligence", ability: "Ability: Ice Spray - Freezes mobs for 5s and increases damage taken by 10%. ✎ Mana Cost: 50" },
+            { category: "Dungeon Swords", name: "Livid Dagger", rarity: "LEGENDARY", stats: "+210 ❁ Damage\n+60 ❁ Strength\n+100% ☣ Crit Chance\n+50% ☠ Crit Damage\n+50% ⚔ Attack Speed", ability: "Critical hits deal 100% more damage if you are behind target. Ability: Throw" },
+            { category: "Dungeon Swords", name: "Shadow Fury", rarity: "LEGENDARY", stats: "+300 ❁ Damage\n+130 ❁ Strength\n+30% ☠ Crit Damage\n+30 ✦ Speed", ability: "Ability: Shadow Fury - Rapidly teleports to up to 5 enemies within 12 blocks. Cooldown: 15s" },
+            { category: "Dungeon Swords", name: "Flower of Truth", rarity: "LEGENDARY", stats: "+160 ❁ Damage\n+300 ❁ Strength", ability: "Ability: Heat-Seeking Rose - Shoots a ricocheting rose hitting up to 3 foes. ❤ Health Cost: 10%" },
+            { category: "Dungeon Swords", name: "Fel Sword", rarity: "EPIC", stats: "+190 ❁ Damage\n+135 ❁ Strength", ability: "Every 100 kills grants +1 Weapon Damage (up to +100). Dungeon Healer bonuses." },
+            { category: "Dungeon Swords", name: "Wither Cloak Sword", rarity: "EPIC", stats: "+250 ❈ Defense\n+190 ❁ Damage\n+135 ❁ Strength", ability: "Ability: Creeper Veil - Grants immunity from damage for 10s. ✎ Mana Cost: 20% max mana when hit" },
+            { category: "Dungeon Swords", name: "Necromancer Sword", rarity: "LEGENDARY", stats: "+125 ❈ Defense\n+250 ❁ Damage\n+125 ❁ Strength", ability: "Ability: Raise Souls - Absorb and summon monster souls to fight for you. Max Souls: 2" },
+            { category: "Dungeon Swords", name: "Giant's Sword", rarity: "LEGENDARY", stats: "+500 ❁ Damage\n+1 Ⓢ Swing Range", ability: "Ability: Giant's Slam - Slam sword into ground dealing damage. ✎ Mana Cost: 100, Cooldown: 30s" },
+            { category: "Dungeon Swords", name: "Necron's Blade", rarity: "LEGENDARY", stats: "+260 ❁ Damage\n+110 ❁ Strength\n+30 ⫽ Ferocity\n+50 ✎ Intelligence", ability: "Deals 50% damage to ☠ Wither mobs. Right-click for class ability." },
+            { category: "Dungeon Swords", name: "Hyperion", rarity: "LEGENDARY", stats: "+260-310 ❁ Damage\n+150 ❁ Strength\n+30 ⫽ Ferocity\n+350-450 ✎ Intelligence", ability: "Deals 50% damage to ☠ Wither mobs. Grants +1 Damage and +2 Intelligence per Catacombs level." },
+            { category: "Dungeon Swords", name: "Astraea", rarity: "LEGENDARY", stats: "+250-350 ❈ Defense\n+20 ❂ True Defense\n+270-320 ❁ Damage\n+150 ❁ Strength\n+30 ⫽ Ferocity\n+50 ✎ Intelligence", ability: "Deals 50% damage to ☠ Wither mobs. Grants +1 Damage and +2 Defense per Catacombs level." },
+            { category: "Dungeon Swords", name: "Scylla", rarity: "LEGENDARY", stats: "+270-320 ❁ Damage\n+150 ❁ Strength\n+12% ☣ Crit Chance\n+35-85% ☠ Crit Damage\n+30 ⫽ Ferocity\n+50 ✎ Intelligence", ability: "Deals 50% damage to ☠ Wither mobs. Grants +1 Damage and +1 Crit Damage per Catacombs level." },
+            { category: "Dungeon Swords", name: "Valkyrie", rarity: "LEGENDARY", stats: "+270-320 ❁ Damage\n+145-195 ❁ Strength\n+60 ⫽ Ferocity\n+60 ✎ Intelligence", ability: "Deals 50% damage to ☠ Wither mobs. Grants +1 Damage and +1 Strength per Catacombs level." },
+            { category: "Dungeon Swords", name: "Dark Claymore", rarity: "LEGENDARY", stats: "+500 ❁ Damage\n+100 ❁ Strength\n+100% ☠ Crit Damage\n+2 Ⓢ Swing Range", ability: "-" },
+
+            // Bows
+            { category: "Bows", name: "Bow", rarity: "COMMON", stats: "+30 ❁ Damage", ability: "-" },
+            { category: "Bows", name: "Wither Bow", rarity: "UNCOMMON", stats: "+30 ❁ Damage", ability: "Deals +100% damage to ☠ Wither mobs." },
+            { category: "Bows", name: "Decent Bow", rarity: "UNCOMMON", stats: "+45 ❁ Damage", ability: "-" },
+            { category: "Bows", name: "Savanna Bow", rarity: "UNCOMMON", stats: "+50 ❁ Damage", ability: "All damage dealt with this bow is doubled." },
+            { category: "Bows", name: "Prismarine Bow", rarity: "UNCOMMON", stats: "+50 ❁ Damage\n+25 ❁ Strength", ability: "Ability: Arrow Infusion - Consumes Prismarine Shards to deal +300% damage to Squids and Guardians." },
+            { category: "Bows", name: "Ender Bow", rarity: "RARE", stats: "+60 ❁ Damage", ability: "Ability: Ender Warp - Shoots an Ender Pearl dealing 10% max HP damage in 8 block radius. ✎ Mana Cost: 50" },
+            { category: "Bows", name: "Undead Bow", rarity: "RARE", stats: "+80 ❁ Damage", ability: "Deals +100% damage to ༕ Undead mobs." },
+            { category: "Bows", name: "Artisanal Shortbow", rarity: "RARE", stats: "+40 ❁ Damage", ability: "-" },
+            { category: "Bows", name: "Machine Gun Shortbow", rarity: "RARE", stats: "+89-102 ❁ Damage\n+25-68 ❁ Strength\n+0-17% ☠ Crit Damage", ability: "Ability: Rapid Fire - Shoot 5 arrows per second for 8s. Cooldown: 100s" },
+            { category: "Bows", name: "Sniper Bow", rarity: "RARE", stats: "+94-240 ❁ Damage\n+1-17 ☠ Crit Damage", ability: "Allows you to shoot arrows much further." },
+            { category: "Bows", name: "Soulstealer Bow", rarity: "RARE", stats: "+50-75 ❁ Strength\n+157-389 ✎ Intelligence", ability: "Replaces all shot arrows with Wither Skulls (up to 3 skulls before 2s cooldown)." },
+            { category: "Bows", name: "Dragon Shortbow", rarity: "EPIC", stats: "+120 ❁ Damage\n+40 ❁ Strength\n+15% ☣ Crit Chance\n+50% ☠ Crit Damage", ability: "Ability: Dragon Stalker - Deal 15% bonus damage to Dragons." },
+            { category: "Bows", name: "Explosive Bow", rarity: "EPIC", stats: "+100 ❁ Damage\n+20 ❁ Strength", ability: "Ability: Explosive - Creates an explosion on impact taking full weapon damage." },
+            { category: "Bows", name: "Magma Bow", rarity: "EPIC", stats: "+100 ❁ Damage\n+100 ❁ Strength", ability: "Consumes 1 Magma Cream to deal double damage per shot." },
+            { category: "Bows", name: "Slime Bow", rarity: "EPIC", stats: "+100 ❁ Damage\n+50% ☠ Crit Damage", ability: "Consumes Slime Balls to deal 5x damage to Magma Cubes and Slimes." },
+            { category: "Bows", name: "Super Undead Bow", rarity: "EPIC", stats: "+220 ❁ Damage", ability: "Deal +100% damage to ༕ Undead. Arrows have 25% chance to bounce." },
+            { category: "Bows", name: "Spider Shortbow", rarity: "EPIC", stats: "+110 ❁ Damage\n+10 ❁ Strength", ability: "Ability: Stinger - Slows victim and deals 35x Strength damage per second for 6s. ✎ Mana Cost: 150" },
+            { category: "Bows", name: "Hurricane Bow", rarity: "EPIC", stats: "+120 ❁ Damage\n+50 ❁ Strength", ability: "Ability: Tempest - Gets more powerful with kills (max 250 kills)." },
+            { category: "Bows", name: "End Stone Bow", rarity: "EPIC", stats: "+140 ❁ Damage", ability: "Ability: Extreme Focus - Consumes all Mana to increase next hit damage." },
+            { category: "Bows", name: "Sulphur Bow", rarity: "EPIC", stats: "+200 ❁ Damage\n+100 ❁ Strength", ability: "Consumes 1 Sulphur to deal double damage per shot." },
+            { category: "Bows", name: "Death Bow", rarity: "EPIC", stats: "+300 ❁ Damage", ability: "Deal +100% to ༕ Undead. Arrows have 50% chance to bounce." },
+            { category: "Bows", name: "Spider Queen's Stinger", rarity: "EPIC", stats: "+300 ❁ Damage", ability: "Arrows have an aura dealing 360 damage and travel through enemies." },
+            { category: "Bows", name: "Venom's Touch", rarity: "EPIC", stats: "+200-300 ❁ Damage\n+100-180 ❁ Strength", ability: "Fires a volley of 5 arrows applying venom dealing damage over 3s." },
+            { category: "Bows", name: "Souls Rebound", rarity: "EPIC", stats: "+450 ❁ Damage", ability: "Marks enemies for 5s, releasing accumulated damage burst upon expiration." },
+            { category: "Bows", name: "Juju Shortbow", rarity: "EPIC", stats: "+310 ❁ Damage\n+40 ❁ Strength\n+10% ☣ Crit Chance\n+110% ☠ Crit Damage", ability: "-" },
+            { category: "Bows", name: "Runaan's Bow", rarity: "LEGENDARY", stats: "+160 ❁ Damage\n+50 ❁ Strength", ability: "Ability: Triple Shot - Shoots 3 arrows at once (extra arrows home and do 40% damage)." },
+            { category: "Bows", name: "Mosquito Shortbow", rarity: "LEGENDARY", stats: "+251 ❁ Damage\n+151 ❁ Strength\n+39% ☠ Crit Damage\n+20 ♨ Vitality", ability: "Ability: Nasty Bite - Deals +19% damage and heals for 2x mana spent. ✎ Mana Cost: 11%" },
+            { category: "Bows", name: "Bonemerang", rarity: "LEGENDARY", stats: "+270 ❁ Damage\n+130 ❁ Strength", ability: "Ability: Swing - Throw bone dealing double damage on return. Pierces 10 foes." },
+            { category: "Bows", name: "Last Breath", rarity: "LEGENDARY", stats: "+200 ❁ Damage\n+180 ❁ Strength\n+50% ☠ Crit Damage", ability: "Ability: Last Breath - Reduces target's Defense by 10% (stacks up to 5 times)." },
+            { category: "Bows", name: "Spirit Shortbow", rarity: "LEGENDARY", stats: "+210 ❁ Damage\n+100 ❁ Strength", ability: "Deal +2% damage to ༕ Undead per 1% missing health. Ability: Spirit Bomb (8,000 damage)." },
+            { category: "Bows", name: "Terminator", rarity: "LEGENDARY", stats: "+310 ❁ Damage\n+50 ❁ Strength\n+250% ☠ Crit Damage\n+40% ⚔ Attack Speed", ability: "Ability: Salvation - Shoot a piercing beam after 3 hits. Always crits." },
+
+            // Support Wands
+            { category: "Support Wands", name: "Wand of Healing", rarity: "UNCOMMON", stats: "-", ability: "Heal 60❤/s for 7s. Wand heals don't stack." },
+            { category: "Support Wands", name: "Wand of Mending", rarity: "RARE", stats: "-", ability: "Heal 90❤/s for 7s. Wand heals don't stack." },
+            { category: "Support Wands", name: "Wand of Restoration", rarity: "EPIC", stats: "-", ability: "Heal 120❤/s for 7s. Wand heals don't stack." },
+            { category: "Support Wands", name: "Wand of Atonement", rarity: "LEGENDARY", stats: "-", ability: "Heal 170❤/s for 7s. Wand heals don't stack." },
+            { category: "Support Wands", name: "Gyrokinetic Wand", rarity: "EPIC", stats: "-", ability: "Left click: Pull mobs into a rift. Right click: Apply Aligned (splits incoming damage over 3s)." },
+
+            // Offensive Wands
+            { category: "Offensive Wands", name: "Staff of the Rising Sun", rarity: "EPIC", stats: "-", ability: "Explodes on impact for 750 damage. Costs 10% total mana. Only item that damages Dante." },
+            { category: "Offensive Wands", name: "Celeste Wand", rarity: "UNCOMMON", stats: "-", ability: "Strikes lightning up to 10 blocks away dealing 40 damage." },
+            { category: "Offensive Wands", name: "Starlight Wand", rarity: "RARE", stats: "-", ability: "Shower stars in 3 blocks area for 5s dealing 50.5 damage." },
+            { category: "Offensive Wands", name: "Wand of Strength", rarity: "EPIC", stats: "-", ability: "Right Click: Use 10% max health to boost nearby allies by +30 Strength for 10s." },
+            { category: "Offensive Wands", name: "Fire Veil Wand", rarity: "EPIC", stats: "-", ability: "Creates a veil of fire dealing 15,000 damage per second for 5s." },
+            { category: "Offensive Wands", name: "Staff of the Volcano", rarity: "RARE", stats: "-", ability: "Sacrifice 50% ❤ Health to damage and ignite nearby mobs." },
+            { category: "Offensive Wands", name: "Hellstorm Wand", rarity: "EPIC", stats: "-", ability: "Unleash a hellstorm after not taking damage for 20s." },
+            { category: "Offensive Wands", name: "Hollow Wand", rarity: "LEGENDARY", stats: "-", ability: "Casts a spell depending on stack order input." },
+
+            // Other Wands
+            { category: "Other Wands", name: "Wizard Wand", rarity: "EPIC", stats: "-", ability: "Teleports through time (Work in progress)." },
+            { category: "Other Wands", name: "Aspect of the Leech", rarity: "UNCOMMON", stats: "-", ability: "Teleports 3 blocks ahead. Upgradeable with Tuners and Modifiers." },
+            { category: "Other Wands", name: "Wand of Farming", rarity: "RARE", stats: "-", ability: "Allows you to harvest Wilted Berberis, Agaricus Cap, Caducous Stem, and Riftwart Roots." },
+            { category: "Other Wands", name: "Staff of the Rising Moon", rarity: "EPIC", stats: "-", ability: "Launches explosive moon dealing 1 ❤ Heart of damage to Wizardman." }
+        ];
+
+        let currentCategory = 'ALL';
+
+        const tableBody = document.getElementById('tableBody');
+        const cardsViewContainer = document.getElementById('cardsViewContainer');
+        const tableViewContainer = document.getElementById('tableViewContainer');
+        const searchInput = document.getElementById('searchInput');
+        const raritySelect = document.getElementById('raritySelect');
+
+        const statTotal = document.getElementById('statTotal');
+        const statShown = document.getElementById('statShown');
+
+        const btnViewTable = document.getElementById('btnViewTable');
+        const btnViewCards = document.getElementById('btnViewCards');
+        const tableNoResults = document.getElementById('tableNoResults');
+        const cardsNoResults = document.getElementById('cardsNoResults');
+
+        const detailModal = document.getElementById('detailModal');
+        const modalClose = document.getElementById('modalClose');
+
+        statTotal.textContent = weaponsData.length;
+
+        document.querySelectorAll('.pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.getAttribute('data-category');
+                render();
+            });
+        });
+
+        function getFilteredData() {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedRarity = raritySelect.value;
+
+            return weaponsData.filter(item => {
+                const matchesCat = (currentCategory === 'ALL' || item.category === currentCategory);
+                const matchesRarity = (selectedRarity === 'ALL' || item.rarity.toUpperCase().includes(selectedRarity));
+                const mpValue = getMagicalPower(item.rarity);
+                const searchHaystack = (item.name + " " + item.stats + " " + item.ability + " " + item.category + " " + mpValue + "mp").toLowerCase();
+                const matchesSearch = !query || searchHaystack.includes(query);
+
+                return matchesCat && matchesRarity && matchesSearch;
+            });
+        }
+
+        function openModal(item) {
+            document.getElementById('modalCat').textContent = item.category;
+            const rarityBadge = document.getElementById('modalRarity');
+            const cleanRarity = item.rarity.split('-')[0].split(',')[0].trim().toUpperCase().replace(' ', '_');
+            rarityBadge.className = `badge-rarity rarity-${cleanRarity}`;
+            rarityBadge.textContent = item.rarity;
+
+            const mpValue = getMagicalPower(item.rarity);
+            document.getElementById('modalMP').textContent = `⚡ ${mpValue} MP`;
+
+            document.getElementById('modalName').textContent = item.name;
+            document.getElementById('modalStats').textContent = item.stats;
+            document.getElementById('modalAbility').textContent = item.ability;
+
+            detailModal.classList.add('active');
+        }
+
+        modalClose.addEventListener('click', () => detailModal.classList.remove('active'));
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) detailModal.classList.remove('active');
+        });
+
+        function render() {
+            const filtered = getFilteredData();
+            statShown.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = '';
+                cardsViewContainer.innerHTML = '';
+                tableNoResults.style.display = 'block';
+                cardsNoResults.style.display = 'block';
+                return;
+            }
+
+            tableNoResults.style.display = 'none';
+            cardsNoResults.style.display = 'none';
+
+            tableBody.innerHTML = filtered.map((item) => {
+                const cleanRarity = item.rarity.split('-')[0].split(',')[0].trim().toUpperCase().replace(' ', '_');
+                const mp = getMagicalPower(item.rarity);
+                return `
+                <tr data-index="${weaponsData.indexOf(item)}">
+                    <td class="col-cat"><span class="badge-cat">${item.category}</span></td>
+                    <td><strong style="color: #EF4444;">${item.name}</strong></td>
+                    <td><span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span></td>
+                    <td class="col-mp"><span class="badge-mp">⚡ ${mp}</span></td>
+                    <td style="white-space: pre-line;">${item.stats}</td>
+                    <td>${item.ability}</td>
+                </tr>
+            `}).join('');
+
+            document.querySelectorAll('#tableBody tr').forEach(row => {
+                row.addEventListener('click', () => {
+                    const idx = row.getAttribute('data-index');
+                    openModal(weaponsData[idx]);
+                });
+            });
+
+            cardsViewContainer.innerHTML = filtered.map((item) => {
+                const cleanRarity = item.rarity.split('-')[0].split(',')[0].trim().toUpperCase().replace(' ', '_');
+                const mp = getMagicalPower(item.rarity);
+                return `
+                <div class="card" data-index="${weaponsData.indexOf(item)}">
+                    <div class="card-header">
+                        <span class="badge-cat">${item.category}</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <span class="badge-mp">⚡ ${mp} MP</span>
+                            <span class="badge-rarity rarity-${cleanRarity}">${item.rarity}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card-title">${item.name}</div>
+                    </div>
+                    <div class="card-body">
+                        <div><strong>Stats:</strong> ${item.stats}</div>
+                        <div><strong>Ability:</strong> ${item.ability}</div>
+                    </div>
+                </div>
+            `}).join('');
+
+            document.querySelectorAll('.cards-container .card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const idx = card.getAttribute('data-index');
+                    openModal(weaponsData[idx]);
+                });
+            });
+        }
+
+        btnViewTable.addEventListener('click', () => {
+            btnViewTable.classList.add('active');
+            btnViewCards.classList.remove('active');
+            tableViewContainer.style.display = 'block';
+            cardsViewContainer.style.display = 'none';
+        });
+
+        btnViewCards.addEventListener('click', () => {
+            btnViewCards.classList.add('active');
+            btnViewTable.classList.remove('active');
+            tableViewContainer.style.display = 'none';
+            cardsViewContainer.style.display = 'grid';
+        });
+
+        searchInput.addEventListener('input', render);
+        raritySelect.addEventListener('change', render);
+
+        render();
+    </script>
+</body>
+</html>
